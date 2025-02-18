@@ -6,6 +6,5 @@ format_directories:
   - test
 report_on:
   - routes
-  - lib
 coverage_exclude:
   - "**/_middleware.dart"
