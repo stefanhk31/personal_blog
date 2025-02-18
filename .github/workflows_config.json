@@ -3,7 +3,7 @@
   "minCoverage": 100,
   "flutterVersion": "3.24.4",
   "flutterChannel": "stable",
-  "dartChannel": "stable",
+  "dartChannel": "3.6.0",
   "dependabotFrequency": "weekly",
   "generateDependabot": false,
   "generateSemanticPullRequest": true,
