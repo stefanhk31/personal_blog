@@ -1,2 +1,4 @@
 .dart_tool/
 .dart_frog/
+
+node_modules/
