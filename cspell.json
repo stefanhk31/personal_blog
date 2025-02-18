@@ -20,7 +20,8 @@
     "useGitignore": true,
     "ignorePaths": [
       "public",
-      "styles"
+      "styles",
+      ".github",
     ],
     "words": []
   }

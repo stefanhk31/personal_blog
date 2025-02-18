@@ -1,9 +1,9 @@
 {
   "exclude": "",
   "minCoverage": 100,
-  "flutterVersion": "3.24.4",
+  "flutterVersion": "3.29.0",
   "flutterChannel": "stable",
-  "dartChannel": "3.6.0",
+  "dartChannel": "stable",
   "dependabotFrequency": "weekly",
   "generateDependabot": false,
   "generateSemanticPullRequest": true,
