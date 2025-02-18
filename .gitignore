@@ -1,4 +1,6 @@
 .dart_tool/
 .dart_frog/
 
+.mason/
+
 node_modules/

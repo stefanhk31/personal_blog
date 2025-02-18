@@ -1,0 +1,32 @@
+name: Butter Cms Client Verify and Test
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches:
+      - master
+      - main
+    paths:
+      - ".github/workflows/butter_cms_client_verify_and_test.yaml"
+      - "packages/butter_cms_client/**"
+      - "packages/blog_models/**"
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - ".github/workflows/**"
+      - "packages/butter_cms_client/**"
+      - "packages/blog_models/**"
+
+jobs:
+  verify_and_test:
+    name: Verify and Test
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@main
+    with:
+      working_directory: packages/butter_cms_client
+      dart_sdk: stable
+      min_coverage: 100

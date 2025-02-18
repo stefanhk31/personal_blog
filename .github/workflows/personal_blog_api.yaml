@@ -1,0 +1,36 @@
+name: Personal Blog Api Verify and Test
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches:
+      - master
+      - main
+    paths:
+      - ".github/workflows/personal_blog_api_verify_and_test.yaml"
+      - "**"
+      - "packages/blog_models/**"
+      - "packages/blog_repository/**"
+      - "packages/butter_cms_client/**"
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - ".github/workflows/**"
+      - "**"
+      - "packages/blog_models/**"
+      - "packages/blog_repository/**"
+      - "packages/butter_cms_client/**"
+
+jobs:
+  verify_and_test:
+    name: Verify and Test
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@main
+    with:
+      working_directory: .
+      dart_sdk: stable
+      min_coverage: 100
