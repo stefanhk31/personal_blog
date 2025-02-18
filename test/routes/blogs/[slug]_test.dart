@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:blog_models/blog_models.dart';
+import 'package:blog_repository/blog_repository.dart';
 import 'package:butter_cms_client/butter_cms_client.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:http/http.dart' as http;
@@ -15,36 +16,32 @@ import '../../helpers/method_not_allowed.dart';
 
 class _MockRequestContext extends Mock implements RequestContext {}
 
-class _MockButterCmsClient extends Mock implements ButterCmsClient {}
+class _MockBlogRepository extends Mock implements BlogRepository {}
 
 void main() {
   group('[slug]', () {
     const slug = 'test-slug';
     group('GET /', () {
-      late ButterCmsClient butterCmsClient;
+      late BlogRepository blogRepository;
 
       setUp(() {
-        butterCmsClient = _MockButterCmsClient();
+        blogRepository = _MockBlogRepository();
       });
       test('responds with a 200', () async {
         final context = _MockRequestContext();
         final request = Request('GET', Uri.parse('http://127.0.0.1/'));
-        final blogResponse = BlogResponse(meta: const BlogMeta(), data: blog);
+        const htmlResponse = '<html>test</html>';
         when(() => context.request).thenReturn(request);
-        when(() => context.read<ButterCmsClient>()).thenReturn(butterCmsClient);
-        when(() => butterCmsClient.fetchBlogPost(slug: any(named: 'slug')))
-            .thenAnswer(
-          (_) async => http.Response(
-            jsonEncode(blogResponse.toJson()),
-            HttpStatus.ok,
-          ),
+        when(() => context.read<BlogRepository>()).thenReturn(blogRepository);
+        when(() => blogRepository.getBlogDetailHtml(any())).thenAnswer(
+          (_) async => (200, htmlResponse),
         );
         final response = await route.onRequest(context, slug);
         expect(response.statusCode, equals(HttpStatus.ok));
         expect(
           response.body(),
           completion(
-            equals(jsonEncode(blogResponse.toJson())),
+            equals(htmlResponse),
           ),
         );
       });
