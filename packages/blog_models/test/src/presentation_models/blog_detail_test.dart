@@ -1,4 +1,5 @@
 import 'package:blog_models/blog_models.dart';
+import 'package:intl/intl.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -48,7 +49,10 @@ void main() {
       expect(blogDetail.seoTitle, equals(blog.seoTitle));
       expect(blogDetail.metaDescription, equals(blog.metaDescription));
       expect(blogDetail.authorName, equals('firstName lastName'));
-      expect(blogDetail.publishDateFormatted, equals('January 1, 2021'));
+      expect(
+        blogDetail.publishDateFormatted,
+        equals(DateFormat.yMMMMd().format(blog.published)),
+      );
     });
 
     test('supports value equality', () {

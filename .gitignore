@@ -4,3 +4,5 @@
 .mason/
 
 node_modules/
+
+**/.dart_tool/
