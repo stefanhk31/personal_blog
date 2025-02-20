@@ -33,9 +33,7 @@ class BlogRepository {
 
       if (response.statusCode != 200) {
         return _renderErrorPage(
-          message: 'Failed to fetch blog post: \n '
-              'Status Code: ${response.statusCode} \n '
-              'Body: ${response.body} ',
+          message: _httpErrorMessage(response.statusCode, response.body),
           statusCode: response.statusCode,
         );
       }
@@ -64,6 +62,63 @@ class BlogRepository {
     } on Exception catch (e) {
       return _renderErrorPage(message: e.toString());
     }
+  }
+
+  /// Fetches a list of blog post previews and generates HTML for the client.
+  Future<RenderedContent> getBlogOverviewHtml({
+    int limit = defaultRequestLimit,
+    int offset = defaultRequestOffset,
+  }) async {
+    try {
+      final response = await _cmsClient.fetchBlogPosts(
+        excludeBody: true,
+        limit: limit,
+        offset: offset,
+      );
+
+      if (response.statusCode != 200) {
+        return _renderErrorPage(
+          message: _httpErrorMessage(response.statusCode, response.body),
+          statusCode: response.statusCode,
+        );
+      }
+
+      final blogsResponse = BlogsResponse.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>,
+      );
+
+      final blogPreviews = blogsResponse.data.map((blog) {
+        return BlogPreview.fromBlog(blog);
+      }).toList();
+
+      final html = await _templateEngine.render(
+        filePath: 'blog_overview_page.html',
+        context: {
+          'posts': [
+            for (final preview in blogPreviews)
+              {
+                'title': preview.title,
+                'description': preview.description,
+                'featuredImage': preview.image,
+                'slug': preview.slug,
+              }
+          ],
+          'metaTitle': defaultMetaTitle,
+          'metaDescription': defaultMetaDescription,
+          'year': currentYear,
+        },
+      );
+
+      return (200, html);
+    } on Exception catch (e) {
+      return _renderErrorPage(message: e.toString());
+    }
+  }
+
+  String _httpErrorMessage(int statusCode, String body) {
+    return 'Http call failed: \n '
+        'Status Code: $statusCode \n '
+        'Body: $body';
   }
 
   Future<RenderedContent> _renderErrorPage({

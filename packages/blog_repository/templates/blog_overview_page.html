@@ -6,7 +6,16 @@
 <body>
     <div class="mx-auto bg-background-light dark:bg-background-dark">
         {{#posts}}
-        {{>blog_overview_card}}
+        <div class="border-2 border-slate-100 hover:border-secondary-500 rounded-lg shadow-lg max-w-screen-xl" onclick="window.location.href='{{slug}}'">
+            {{#featuredImage}}
+            <img src="{{featuredImage}}" alt="{{title}}" class="w-full object-cover">
+            {{/featuredImage}}
+            <div class="p-4">
+                <h2>{{title}}</h2>
+                <p>{{published}}</p>
+                <p>{{description}}</p>
+            </div>
+        </div>
         {{/posts}}
     </div>
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
