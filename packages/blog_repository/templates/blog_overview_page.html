@@ -6,14 +6,14 @@
 <body>
     <div class="mx-auto bg-background-light dark:bg-background-dark">
         {{#posts}}
-        <div class="border-2 border-slate-100 hover:border-secondary-500 rounded-lg shadow-lg max-w-screen-xl" onclick="window.location.href='{{slug}}'">
+        <div class="bg-secondary-light dark:bg-secondary-dark border-2 border-slate-100 hover:border-secondary-500 rounded-lg shadow-lg max-w-screen-xl" onclick="window.location.href='blogs/{{slug}}'">
             {{#featuredImage}}
-            <img src="{{featuredImage}}" alt="{{title}}" class="w-full object-cover">
+            <img src="{{featuredImage}}" alt="{{title}}" class="h-96 w-full object-cover">
             {{/featuredImage}}
             <div class="p-4">
-                <h2>{{title}}</h2>
-                <p>{{published}}</p>
-                <p>{{description}}</p>
+                <h2 class="pb-2 font-bold text=lg">{{title}}</h2>
+                <p class="pb-2">{{published}}</p>
+                <p class="pb-2">{{description}}</p>
             </div>
         </div>
         {{/posts}}
