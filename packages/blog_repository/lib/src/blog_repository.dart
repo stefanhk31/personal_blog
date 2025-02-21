@@ -100,6 +100,7 @@ class BlogRepository {
                 'title': preview.title,
                 'description': preview.description,
                 'featuredImage': preview.image,
+                'published': preview.publishDateFormatted,
                 'slug': preview.slug,
               }
           ],
