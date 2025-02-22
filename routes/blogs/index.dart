@@ -1,6 +1,5 @@
 import 'package:blog_models/blog_models.dart';
 import 'package:blog_repository/blog_repository.dart';
-import 'package:butter_cms_client/butter_cms_client.dart';
 import 'package:dart_frog/dart_frog.dart';
 
 /// Request handler for the `/blogs` route.

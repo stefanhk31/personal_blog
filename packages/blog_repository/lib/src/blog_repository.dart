@@ -102,7 +102,7 @@ class BlogRepository {
                 'featuredImage': preview.image,
                 'published': preview.publishDateFormatted,
                 'slug': preview.slug,
-              }
+              },
           ],
           'metaTitle': defaultMetaTitle,
           'metaDescription': defaultMetaDescription,
