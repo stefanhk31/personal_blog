@@ -17,7 +17,7 @@ typedef RenderedContent = (int, String);
 /// {@endtemplate}
 class BlogRepository {
   /// {@macro blog_repository}
-  const BlogRepository({
+  BlogRepository({
     required ButterCmsClient cmsClient,
     required TemplateEngine templateEngine,
   })  : _cmsClient = cmsClient,
@@ -25,6 +25,8 @@ class BlogRepository {
 
   final ButterCmsClient _cmsClient;
   final TemplateEngine _templateEngine;
+
+  int _offset = 0;
 
   /// Fetches a detailed blog post by [slug] and generates HTML for the client.
   Future<RenderedContent> getBlogDetailHtml(String slug) async {
@@ -104,11 +106,15 @@ class BlogRepository {
                 'slug': preview.slug,
               },
           ],
+          'offset': _offset + blogPreviews.length,
+          'showHeader': _offset == 0,
           'metaTitle': defaultMetaTitle,
           'metaDescription': defaultMetaDescription,
           'year': currentYear,
         },
       );
+
+      _offset += blogPreviews.length;
 
       return (200, html);
     } on Exception catch (e) {
