@@ -27,8 +27,6 @@ class BlogRepository {
   final ButterCmsClient _cmsClient;
   final TemplateEngine _templateEngine;
 
-  int _offset = 0;
-
   /// Fetches a detailed blog post by [slug] and generates HTML for the client.
   Future<RenderedContent> getBlogDetailHtml(String slug) async {
     try {
@@ -95,13 +93,15 @@ class BlogRepository {
       }).toList();
 
       final posts = [
-        for (final preview in blogPreviews)
+        for (final (index, preview) in blogPreviews.indexed)
           {
             'title': preview.title,
             'description': preview.description,
             'featuredImage': preview.image,
             'published': preview.publishDateFormatted,
             'slug': preview.slug,
+            'isLast': preview == blogPreviews.last,
+            'offset': offset + index + 1,
           },
       ];
 
@@ -110,7 +110,6 @@ class BlogRepository {
               filePath: 'blog_overview_page.html',
               context: {
                 'posts': posts,
-                'showHeader': _offset == 0,
                 'metaTitle': defaultMetaTitle,
                 'metaDescription': defaultMetaDescription,
                 'year': currentYear,
@@ -123,8 +122,6 @@ class BlogRepository {
                 'posts': posts,
               },
             );
-
-      _offset += blogPreviews.length;
 
       return (200, html);
     } on Exception catch (e) {
