@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:blog_html_builder/blog_html_builder.dart';
 import 'package:blog_models/blog_models.dart';
@@ -111,6 +112,7 @@ class BlogRepository {
           'metaTitle': defaultMetaTitle,
           'metaDescription': defaultMetaDescription,
           'year': currentYear,
+          'baseUrl': Platform.environment['BASE_URL'] ?? '',
         },
       );
 
