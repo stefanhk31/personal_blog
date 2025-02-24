@@ -112,7 +112,7 @@ class BlogRepository {
           'metaTitle': defaultMetaTitle,
           'metaDescription': defaultMetaDescription,
           'year': currentYear,
-          'baseUrl': Platform.environment['BASE_URL'] ?? '',
+          'baseBlogsUrl': Platform.environment['BASE_BLOGS_URL'] ?? '',
         },
       );
 
