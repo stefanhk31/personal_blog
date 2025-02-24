@@ -16,7 +16,7 @@ Future<Response> _get(RequestContext context) async {
 
   final (statusCode, html) =
       await context.read<BlogRepository>().getBlogOverviewHtml(
-            limit: request.limit,
+            limit: 3, //request.limit,
             offset: request.offset,
           );
 

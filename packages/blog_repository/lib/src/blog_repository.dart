@@ -94,27 +94,35 @@ class BlogRepository {
         return BlogPreview.fromBlog(blog);
       }).toList();
 
-      final html = await _templateEngine.render(
-        filePath: 'blog_overview_page.html',
-        context: {
-          'posts': [
-            for (final preview in blogPreviews)
-              {
-                'title': preview.title,
-                'description': preview.description,
-                'featuredImage': preview.image,
-                'published': preview.publishDateFormatted,
-                'slug': preview.slug,
+      final posts = [
+        for (final preview in blogPreviews)
+          {
+            'title': preview.title,
+            'description': preview.description,
+            'featuredImage': preview.image,
+            'published': preview.publishDateFormatted,
+            'slug': preview.slug,
+          },
+      ];
+
+      final html = offset == 0
+          ? await _templateEngine.render(
+              filePath: 'blog_overview_page.html',
+              context: {
+                'posts': posts,
+                'showHeader': _offset == 0,
+                'metaTitle': defaultMetaTitle,
+                'metaDescription': defaultMetaDescription,
+                'year': currentYear,
+                'baseBlogsUrl': Platform.environment['BASE_BLOGS_URL'] ?? '',
               },
-          ],
-          'offset': _offset + blogPreviews.length,
-          'showHeader': _offset == 0,
-          'metaTitle': defaultMetaTitle,
-          'metaDescription': defaultMetaDescription,
-          'year': currentYear,
-          'baseBlogsUrl': Platform.environment['BASE_BLOGS_URL'] ?? '',
-        },
-      );
+            )
+          : await _templateEngine.render(
+              filePath: 'blog_preview_list.html',
+              context: {
+                'posts': posts,
+              },
+            );
 
       _offset += blogPreviews.length;
 

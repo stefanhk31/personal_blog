@@ -1,0 +1,29 @@
+{{#posts}}
+<a id="preview-{{slug}}" href="{{baseBlogsUrl}}/{{slug}}">
+    <div
+        class="mx-4 md:mx-auto my-6 md:w-2/3 bg-secondary-light dark:bg-secondary-dark border-4 border-transparent hover:border-primary-light hover:dark:border-primary-dark rounded-lg shadow-lg">
+        {{#featuredImage}}
+        <img src="{{featuredImage}}" alt="{{title}}" class="h-72 w-full object-cover">
+        {{/featuredImage}}
+        <div class="p-4">
+            <h2 class="pb-2 font-bold text=lg">{{title}}</h2>
+            <p class="pb-2">{{published}}</p>
+            <p class="pb-2">{{description}}</p>
+        </div>
+    </div>
+</a>
+{{/posts}}
+<div id="bottomLoader"
+data-offset="0"
+hx-get=""
+hx-trigger="revealed"
+hx-swap="afterend"></div>
+<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+<script>
+    htmx.onLoad(function(event) {
+        let itemCount = document.querySelectorAll('[id^=preview]').length
+        console.log(`we have ${itemCount} items`);
+        let loader = document.getElementById('bottomLoader');
+        loader.setAttribute('data-offset', itemCount);
+    });
+</script>
