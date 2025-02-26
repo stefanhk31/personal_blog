@@ -7,8 +7,6 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  blog_html_builder:
-    path: packages/blog_html_builder
   blog_models:
     path: packages/blog_models
   blog_repository:
@@ -19,6 +17,8 @@ dependencies:
   http: ^1.2.0
   intl: ^0.19.0
   shelf_cors_headers: ^0.1.5
+  template_engine:
+    path: packages/template_engine
 
 dev_dependencies:
   mocktail: ^1.0.0
