@@ -1,5 +1,6 @@
 import 'package:blog_models/blog_models.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 
 /// {@template blog_preview}
 /// Represents a preview of a blog post.
@@ -26,6 +27,9 @@ class BlogPreview extends Equatable {
         authorImage: blog.author.profileImage,
         image: blog.featuredImage,
       );
+
+  /// Returns the date of publication in the format `Month Day, Year`.
+  String get publishDateFormatted => DateFormat.yMMMMd().format(published);
 
   /// Title of the blog post.
   final String title;

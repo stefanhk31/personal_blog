@@ -15,8 +15,8 @@ void main() {
     const imageUrl = 'https://example.com/image.png';
     const header = 'Test Header';
     const people = [
-      {'name': 'John Doe'},
-      {'name': 'Jane Doe'},
+      {'name': 'John Doe', 'dob': '01/01/2000'},
+      {'name': 'Jane Doe', 'dob': '02/02/2000'},
     ];
 
     setUp(
@@ -53,6 +53,7 @@ void main() {
         expect(result, contains('<h1>$header</h1>'));
         for (final person in people) {
           expect(result, contains('<p>${person['name']}</p>'));
+          expect(result, contains('<p>${person['dob']}</p>'));
         }
       });
 
@@ -92,6 +93,26 @@ void main() {
         expect(result, isNot(contains('<h1>')));
       });
 
+      test('handles optional null values', () async {
+        final people = [
+          {'name': 'John Doe', 'dob': null},
+          {'name': 'Jane Doe', 'dob': '02/02/2000'},
+        ];
+        final context = {
+          'title': title,
+          'people': people,
+          'header': null,
+          'imageUrl': null,
+        };
+        final engine = TemplateEngine(
+          basePath: basePath,
+          logger: logger,
+        );
+        final result =
+            await engine.render(filePath: '/template.html', context: context);
+        expect(result, isNot(contains(people[0]['dob'])));
+        expect(result, contains(people[1]['dob']));
+      });
       test('displays content for negative conditions', () async {
         final context = {
           'title': title,

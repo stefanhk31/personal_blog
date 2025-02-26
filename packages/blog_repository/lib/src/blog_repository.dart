@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:blog_html_builder/blog_html_builder.dart';
 import 'package:blog_models/blog_models.dart';
@@ -17,7 +18,7 @@ typedef RenderedContent = (int, String);
 /// {@endtemplate}
 class BlogRepository {
   /// {@macro blog_repository}
-  const BlogRepository({
+  BlogRepository({
     required ButterCmsClient cmsClient,
     required TemplateEngine templateEngine,
   })  : _cmsClient = cmsClient,
@@ -33,9 +34,7 @@ class BlogRepository {
 
       if (response.statusCode != 200) {
         return _renderErrorPage(
-          message: 'Failed to fetch blog post: \n '
-              'Status Code: ${response.statusCode} \n '
-              'Body: ${response.body} ',
+          message: _httpErrorMessage(response.statusCode, response.body),
           statusCode: response.statusCode,
         );
       }
@@ -66,7 +65,77 @@ class BlogRepository {
     }
   }
 
-  Future<(int, String)> _renderErrorPage({
+  /// Fetches a list of blog post previews and generates HTML for the client.
+  Future<RenderedContent> getBlogOverviewHtml({
+    int limit = defaultRequestLimit,
+    int offset = defaultRequestOffset,
+  }) async {
+    try {
+      final response = await _cmsClient.fetchBlogPosts(
+        excludeBody: true,
+        limit: limit,
+        offset: offset,
+      );
+
+      if (response.statusCode != 200) {
+        return _renderErrorPage(
+          message: _httpErrorMessage(response.statusCode, response.body),
+          statusCode: response.statusCode,
+        );
+      }
+
+      final blogsResponse = BlogsResponse.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>,
+      );
+
+      final blogPreviews = blogsResponse.data.map((blog) {
+        return BlogPreview.fromBlog(blog);
+      }).toList();
+
+      final posts = [
+        for (final (index, preview) in blogPreviews.indexed)
+          {
+            'title': preview.title,
+            'description': preview.description,
+            'featuredImage': preview.image,
+            'published': preview.publishDateFormatted,
+            'slug': preview.slug,
+            'isLast': preview == blogPreviews.last,
+            'offset': offset + index + 1,
+          },
+      ];
+
+      final html = offset == 0
+          ? await _templateEngine.render(
+              filePath: 'blog_overview_page.html',
+              context: {
+                'posts': posts,
+                'metaTitle': defaultMetaTitle,
+                'metaDescription': defaultMetaDescription,
+                'year': currentYear,
+                'baseBlogsUrl': Platform.environment['BASE_BLOGS_URL'] ?? '',
+              },
+            )
+          : await _templateEngine.render(
+              filePath: 'blog_preview_list.html',
+              context: {
+                'posts': posts,
+              },
+            );
+
+      return (200, html);
+    } on Exception catch (e) {
+      return _renderErrorPage(message: e.toString());
+    }
+  }
+
+  String _httpErrorMessage(int statusCode, String body) {
+    return 'Http call failed: \n '
+        'Status Code: $statusCode \n '
+        'Body: $body';
+  }
+
+  Future<RenderedContent> _renderErrorPage({
     required String message,
     int statusCode = 500,
   }) async {

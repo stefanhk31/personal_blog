@@ -46,6 +46,7 @@ class TemplateEngine {
       var skipField = '';
       var listValues = <dynamic>[];
       var listLoop = 0;
+      var listField = '';
       final tempCtx = <String, dynamic>{};
       final ctx = Map<String, dynamic>.from(context);
 
@@ -70,7 +71,9 @@ class TemplateEngine {
         if (modifier == '/') {
           if (!skip) {
             buffer.write(file.substring(startIndex, match.start));
-            if (listValues.isNotEmpty) {
+            if (listValues.isNotEmpty &&
+                listField.isNotEmpty &&
+                field == listField) {
               startIndex = listLoop;
               ctx
                 ..clear()
@@ -116,6 +119,8 @@ class TemplateEngine {
                 startIndex = match.end;
                 continue;
               }
+
+              listField = field;
 
               tempCtx
                 ..clear()

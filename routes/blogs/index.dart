@@ -1,5 +1,5 @@
 import 'package:blog_models/blog_models.dart';
-import 'package:butter_cms_client/butter_cms_client.dart';
+import 'package:blog_repository/blog_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
 
 /// Request handler for the `/blogs` route.
@@ -14,14 +14,15 @@ Future<Response> onRequest(RequestContext context) async {
 Future<Response> _get(RequestContext context) async {
   final request = BlogsRequest.fromJson(context.request.uri.queryParameters);
 
-  final blogsResponse = await context.read<ButterCmsClient>().fetchBlogPosts(
-        excludeBody: request.excludeBody,
-        limit: request.limit,
-        offset: request.offset,
-      );
+  final (statusCode, html) =
+      await context.read<BlogRepository>().getBlogOverviewHtml(
+            limit: request.limit,
+            offset: request.offset,
+          );
 
   return Response(
-    statusCode: blogsResponse.statusCode,
-    body: blogsResponse.body,
+    statusCode: statusCode,
+    body: html,
+    headers: {'content-type': 'text/html'},
   );
 }
