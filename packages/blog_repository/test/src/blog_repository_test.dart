@@ -125,5 +125,149 @@ void main() {
         ).called(1);
       });
     });
+
+    group('getBlogOverviewHtml', () {
+      test(
+          'uses template engine to render blog overview page '
+          'when api call is successful and offset is zero', () async {
+        when(
+          () => cmsClient.fetchBlogPosts(
+            excludeBody: true,
+            limit: any(named: 'limit'),
+          ),
+        ).thenAnswer(
+          (_) async => Response(
+            jsonEncode({
+              'meta': blogsMetaJson,
+              'data': [blogJson],
+            }),
+            200,
+          ),
+        );
+
+        when(
+          () => templateEngine.render(
+            filePath: 'blog_overview_page.html',
+            context: any(named: 'context'),
+          ),
+        ).thenAnswer((_) async => '<html></html>');
+
+        await blogRepository.getBlogOverviewHtml();
+        verify(
+          () => templateEngine.render(
+            filePath: 'blog_overview_page.html',
+            context: any(named: 'context'),
+          ),
+        ).called(1);
+      });
+
+      test(
+          'uses template engine to render new blog preview list data '
+          'when api call is successful '
+          'and offset is greater than zero', () async {
+        when(
+          () => cmsClient.fetchBlogPosts(
+            excludeBody: true,
+            limit: any(named: 'limit'),
+            offset: 1,
+          ),
+        ).thenAnswer(
+          (_) async => Response(
+            jsonEncode({
+              'meta': blogsMetaJson,
+              'data': [blogJson],
+            }),
+            200,
+          ),
+        );
+
+        when(
+          () => templateEngine.render(
+            filePath: 'blog_preview_list.html',
+            context: any(named: 'context'),
+          ),
+        ).thenAnswer((_) async => '<html></html>');
+
+        await blogRepository.getBlogOverviewHtml(offset: 1);
+        verify(
+          () => templateEngine.render(
+            filePath: 'blog_preview_list.html',
+            context: any(named: 'context'),
+          ),
+        ).called(1);
+      });
+
+      test(
+          'uses template engine to render error page '
+          'when api call is not successful', () async {
+        when(
+          () => cmsClient.fetchBlogPosts(
+            excludeBody: true,
+            limit: any(named: 'limit'),
+          ),
+        ).thenAnswer(
+          (_) async => Response(
+            'bad request',
+            400,
+          ),
+        );
+
+        when(
+          () => templateEngine.render(
+            filePath: 'error_page.html',
+            context: any(named: 'context'),
+          ),
+        ).thenAnswer((_) async => '<html></html>');
+
+        await blogRepository.getBlogOverviewHtml();
+        verify(
+          () => templateEngine.render(
+            filePath: 'error_page.html',
+            context: any(named: 'context'),
+          ),
+        ).called(1);
+      });
+
+      test(
+          'uses template engine to render error page '
+          'when an unexpected error occurs', () async {
+        when(
+          () => cmsClient.fetchBlogPosts(
+            excludeBody: true,
+            limit: any(named: 'limit'),
+          ),
+        ).thenAnswer(
+          (_) async => Response(
+            jsonEncode({
+              'meta': blogsMetaJson,
+              'data': [blogJson],
+            }),
+            200,
+          ),
+        );
+
+        when(
+          () => templateEngine.render(
+            filePath: 'blog_overview_page.html',
+            context: any(named: 'context'),
+          ),
+        ).thenThrow(Exception('error rendering template'));
+
+        when(
+          () => templateEngine.render(
+            filePath: 'error_page.html',
+            context: any(named: 'context'),
+          ),
+        ).thenAnswer((_) async => '<html></html>');
+
+        await blogRepository.getBlogOverviewHtml();
+        verify(
+          () => templateEngine.render(
+            filePath: 'error_page.html',
+            context: any(named: 'context'),
+          ),
+        ).called(1);
+      });
+    });
   });
 }

@@ -84,6 +84,13 @@ const blogMetaJson = {
   'previous_post': blogSummaryJson,
 };
 
+/// Mock [BlogsMeta] data in JSON format. For testing purposes only.
+const blogsMetaJson = {
+  'count': 3,
+  'next_post': blogSummaryJson,
+  'previous_post': blogSummaryJson,
+};
+
 /// Mock [Category] data. For testing purposes only.
 const category = Category(name: 'name', slug: 'slug');
 
