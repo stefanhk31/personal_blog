@@ -22,6 +22,9 @@
         {{^people}}
         <p>No people</p>
         {{/people}}
+        {{#address}}
+        <p>{{coordinates}}</p>
+        {{/address}}
         <div>
             {{innerHtml}}
         </div>

@@ -18,6 +18,7 @@ void main() {
       {'name': 'John Doe', 'dob': '01/01/2000'},
       {'name': 'Jane Doe', 'dob': '02/02/2000'},
     ];
+    const coordinates = '0.0, 0.0';
 
     setUp(
       () {
@@ -31,6 +32,14 @@ void main() {
       },
     );
 
+    test('can be instantiated', () {
+      expect(TemplateEngine(basePath: basePath), isNotNull);
+    });
+
+    test('can be instantiated with a logger', () {
+      expect(TemplateEngine(basePath: basePath, logger: logger), isNotNull);
+    });
+
     group('render', () {
       test('inserts fields into template', () async {
         final context = {
@@ -38,6 +47,7 @@ void main() {
           'imageUrl': imageUrl,
           'header': header,
           'people': people,
+          'address': {'coordinates': coordinates},
         };
         final engine = TemplateEngine(
           basePath: basePath,
@@ -55,6 +65,7 @@ void main() {
           expect(result, contains('<p>${person['name']}</p>'));
           expect(result, contains('<p>${person['dob']}</p>'));
         }
+        expect(result, contains('<p>$coordinates</p>'));
       });
 
       test('omits comments', () async {
@@ -113,6 +124,21 @@ void main() {
         expect(result, isNot(contains(people[0]['dob'])));
         expect(result, contains(people[1]['dob']));
       });
+
+      test('handles empty lists', () async {
+        final context = {
+          'title': title,
+          'people': <dynamic>[],
+        };
+        final engine = TemplateEngine(
+          basePath: basePath,
+          logger: logger,
+        );
+        final result =
+            await engine.render(filePath: '/template.html', context: context);
+        expect(result, contains('<p>No people</p>'));
+      });
+
       test('displays content for negative conditions', () async {
         final context = {
           'title': title,
@@ -143,6 +169,18 @@ void main() {
         for (final person in people) {
           expect(result, contains('<p>${person['name']}</p>'));
         }
+      });
+
+      test('logs and throws exception when file cannot be read', () async {
+        final engine = TemplateEngine(
+          basePath: basePath,
+          logger: logger,
+        );
+        await expectLater(
+          () => engine.render(filePath: '/missing.html'),
+          throwsA(isA<Exception>()),
+        );
+        verify(() => logger.severe(any())).called(1);
       });
     });
   });

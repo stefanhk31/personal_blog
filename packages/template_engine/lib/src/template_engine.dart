@@ -40,153 +40,150 @@ class TemplateEngine {
     final regex =
         RegExp(r'({{\s*([#/^>!]?) *([\w\d_]*)\s*\|?\s*([\w\d\s_\|]*)}})');
 
-    try {
-      var startIndex = 0;
-      var skip = false;
-      var skipField = '';
-      var listValues = <dynamic>[];
-      var listLoop = 0;
-      var listField = '';
-      final tempCtx = <String, dynamic>{};
-      final ctx = Map<String, dynamic>.from(context);
+    var startIndex = 0;
+    var skip = false;
+    var skipField = '';
+    var listValues = <dynamic>[];
+    var listLoop = 0;
+    var listField = '';
+    final tempCtx = <String, dynamic>{};
+    final ctx = Map<String, dynamic>.from(context);
 
-      while (true) {
-        final matches = regex.allMatches(file, startIndex);
-        if (matches.isEmpty) break;
-        final match = matches.first;
-        final modifier = match.group(2);
-        final field = match.group(3);
-        if (modifier == null || field == null) {
-          continue;
-        }
+    while (true) {
+      final matches = regex.allMatches(file, startIndex);
+      if (matches.isEmpty) break;
+      final match = matches.first;
+      final modifier = match.group(2);
+      final field = match.group(3);
+      if (modifier == null || field == null) {
+        continue;
+      }
 
-        // comment tag
-        if (modifier == '!') {
+      // comment tag
+      if (modifier == '!') {
+        buffer.write(file.substring(startIndex, match.start));
+        startIndex = match.end;
+        continue;
+      }
+
+      // end tag
+      if (modifier == '/') {
+        if (!skip) {
           buffer.write(file.substring(startIndex, match.start));
-          startIndex = match.end;
-          continue;
+          if (listValues.isNotEmpty &&
+              listField.isNotEmpty &&
+              field == listField) {
+            startIndex = listLoop;
+            ctx
+              ..clear()
+              ..addAll(tempCtx)
+              ..addAll(listValues.first as Map<String, dynamic>);
+            listValues.removeAt(0);
+            continue;
+          }
+        }
+        if (skipField == field) {
+          skip = false;
+          skipField = '';
         }
 
-        // end tag
-        if (modifier == '/') {
-          if (!skip) {
-            buffer.write(file.substring(startIndex, match.start));
-            if (listValues.isNotEmpty &&
-                listField.isNotEmpty &&
-                field == listField) {
-              startIndex = listLoop;
-              ctx
-                ..clear()
-                ..addAll(tempCtx)
-                ..addAll(listValues.first as Map<String, dynamic>);
-              listValues.removeAt(0);
+        startIndex = match.end;
+        continue;
+      }
+
+      if (skip) {
+        startIndex = match.end;
+        continue;
+      }
+
+      // start tag
+      if (modifier == '#') {
+        buffer.write(file.substring(startIndex, match.start));
+        if (ctx.containsKey(field)) {
+          var value = ctx[field];
+          if (value is bool) {
+            skip = !value;
+          } else {
+            skip = value == null;
+          }
+
+          if (value is Map) {
+            value = <dynamic>[value];
+          }
+
+          if (value is List) {
+            if (value.isEmpty) {
+              skip = true;
+              skipField = field;
+              startIndex = match.end;
               continue;
             }
+
+            listField = field;
+
+            tempCtx
+              ..clear()
+              ..addAll(ctx);
+            listValues = <dynamic>[...value];
+            ctx
+              ..clear()
+              ..addAll(tempCtx)
+              ..addAll(listValues.first as Map<String, dynamic>);
+            listValues.removeAt(0);
+            listLoop = match.end;
           }
-          if (skipField == field) {
-            skip = false;
-            skipField = '';
-          }
-
-          startIndex = match.end;
-          continue;
+        } else {
+          skip = true;
         }
+        skipField = field;
+        startIndex = match.end;
+        continue;
+      }
 
-        if (skip) {
-          startIndex = match.end;
-          continue;
-        }
-
-        // start tag
-        if (modifier == '#') {
-          buffer.write(file.substring(startIndex, match.start));
-          if (ctx.containsKey(field)) {
-            var value = ctx[field];
-            if (value is bool) {
-              skip = !value;
-            } else {
-              skip = value == null;
-            }
-
-            if (value is Map) {
-              value = <dynamic>[value];
-            }
-
-            if (value is List) {
-              if (value.isEmpty) {
-                skip = true;
-                skipField = field;
-                startIndex = match.end;
-                continue;
-              }
-
-              listField = field;
-
-              tempCtx
-                ..clear()
-                ..addAll(ctx);
-              listValues = <dynamic>[...value];
-              ctx
-                ..clear()
-                ..addAll(tempCtx)
-                ..addAll(listValues.first as Map<String, dynamic>);
-              listValues.removeAt(0);
-              listLoop = match.end;
-            }
+      // inverted start tag
+      if (modifier == '^') {
+        buffer.write(file.substring(startIndex, match.start));
+        if (ctx.containsKey(field)) {
+          final value = ctx[field];
+          if (value is bool) {
+            skip = value;
+          } else if (value is List) {
+            skip = value.isNotEmpty;
           } else {
             skip = true;
           }
-          skipField = field;
-          startIndex = match.end;
-          continue;
         }
-
-        // inverted start tag
-        if (modifier == '^') {
-          buffer.write(file.substring(startIndex, match.start));
-          if (ctx.containsKey(field)) {
-            final value = ctx[field];
-            if (value is bool) {
-              skip = value;
-            } else {
-              skip = true;
-            }
-          }
-          skipField = field;
-          startIndex = match.end;
-          continue;
-        }
-
-        // partial tag
-        if (modifier == '>') {
-          buffer.write(file.substring(startIndex, match.start));
-          final partial = await render(
-            filePath: '/$field.html',
-            context: context,
-          );
-          buffer.write(partial);
-          startIndex = match.end;
-          continue;
-        }
-
-        buffer.write(file.substring(startIndex, match.start));
-
-        dynamic value;
-        if (!ctx.containsKey(field)) {
-          _logger.warning('field $field not found');
-          value = field;
-        } else {
-          value = ctx[field];
-        }
-        buffer.write(value);
+        skipField = field;
         startIndex = match.end;
+        continue;
       }
 
-      buffer.write(file.substring(startIndex));
-      return buffer.toString();
-    } on Exception catch (e) {
-      _logger.severe('Error rendering template: $e');
-      rethrow;
+      // partial tag
+      if (modifier == '>') {
+        buffer.write(file.substring(startIndex, match.start));
+        final partial = await render(
+          filePath: '/$field.html',
+          context: context,
+        );
+        buffer.write(partial);
+        startIndex = match.end;
+        continue;
+      }
+
+      buffer.write(file.substring(startIndex, match.start));
+
+      dynamic value;
+      if (!ctx.containsKey(field)) {
+        _logger.warning('field $field not found');
+        value = field;
+      } else {
+        value = ctx[field];
+      }
+      buffer.write(value);
+      startIndex = match.end;
     }
+
+    buffer.write(file.substring(startIndex));
+    return buffer.toString();
   }
 }
