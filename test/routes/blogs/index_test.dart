@@ -1,12 +1,9 @@
 // ignore_for_file: avoid_relative_lib_imports
 
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:blog_models/blog_models.dart';
-import 'package:butter_cms_client/butter_cms_client.dart';
+import 'package:blog_repository/blog_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
-import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -15,41 +12,37 @@ import '../../helpers/method_not_allowed.dart';
 
 class _MockRequestContext extends Mock implements RequestContext {}
 
-class _MockButterCmsClient extends Mock implements ButterCmsClient {}
+class _MockBlogRepository extends Mock implements BlogRepository {}
 
 void main() {
   group('index', () {
     group('GET /', () {
-      late ButterCmsClient butterCmsClient;
+      late BlogRepository blogRepository;
 
       setUp(() {
-        butterCmsClient = _MockButterCmsClient();
+        blogRepository = _MockBlogRepository();
       });
       test('responds with a 200', () async {
         final context = _MockRequestContext();
         final request = Request('GET', Uri.parse('http://127.0.0.1/'));
-        final blogsResponse =
-            BlogsResponse(meta: const BlogsMeta(count: 1), data: [blog]);
+        const htmlResponse = '<html>test</html>';
+
         when(() => context.request).thenReturn(request);
-        when(() => context.read<ButterCmsClient>()).thenReturn(butterCmsClient);
+        when(() => context.read<BlogRepository>()).thenReturn(blogRepository);
         when(
-          () => butterCmsClient.fetchBlogPosts(
-            excludeBody: any(named: 'excludeBody'),
+          () => blogRepository.getBlogOverviewHtml(
             limit: any(named: 'limit'),
             offset: any(named: 'offset'),
           ),
         ).thenAnswer(
-          (_) async => http.Response(
-            jsonEncode(blogsResponse.toJson()),
-            HttpStatus.ok,
-          ),
+          (_) async => (200, htmlResponse),
         );
         final response = await route.onRequest(context);
         expect(response.statusCode, equals(HttpStatus.ok));
         expect(
           response.body(),
           completion(
-            equals(jsonEncode(blogsResponse.toJson())),
+            equals(htmlResponse),
           ),
         );
       });
