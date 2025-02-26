@@ -38,13 +38,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
-  blog_html_builder:
-    dependency: "direct main"
-    description:
-      path: "packages/blog_html_builder"
-      relative: true
-    source: path
-    version: "0.1.0+1"
   blog_models:
     dependency: "direct main"
     description:
@@ -418,6 +411,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  template_engine:
+    dependency: "direct main"
+    description:
+      path: "packages/template_engine"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   term_glyph:
     dependency: transitive
     description:

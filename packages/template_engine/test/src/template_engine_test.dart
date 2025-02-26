@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:blog_html_builder/blog_html_builder.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:template_engine/template_engine.dart';
 import 'package:test/test.dart';
 
 class _MockLogger extends Mock implements Logger {}
