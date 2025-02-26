@@ -12,6 +12,8 @@ This Dart package provides Read API access to [Butter CMS](https://buttercms.com
 - Fetch all blog posts
 - Fetch an individual blog post
 
+Additional information on the Butter CMS can be found in their [API documentation](https://buttercms.com/docs/api/#introduction).
+
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [license_link]: https://opensource.org/licenses/MIT
 [very_good_analysis_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg

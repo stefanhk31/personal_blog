@@ -4,11 +4,13 @@
 [![License: MIT][license_badge]][license_link]
 [![Powered by Dart Frog](https://img.shields.io/endpoint?url=https://tinyurl.com/dartfrog-badge)](https://dartfrog.vgv.dev)
 
-My personal blog website. HTML content is served from Dart Frog and styled by .
+My personal blog website.
 
 Blog content provided by [Butter CMS](butter_cms_link). 
 
 ## Running Locally
+
+Dependencies need to be fetched for every package in the project. The easiest way to do this is by running `very_good packages get -r`, a command made available via the [Very Good CLI](https://pub.dev/packages/very_good_cli). 
 
 Run `dart_frog dev` to serve the app locally. Running the app properly requires two environment variables:
 
@@ -17,7 +19,7 @@ Run `dart_frog dev` to serve the app locally. Running the app properly requires 
 
 ## Updating Styles
 
-Styling uses [TailwindCSS](https://v3.tailwindcss.com/). New CSS content is generated in `public/output.css` on each save when the styles are being watched. To watch, run `npm run watch`.
+Styling uses [TailwindCSS](https://v3.tailwindcss.com/). New CSS content is generated in `public/output.css` on each save when the styles are being watched. To watch, run `npm install` (if you have not done so previously) and then `npm run watch`.
 
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [license_link]: https://opensource.org/licenses/MIT

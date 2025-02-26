@@ -6,7 +6,13 @@
 
 ## Introduction
 
-An package containing the data models necessary to fetch blogs.
+This Dart contains the data models necessary to fetch and de-serialize blogs and display them on the client. Models are grouped into three categories:
+
+1. `endpoint_models`: request/response models made for interacting directly with the API
+2. `data_models`: core models containing key properties for blogs and associated entities
+3. `presentation_models`: models made for displaying content on the client
+
+This project also includes a `test_fixtures.dart` class to make testing easier in packages that consume this models package.
 
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [license_link]: https://opensource.org/licenses/MIT
