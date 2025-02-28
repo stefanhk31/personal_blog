@@ -6,12 +6,8 @@ FROM --platform=amd64 dart:stable AS build
 WORKDIR /app
 
 # Resolve app dependencies.
-COPY pubspec.* ./
-COPY packages/blog_models/pubspec.* ./packages/blog_models/
-COPY packages/butter_cms_client/pubspec.* ./packages/butter_cms_client/
-RUN cd packages/blog_models/ && dart pub get
-RUN cd packages/butter_cms_client/ && dart pub get
-RUN dart pub get
+RUN dart pub global activate very_good_cli
+RUN dart pub global run very_good_cli:very_good packages get -r
 
 # Copy app source code and AOT compile it.
 COPY . .
@@ -29,8 +25,7 @@ RUN dart compile exe build/bin/server.dart -o build/bin/server
 FROM scratch
 COPY --from=build /runtime/ /
 COPY --from=build /app/build/bin/server /app/bin/
-# Uncomment the following line if you are serving static files.
-# COPY --from=build /app/build/public /public/
+COPY --from=build /app/build/public /public/
 
 # Start the server.
 CMD ["/app/bin/server"]
