@@ -29,6 +29,17 @@ Handler middleware(Handler handler) {
       .use(
     provider<ButterCmsClient>(
       (_) {
+        final apiKey = Platform.environment['BUTTER_CMS_API_KEY'];
+
+        if (apiKey == null) {
+          throw StateError('Could not fetch secret BUTTER_CMS_API_KEY');
+        }
+
+        return ButterCmsClient(
+          httpClient: Client(),
+          apiKey: apiKey,
+        );
+
         final secretJson = Platform.environment['BUTTER_CMS_API_KEY'];
 
         if (secretJson == null) {
@@ -36,7 +47,7 @@ Handler middleware(Handler handler) {
         }
 
         final secret = jsonDecode(secretJson) as Map<String, dynamic>;
-        final apiKey = secret['BUTTER_CMS_API_KEY'] as String?;
+        //final apiKey = secret['BUTTER_CMS_API_KEY'] as String?;
 
         if (apiKey == null) {
           throw StateError('Could not resolve apiKey value from secret');
