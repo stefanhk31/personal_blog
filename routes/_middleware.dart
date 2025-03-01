@@ -19,14 +19,17 @@ Handler middleware(Handler handler) {
         ),
       )
       .use(
-        provider<TemplateEngine>(
-          (_) => TemplateEngine(
-            basePath:
-                '${Directory.current.path}/packages/blog_repository/templates',
-          ),
-        ),
-      )
-      .use(
+    provider<TemplateEngine>(
+      (_) {
+        final currentPath = Directory.current.path;
+        final base = currentPath.endsWith('/') ? currentPath : '$currentPath/';
+
+        return TemplateEngine(
+          basePath: '${base}packages/blog_repository/templates',
+        );
+      },
+    ),
+  ).use(
     provider<ButterCmsClient>(
       (_) {
         final apiKey = Platform.environment['BUTTER_CMS_API_KEY'];
