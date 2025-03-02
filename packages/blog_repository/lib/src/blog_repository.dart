@@ -143,6 +143,9 @@ class BlogRepository {
       filePath: 'error_page.html',
       context: {
         'message': message,
+        'metaTitle': defaultMetaTitle,
+        'metaDescription': defaultMetaDescription,
+        'year': currentYear,
       },
     );
     return (statusCode, errorHtml);
