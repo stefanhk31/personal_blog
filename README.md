@@ -14,7 +14,7 @@ Dependencies need to be fetched for every package in the project. The easiest wa
 
 Run `dart_frog dev` to serve the app locally. Running the app properly requires two environment variables:
 
-- `BUTTER_CMS_API_KEY`: the api key that enables access to the CMS content. Should be a JSON object: `"{\"BUTTER_CMS_API_KEY\":\"butter-cms-key\"}"`
+- `BUTTER_CMS_API_KEY`: the api key that enables access to the CMS content.
 - `BASE_BLOGS_URL`: the base url of the content on `blog_overview_page.html`. Should be a `localhost` url with the `blogs` path: `http://localhost:8080/blogs`.
 
 ## Updating Styles
