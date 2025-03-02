@@ -1,7 +1,7 @@
 {{#posts}}
-<a id="preview-{{slug}}" href="{{baseBlogsUrl}}/{{slug}}">
-    <div
-        class="mx-4 md:mx-auto my-6 md:w-2/3 bg-secondary-light dark:bg-secondary-dark border-4 border-transparent hover:border-primary-light hover:dark:border-primary-dark rounded-lg shadow-lg">
+<div
+    class="mx-4 md:mx-auto my-6 md:w-2/3 bg-secondary-light dark:bg-secondary-dark border-4 border-transparent hover:border-primary-light hover:dark:border-primary-dark rounded-lg shadow-lg">
+    <a href="{{baseBlogsUrl}}/{{slug}}">
         {{#featuredImage}}
         <img src="{{featuredImage}}" alt="{{title}}" class="h-72 w-full object-cover">
         {{/featuredImage}}
@@ -10,11 +10,11 @@
             <p class="pb-2">{{published}}</p>
             <p class="pb-2">{{description}}</p>
         </div>
-    </div>
-    {{#isLast}}
-    <div hx-get="?offset={{offset}}" hx-trigger="revealed" hx-swap="afterend"></div>
-    {{/isLast}}
-</a>
+    </a>
+</div>
+{{#isLast}}
+<div hx-get="?offset={{offset}}" hx-trigger="revealed" hx-swap="afterend"></div>
+{{/isLast}}
 {{/posts}}
 
 <script src="https://unpkg.com/htmx.org@2.0.4"></script>
