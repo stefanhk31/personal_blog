@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:blog_repository/blog_repository.dart';
@@ -36,24 +35,6 @@ Handler middleware(Handler handler) {
 
         if (apiKey == null) {
           throw StateError('Could not fetch secret BUTTER_CMS_API_KEY');
-        }
-
-        return ButterCmsClient(
-          httpClient: Client(),
-          apiKey: apiKey,
-        );
-
-        final secretJson = Platform.environment['BUTTER_CMS_API_KEY'];
-
-        if (secretJson == null) {
-          throw StateError('Could not fetch secret BUTTER_CMS_API_KEY');
-        }
-
-        final secret = jsonDecode(secretJson) as Map<String, dynamic>;
-        //final apiKey = secret['BUTTER_CMS_API_KEY'] as String?;
-
-        if (apiKey == null) {
-          throw StateError('Could not resolve apiKey value from secret');
         }
 
         return ButterCmsClient(
