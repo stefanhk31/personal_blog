@@ -25,7 +25,7 @@ Handler middleware(Handler handler) {
         final base = currentPath.endsWith('/') ? currentPath : '$currentPath/';
 
         return TemplateEngine(
-          basePath: '${base}packages/blog_repository/templates',
+          basePath: '${base}templates',
         );
       },
     ),

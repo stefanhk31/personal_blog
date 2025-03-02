@@ -26,6 +26,7 @@ FROM scratch
 COPY --from=build /runtime/ /
 COPY --from=build /app/build/bin/server /app/bin/
 COPY --from=build /app/build/public /public/
+COPY --from=build /app/build/templates /templates/
 
 # Start the server.
 CMD ["/app/bin/server"]
