@@ -56,6 +56,7 @@ class BlogRepository {
           'featuredImage': blogDetail.featuredImage,
           'metaTitle': blogDetail.seoTitle,
           'metaDescription': blogDetail.metaDescription,
+          'metaImageUrl': blogDetail.featuredImage,
           'year': currentYear,
         },
       );
