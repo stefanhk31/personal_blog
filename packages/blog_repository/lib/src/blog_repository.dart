@@ -27,6 +27,16 @@ class BlogRepository {
   final ButterCmsClient _cmsClient;
   final TemplateEngine _templateEngine;
 
+  final _defaultMetaContext = {
+    'metaTitle': defaultMetaTitle,
+    'metaDescription': defaultMetaDescription,
+  };
+
+  final _globalContext = {
+    'baseBlogsUrl': Platform.environment['BASE_BLOGS_URL'] ?? '',
+    'year': currentYear,
+  };
+
   /// Fetches a detailed blog post by [slug] and generates HTML for the client.
   Future<RenderedContent> getBlogDetailHtml(String slug) async {
     try {
@@ -57,7 +67,7 @@ class BlogRepository {
           'metaTitle': blogDetail.seoTitle,
           'metaDescription': blogDetail.metaDescription,
           'metaImageUrl': blogDetail.featuredImage,
-          'year': currentYear,
+          ..._globalContext,
         },
       );
       return (200, html);
@@ -111,16 +121,15 @@ class BlogRepository {
               filePath: 'blog_overview_page.html',
               context: {
                 'posts': posts,
-                'metaTitle': defaultMetaTitle,
-                'metaDescription': defaultMetaDescription,
-                'year': currentYear,
-                'baseBlogsUrl': Platform.environment['BASE_BLOGS_URL'] ?? '',
+                ..._defaultMetaContext,
+                ..._globalContext,
               },
             )
           : await _templateEngine.render(
               filePath: 'blog_preview_list.html',
               context: {
                 'posts': posts,
+                'baseBlogsUrl': Platform.environment['BASE_BLOGS_URL'] ?? '',
               },
             );
 
@@ -144,9 +153,8 @@ class BlogRepository {
       filePath: 'error_page.html',
       context: {
         'message': message,
-        'metaTitle': defaultMetaTitle,
-        'metaDescription': defaultMetaDescription,
-        'year': currentYear,
+        ..._defaultMetaContext,
+        ..._globalContext,
       },
     );
     return (statusCode, errorHtml);

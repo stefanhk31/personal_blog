@@ -3,6 +3,8 @@
 
 .mason/
 
+build/
+
 node_modules/
 
 **/.dart_tool/
