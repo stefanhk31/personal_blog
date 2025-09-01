@@ -66,7 +66,7 @@ class BlogRepository {
           'featuredImage': blogDetail.featuredImage,
           'metaTitle': blogDetail.seoTitle,
           'metaDescription': blogDetail.metaDescription,
-          'metaImageUrl': blogDetail.featuredImage,
+          'metaImageUrl': blogDetail.featuredImage ?? defaultMetaImageUrl,
           ..._globalContext,
         },
       );
