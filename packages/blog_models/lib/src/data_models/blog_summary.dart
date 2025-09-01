@@ -29,7 +29,7 @@ class BlogSummary extends Equatable {
   final String title;
 
   /// Featured image of the blog post.
-  final String featuredImage;
+  final String? featuredImage;
 
   @override
   List<Object?> get props => [slug, title, featuredImage];
