@@ -1,16 +1,15 @@
 # An example of using a custom Dockerfile with Dart Frog
 # Official Dart image: https://hub.docker.com/_/dart
 # Specify the Dart SDK base image version using dart:<version> (ex: dart:2.17)
-FROM --platform=amd64 dart:stable AS build 
+FROM --platform=amd64 dart:stable AS build
 
 WORKDIR /app
 
-# Resolve app dependencies.
-RUN dart pub global activate very_good_cli
-RUN dart pub global run very_good_cli:very_good packages get -r
-
 # Copy app source code and AOT compile it.
 COPY . .
+
+# Resolve app dependencies.
+RUN ./get_packages.sh
 
 # Generate a production build.
 RUN dart pub global activate dart_frog_cli
