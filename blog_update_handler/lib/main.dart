@@ -1,4 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
+
 void main() {
-    print('Hello from blog_update_handler! The time is ${DateTime.now()}');
-    exit(0);
+  final log = jsonEncode({
+    'level': 'info',
+    'message': 'Hello from blog_update_handler!',
+    'timestamp': DateTime.now().toIso8601String(),
+  });
+  print(log);
+  exit(0);
 }
