@@ -11,8 +11,8 @@ COPY . .
 # Resolve app dependencies.
 RUN ./get_packages.sh
 
-# Compile the blog_update_handler as an executable.
-RUN dart compile exe packages/blog_update_handler/lib/main.dart -o build/bin/blog_update_handler
+# Create output directory and compile the blog_update_handler as an executable.
+RUN mkdir -p build/bin && dart compile exe blog_update_handler/lib/main.dart -o build/bin/blog_update_handler
 
 # Build minimal image from AOT-compiled executable and required system
 # libraries and configuration files stored in `/runtime/` from the build stage.
