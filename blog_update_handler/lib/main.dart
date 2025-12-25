@@ -1,10 +1,19 @@
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:logger/logger.dart';
+import 'package:logging/logging.dart';
+
 
 void main() {
-  Logger()
-  .i('Hello from blog_update_handler!', time:  DateTime.now());
+  final log = jsonEncode({
+    'level': 'info',
+    'message': 'Hello from blog_update_handler!',
+    'timestamp': DateTime.now().toIso8601String(),
+  });
+  Logger('BlogUpdateHandler')
+  .info(log);
   
+  
+
   exit(0);
 }
