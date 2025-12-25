@@ -11,7 +11,7 @@ on:
       - main
     paths:
       - ".github/workflows/blog_update_handler_verify_and_test.yaml"
-      - "packages/blog_update_handler/**"
+      - "blog_update_handler/**"
 
   push:
     branches:
@@ -19,7 +19,7 @@ on:
       - main
     paths:
       - ".github/workflows/**"
-      - "packages/blog_update_handler/**"
+      - "blog_update_handler/**"
 
 
 jobs:
@@ -27,6 +27,6 @@ jobs:
     name: Verify and Test
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@main
     with:
-      working_directory: packages/blog_update_handler
+      working_directory: blog_update_handler
       dart_sdk: stable
       min_coverage: 100
