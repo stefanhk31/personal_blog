@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:logging/logging.dart';
-
-
 void main() {
   final log = jsonEncode({
     'level': 'info',
