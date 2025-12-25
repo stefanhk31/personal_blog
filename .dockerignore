@@ -1,0 +1,6 @@
+.dart_tool/
+.dart_frog/
+build/
+node_modules/
+**/.dart_tool/
+**/build/

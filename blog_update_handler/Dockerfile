@@ -1,5 +1,5 @@
 # Dockerfile for blog_update_handler scheduled job
-# Build from repo root: docker build -f packages/blog_update_handler/Dockerfile .
+# Build from repo root: docker build -f blog_update_handler/Dockerfile .
 # Official Dart image: https://hub.docker.com/_/dart
 FROM --platform=amd64 dart:stable AS build
 
