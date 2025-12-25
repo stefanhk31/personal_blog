@@ -4,4 +4,5 @@ export 'blog_meta.dart';
 export 'blog_summary.dart';
 export 'blogs_meta.dart';
 export 'category.dart';
+export 'newsletter_content.dart';
 export 'tag.dart';

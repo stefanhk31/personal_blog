@@ -108,3 +108,27 @@ final tagJson = {
   'name': 'name',
   'slug': 'slug',
 };
+
+/// Mock newsletter title. For testing purposes only.
+const newsletterTitle = 'Newsletter Title';
+
+/// Mock newsletter idempotency key. For testing purposes only.
+const newsletterIdempotencyKey = 'idempotency-key-123';
+
+/// Mock newsletter html content. For testing purposes only.
+const newsletterHtmlContent = '<p>Hello, World!</p>';
+
+/// Mock newsletter plain text content. For testing purposes only.
+const newsletterTextContent = 'Hello, World!';
+
+/// Mock [NewsletterContent] data. For testing purposes only.
+const newsletterContent = NewsletterContent(
+  html: newsletterHtmlContent,
+  text: newsletterTextContent,
+);
+
+/// Mock [NewsletterContent] data in JSON format. For testing purposes only.
+final newsletterContentJson = {
+  'html': newsletterContent.html,
+  'text': newsletterContent.text,
+};
