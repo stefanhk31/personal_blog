@@ -10,9 +10,9 @@ void main() {
     'message': 'Hello from blog_update_handler!',
     'timestamp': DateTime.now().toIso8601String(),
   });
-  Logger('BlogUpdateHandler')
-  .info(log);
-  
+  // Logger('BlogUpdateHandler')
+  // .info(log);
+  print(log);
   
 
   exit(0);
