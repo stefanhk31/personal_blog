@@ -14,7 +14,7 @@ const author = Author(
 );
 
 /// Mock [Author] data in JSON format. For testing purposes only.
-final authorJson = {
+final authorJson = <String, String?>{
   'first_name': author.firstName,
   'last_name': author.lastName,
   'email': author.email,
@@ -45,7 +45,7 @@ final blog = Blog(
 );
 
 /// Mock [Blog] data in JSON format. For testing purposes only.
-final blogJson = {
+final blogJson = <String, dynamic>{
   'url': blog.url,
   'created': blog.created.toIso8601String(),
   'updated': blog.updated.toIso8601String(),
@@ -79,13 +79,13 @@ const blogSummaryJson = {
 };
 
 /// Mock [BlogMeta] data in JSON format. For testing purposes only.
-const blogMetaJson = {
+const blogMetaJson = <String, dynamic>{
   'next_post': blogSummaryJson,
   'previous_post': blogSummaryJson,
 };
 
 /// Mock [BlogsMeta] data in JSON format. For testing purposes only.
-const blogsMetaJson = {
+const blogsMetaJson = <String, dynamic>{
   'count': 3,
   'next_post': blogSummaryJson,
   'previous_post': blogSummaryJson,
@@ -107,4 +107,28 @@ const tag = Tag(name: 'name', slug: 'slug');
 final tagJson = {
   'name': 'name',
   'slug': 'slug',
+};
+
+/// Mock newsletter title. For testing purposes only.
+const newsletterTitle = 'Newsletter Title';
+
+/// Mock newsletter idempotency key. For testing purposes only.
+const newsletterIdempotencyKey = 'idempotency-key-123';
+
+/// Mock newsletter html content. For testing purposes only.
+const newsletterHtmlContent = '<p>Hello, World!</p>';
+
+/// Mock newsletter plain text content. For testing purposes only.
+const newsletterTextContent = 'Hello, World!';
+
+/// Mock [NewsletterContent] data. For testing purposes only.
+const newsletterContent = NewsletterContent(
+  html: newsletterHtmlContent,
+  text: newsletterTextContent,
+);
+
+/// Mock [NewsletterContent] data in JSON format. For testing purposes only.
+final newsletterContentJson = <String, String>{
+  'html': newsletterContent.html,
+  'text': newsletterContent.text,
 };

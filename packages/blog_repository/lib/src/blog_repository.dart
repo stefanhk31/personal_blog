@@ -21,8 +21,8 @@ class BlogRepository {
   BlogRepository({
     required ButterCmsClient cmsClient,
     required TemplateEngine templateEngine,
-  })  : _cmsClient = cmsClient,
-        _templateEngine = templateEngine;
+  }) : _cmsClient = cmsClient,
+       _templateEngine = templateEngine;
 
   final ButterCmsClient _cmsClient;
   final TemplateEngine _templateEngine;
@@ -151,11 +151,7 @@ class BlogRepository {
   }) async {
     final errorHtml = await _templateEngine.render(
       filePath: 'error_page.html',
-      context: {
-        'message': message,
-        ..._defaultMetaContext,
-        ..._globalContext,
-      },
+      context: {'message': message, ..._defaultMetaContext, ..._globalContext},
     );
     return (statusCode, errorHtml);
   }

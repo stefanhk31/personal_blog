@@ -9,11 +9,9 @@ import 'package:logging/logging.dart';
 /// {@endtemplate}
 class TemplateEngine {
   /// {@macro TemplateEngine}
-  TemplateEngine({
-    required String basePath,
-    Logger? logger,
-  })  : _basePath = basePath,
-        _logger = logger ?? Logger('TemplateEngine');
+  TemplateEngine({required String basePath, Logger? logger})
+    : _basePath = basePath,
+      _logger = logger ?? Logger('TemplateEngine');
 
   final String _basePath;
   final Logger _logger;
@@ -37,8 +35,9 @@ class TemplateEngine {
     }
 
     final buffer = StringBuffer();
-    final regex =
-        RegExp(r'({{\s*([#/^>!]?) *([\w\d_]*)\s*\|?\s*([\w\d\s_\|]*)}})');
+    final regex = RegExp(
+      r'({{\s*([#/^>!]?) *([\w\d_]*)\s*\|?\s*([\w\d\s_\|]*)}})',
+    );
 
     var startIndex = 0;
     var skip = false;

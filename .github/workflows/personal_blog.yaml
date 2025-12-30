@@ -1,4 +1,4 @@
-name: Butter Cms Client Verify and Test
+name: Personal Blog Verify and Test
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,24 +10,30 @@ on:
       - master
       - main
     paths:
-      - ".github/workflows/butter_cms_client_verify_and_test.yaml"
-      - "packages/butter_cms_client/**"
+      - ".github/workflows/personal_blog_verify_and_test.yaml"
+      - "**"
       - "packages/blog_models/**"
+      - "packages/blog_repository/**"
+      - "packages/butter_cms_client/**"
+      - "packages/template_engine/**"
   push:
     branches:
       - master
       - main
     paths:
       - ".github/workflows/**"
-      - "packages/butter_cms_client/**"
+      - "**"
       - "packages/blog_models/**"
+      - "packages/blog_repository/**"
+      - "packages/butter_cms_client/**"
+      - "packages/template_engine/**"
 
 jobs:
   verify_and_test:
     name: Verify and Test
     defaults:
       run:
-        working-directory: packages/butter_cms_client
+        working-directory: .
 
     runs-on: ubuntu-latest
 
@@ -44,18 +50,19 @@ jobs:
         run: dart pub get
 
       - name: ✨ Check Formatting
-        run: dart format --set-exit-if-changed lib test
+        run: dart format --set-exit-if-changed routes test
       
       - name: 🕵️ Analyze
-        run: dart analyze --fatal-infos --fatal-warnings lib test
+        run: dart analyze --fatal-infos --fatal-warnings routes test
 
       - name: 🧪 Run Tests
         run: |
           dart pub global activate coverage 1.15.0
-          dart test -j 4 --coverage=coverage --platform=vm && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib
+          dart test -j 4 --coverage=coverage --platform=vm && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=routes
 
       - name: 📊 Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
-          path: packages/butter_cms_client/coverage/lcov.info
+          path: ./coverage/lcov.info
+          exclude: "**/_middleware.dart"
           min_coverage: 100
