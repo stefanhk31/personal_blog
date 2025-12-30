@@ -1,5 +1,5 @@
 name: blog_update_handler
-description: A Very Good Project created by Very Good CLI.
+description: A service to check for new blog posts and publish them to email subscribers.
 version: 0.1.0+1
 publish_to: none
 
