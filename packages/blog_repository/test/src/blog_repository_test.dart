@@ -22,8 +22,10 @@ void main() {
     setUp(() {
       cmsClient = _MockButterCmsClient();
       templateEngine = _MockTemplateEngine();
-      blogRepository =
-          BlogRepository(cmsClient: cmsClient, templateEngine: templateEngine);
+      blogRepository = BlogRepository(
+        cmsClient: cmsClient,
+        templateEngine: templateEngine,
+      );
     });
 
     test('can be instantiated', () {
@@ -31,16 +33,13 @@ void main() {
     });
 
     group('getBlogDetailHtml', () {
-      test(
-          'uses template engine to render blog detail page '
+      test('uses template engine to render blog detail page '
           'when api call is successful', () async {
-        when(() => cmsClient.fetchBlogPost(slug: any(named: 'slug')))
-            .thenAnswer(
+        when(
+          () => cmsClient.fetchBlogPost(slug: any(named: 'slug')),
+        ).thenAnswer(
           (_) async => Response(
-            jsonEncode({
-              'meta': blogMetaJson,
-              'data': blogJson,
-            }),
+            jsonEncode({'meta': blogMetaJson, 'data': blogJson}),
             200,
           ),
         );
@@ -61,16 +60,11 @@ void main() {
         ).called(1);
       });
 
-      test(
-          'uses template engine to render error page '
+      test('uses template engine to render error page '
           'when api call is not successful', () async {
-        when(() => cmsClient.fetchBlogPost(slug: any(named: 'slug')))
-            .thenAnswer(
-          (_) async => Response(
-            'bad request',
-            400,
-          ),
-        );
+        when(
+          () => cmsClient.fetchBlogPost(slug: any(named: 'slug')),
+        ).thenAnswer((_) async => Response('bad request', 400));
 
         when(
           () => templateEngine.render(
@@ -88,16 +82,13 @@ void main() {
         ).called(1);
       });
 
-      test(
-          'uses template engine to render error page '
+      test('uses template engine to render error page '
           'when an unexpected error occurs', () async {
-        when(() => cmsClient.fetchBlogPost(slug: any(named: 'slug')))
-            .thenAnswer(
+        when(
+          () => cmsClient.fetchBlogPost(slug: any(named: 'slug')),
+        ).thenAnswer(
           (_) async => Response(
-            jsonEncode({
-              'meta': blogMetaJson,
-              'data': blogJson,
-            }),
+            jsonEncode({'meta': blogMetaJson, 'data': blogJson}),
             200,
           ),
         );
@@ -127,8 +118,7 @@ void main() {
     });
 
     group('getBlogOverviewHtml', () {
-      test(
-          'uses template engine to render blog overview page '
+      test('uses template engine to render blog overview page '
           'when api call is successful and offset is zero', () async {
         when(
           () => cmsClient.fetchBlogPosts(
@@ -161,8 +151,7 @@ void main() {
         ).called(1);
       });
 
-      test(
-          'uses template engine to render new blog preview list data '
+      test('uses template engine to render new blog preview list data '
           'when api call is successful '
           'and offset is greater than zero', () async {
         when(
@@ -197,20 +186,14 @@ void main() {
         ).called(1);
       });
 
-      test(
-          'uses template engine to render error page '
+      test('uses template engine to render error page '
           'when api call is not successful', () async {
         when(
           () => cmsClient.fetchBlogPosts(
             excludeBody: true,
             limit: any(named: 'limit'),
           ),
-        ).thenAnswer(
-          (_) async => Response(
-            'bad request',
-            400,
-          ),
-        );
+        ).thenAnswer((_) async => Response('bad request', 400));
 
         when(
           () => templateEngine.render(
@@ -228,8 +211,7 @@ void main() {
         ).called(1);
       });
 
-      test(
-          'uses template engine to render error page '
+      test('uses template engine to render error page '
           'when an unexpected error occurs', () async {
         when(
           () => cmsClient.fetchBlogPosts(

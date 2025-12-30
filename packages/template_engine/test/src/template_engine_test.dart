@@ -20,17 +20,11 @@ void main() {
     ];
     const coordinates = '0.0, 0.0';
 
-    setUp(
-      () {
-        logger = _MockLogger();
-        when(
-          () => logger.warning(any()),
-        ).thenAnswer((_) {});
-        when(
-          () => logger.severe(any()),
-        ).thenAnswer((_) {});
-      },
-    );
+    setUp(() {
+      logger = _MockLogger();
+      when(() => logger.warning(any())).thenAnswer((_) {});
+      when(() => logger.severe(any())).thenAnswer((_) {});
+    });
 
     test('can be instantiated', () {
       expect(TemplateEngine(basePath: basePath), isNotNull);
@@ -49,12 +43,11 @@ void main() {
           'people': people,
           'address': {'coordinates': coordinates},
         };
-        final engine = TemplateEngine(
-          basePath: basePath,
-          logger: logger,
+        final engine = TemplateEngine(basePath: basePath, logger: logger);
+        final result = await engine.render(
+          filePath: '/template.html',
+          context: context,
         );
-        final result =
-            await engine.render(filePath: '/template.html', context: context);
         expect(result, contains('<title>$title</title>'));
         expect(
           result,
@@ -75,12 +68,11 @@ void main() {
           'header': header,
           'people': people,
         };
-        final engine = TemplateEngine(
-          basePath: basePath,
-          logger: logger,
+        final engine = TemplateEngine(basePath: basePath, logger: logger);
+        final result = await engine.render(
+          filePath: '/template.html',
+          context: context,
         );
-        final result =
-            await engine.render(filePath: '/template.html', context: context);
         expect(result, isNot(contains('This is a comment')));
       });
 
@@ -91,16 +83,12 @@ void main() {
           'header': null,
           'imageUrl': null,
         };
-        final engine = TemplateEngine(
-          basePath: basePath,
-          logger: logger,
+        final engine = TemplateEngine(basePath: basePath, logger: logger);
+        final result = await engine.render(
+          filePath: '/template.html',
+          context: context,
         );
-        final result =
-            await engine.render(filePath: '/template.html', context: context);
-        expect(
-          result,
-          isNot(contains('<meta property="og:image"')),
-        );
+        expect(result, isNot(contains('<meta property="og:image"')));
         expect(result, isNot(contains('<h1>')));
       });
 
@@ -115,27 +103,22 @@ void main() {
           'header': null,
           'imageUrl': null,
         };
-        final engine = TemplateEngine(
-          basePath: basePath,
-          logger: logger,
+        final engine = TemplateEngine(basePath: basePath, logger: logger);
+        final result = await engine.render(
+          filePath: '/template.html',
+          context: context,
         );
-        final result =
-            await engine.render(filePath: '/template.html', context: context);
         expect(result, isNot(contains(people[0]['dob'])));
         expect(result, contains(people[1]['dob']));
       });
 
       test('handles empty lists', () async {
-        final context = {
-          'title': title,
-          'people': <dynamic>[],
-        };
-        final engine = TemplateEngine(
-          basePath: basePath,
-          logger: logger,
+        final context = {'title': title, 'people': <dynamic>[]};
+        final engine = TemplateEngine(basePath: basePath, logger: logger);
+        final result = await engine.render(
+          filePath: '/template.html',
+          context: context,
         );
-        final result =
-            await engine.render(filePath: '/template.html', context: context);
         expect(result, contains('<p>No people</p>'));
       });
 
@@ -145,23 +128,17 @@ void main() {
           'imageUrl': imageUrl,
           'header': header,
         };
-        final engine = TemplateEngine(
-          basePath: basePath,
-          logger: logger,
+        final engine = TemplateEngine(basePath: basePath, logger: logger);
+        final result = await engine.render(
+          filePath: '/template.html',
+          context: context,
         );
-        final result =
-            await engine.render(filePath: '/template.html', context: context);
         expect(result, contains('<p>No people</p>'));
       });
 
       test('inserts fields into partials', () async {
-        final context = {
-          'people': people,
-        };
-        final engine = TemplateEngine(
-          basePath: basePath,
-          logger: logger,
-        );
+        final context = {'people': people};
+        final engine = TemplateEngine(basePath: basePath, logger: logger);
         final result = await engine.render(
           filePath: '/template_with_partial.html',
           context: context,
@@ -172,10 +149,7 @@ void main() {
       });
 
       test('logs and throws exception when file cannot be read', () async {
-        final engine = TemplateEngine(
-          basePath: basePath,
-          logger: logger,
-        );
+        final engine = TemplateEngine(basePath: basePath, logger: logger);
         await expectLater(
           () => engine.render(filePath: '/missing.html'),
           throwsA(isA<Exception>()),

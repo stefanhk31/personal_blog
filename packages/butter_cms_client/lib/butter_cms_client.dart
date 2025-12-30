@@ -1,4 +1,4 @@
-/// A Very Good Project created by Very Good CLI.
-library butter_cms_client;
+/// Client used for interacting with Butter CMS API.
+library;
 
 export 'src/butter_cms_client.dart';

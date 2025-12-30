@@ -1,5 +1,5 @@
-name: personal_blog_api
-description: An new Dart Frog application
+name: personal_blog
+description: My personal blog site, managed server-side with Dart Frog
 version: 1.0.0+1
 publish_to: none
 
@@ -13,13 +13,14 @@ dependencies:
     path: packages/blog_repository
   butter_cms_client:
     path: packages/butter_cms_client
-  dart_frog: ^1.0.0
-  http: ^1.2.0
-  intl: ^0.19.0
+  dart_frog: ^1.2.6
+  http: ^1.6.0
+  intl: ^0.20.2
   template_engine:
     path: packages/template_engine
 
 dev_dependencies:
   mocktail: ^1.0.0
-  test: ^1.19.2
-  very_good_analysis: ^6.0.0
+  # Pinning to 1.25.8 to fix empty coverage issue on 1.28.0
+  test: 1.25.8
+  very_good_analysis: ^10.0.0
