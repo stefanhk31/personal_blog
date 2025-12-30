@@ -39,8 +39,7 @@ void main() {
       );
       const errorMessage = 'error';
 
-      test(
-          'returns 200 with response body '
+      test('returns 200 with response body '
           'when the call completes successfully', () async {
         when(
           () => httpClient.post(
