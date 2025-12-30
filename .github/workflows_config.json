@@ -1,7 +1,7 @@
 {
   "exclude": "",
   "minCoverage": 100,
-  "flutterVersion": "3.29.0",
+  "flutterVersion": "3.38.2",
   "flutterChannel": "stable",
   "dartChannel": "stable",
   "dependabotFrequency": "weekly",
@@ -12,5 +12,6 @@
   "workflowRef": "main",
   "clearOldWorkflows": true,
   "mainJobName": "verify_and_test",
-  "licenseCheckJobName": "license_check"
+  "licenseCheckJobName": "license_check",
+  "preserve": ""
 }
