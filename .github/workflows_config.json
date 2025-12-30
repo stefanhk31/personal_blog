@@ -1,7 +1,6 @@
 {
   "exclude": "",
   "minCoverage": 100,
-  "flutterVersion": "3.38.5",
   "flutterChannel": "stable",
   "dartChannel": "stable",
   "dependabotFrequency": "weekly",
