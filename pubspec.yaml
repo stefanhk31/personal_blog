@@ -1,5 +1,5 @@
-name: personal_blog_api
-description: An new Dart Frog application
+name: personal_blog
+description: My personal blog site, managed server-side with Dart Frog
 version: 1.0.0+1
 publish_to: none
 
