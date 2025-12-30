@@ -13,13 +13,13 @@ dependencies:
     path: packages/blog_repository
   butter_cms_client:
     path: packages/butter_cms_client
-  dart_frog: ^1.0.0
-  http: ^1.2.0
-  intl: ^0.19.0
+  dart_frog: ^1.2.6
+  http: ^1.6.0
+  intl: ^0.20.2
   template_engine:
     path: packages/template_engine
 
 dev_dependencies:
   mocktail: ^1.0.0
-  test: ^1.19.2
-  very_good_analysis: ^6.0.0
+  test: ^1.28.0
+  very_good_analysis: ^10.0.0
