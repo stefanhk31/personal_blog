@@ -240,7 +240,6 @@ void main() {
         final now = DateTime.now();
         final blogWithoutBody = _TestData.blog(
           now.subtract(const Duration(minutes: 30)),
-
           slug: 'blog-no-body',
           title: 'Blog Without Body',
           body: '',
@@ -260,10 +259,8 @@ void main() {
           ),
         );
 
-        // Act
         await handler.publishRecentPosts();
 
-        // Assert
         verify(
           () => butterCmsClient.fetchBlogPosts(),
         ).called(1);
@@ -275,12 +272,10 @@ void main() {
       });
 
       test('handles exception during fetch gracefully', () async {
-        // Arrange
         when(
           () => butterCmsClient.fetchBlogPosts(),
         ).thenThrow(Exception('Network error'));
 
-        // Act & Assert - should not throw
         await handler.publishRecentPosts();
 
         verify(

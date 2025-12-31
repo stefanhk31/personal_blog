@@ -12,7 +12,9 @@ on:
     paths:
       - ".github/workflows/blog_update_handler_verify_and_test.yaml"
       - "blog_update_handler/**"
-
+      - "packages/blog_models/**"
+      - "packages/blog_newsletter_client/**"
+      - "packages/butter_cms_client/**"
   push:
     branches:
       - master
@@ -20,13 +22,44 @@ on:
     paths:
       - ".github/workflows/**"
       - "blog_update_handler/**"
-
+      - "packages/blog_models/**"
+      - "packages/blog_newsletter_client/**"
+      - "packages/butter_cms_client/**"
 
 jobs:
   verify_and_test:
     name: Verify and Test
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@main
-    with:
-      working_directory: blog_update_handler
-      dart_sdk: stable
-      min_coverage: 100
+    defaults:
+      run:
+        working-directory: blog_update_handler
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v6
+
+      - name: 🎯 Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: 📦 Install Dependencies
+        run: dart pub get
+
+      - name: ✨ Check Formatting
+        run: dart format --set-exit-if-changed lib test bin
+      
+      - name: 🕵️ Analyze
+        run: dart analyze --fatal-infos --fatal-warnings lib test bin
+
+      - name: 🧪 Run Tests
+        run: |
+          dart pub global activate coverage 1.15.0
+          dart test -j 4 --coverage=coverage --platform=vm && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib,bin
+
+      - name: 📊 Check Code Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v3
+        with:
+          path: blog_update_handler/coverage/lcov.info
+          min_coverage: 100
