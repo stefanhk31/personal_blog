@@ -10,5 +10,14 @@ dev_dependencies:
   mocktail: ^1.0.4
   test: ^1.26.3
   very_good_analysis: ^10.0.0
+
 dependencies:
+  blog_models:
+    path: ../packages/blog_models
+  blog_newsletter_client:
+    path: ../packages/blog_newsletter_client
+  butter_cms_client:
+    path: ../packages/butter_cms_client
+  html: ^0.15.4
   http: ^1.6.0
+  uuid: ^4.0.0
