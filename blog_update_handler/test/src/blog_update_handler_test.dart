@@ -215,6 +215,7 @@ void main() {
           ),
         );
 
+        //TODO: this should fail #1 and succeed #2.
         when(
           () => blogNewsletterClient.publishNewsletter(
             request: any(named: 'request'),
