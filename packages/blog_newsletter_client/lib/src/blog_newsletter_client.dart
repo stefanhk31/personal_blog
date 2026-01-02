@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:blog_models/blog_models.dart';
 import 'package:http/http.dart';
 
@@ -23,7 +25,12 @@ class BlogNewsletterClient {
   Future<Response> publishNewsletter({
     required BlogNewsletterPublishRequest request,
   }) async {
-    final uri = Uri.https(_baseUrl, '/newsletters');
-    return _httpClient.post(uri, body: request.toJson());
+    final uri = Uri.http(_baseUrl, '/newsletters');
+    final body = jsonEncode(request.toJson());
+    return _httpClient.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body: body,
+    );
   }
 }

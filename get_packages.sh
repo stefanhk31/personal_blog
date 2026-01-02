@@ -8,32 +8,19 @@ echo ""
 # Store the root directory
 ROOT_DIR=$(pwd)
 
-# Check if packages directory exists
-if [ ! -d "packages" ]; then
-    echo "❌ Error: packages directory not found!"
-    echo "Please run this script from the root of your project."
-    exit 1
-fi
-
 # Counter for tracking progress
 PACKAGE_COUNT=0
 SUCCESS_COUNT=0
 FAILED_PACKAGES=()
 
-# Iterate through all directories in packages/
-for package_dir in packages/*/; do
-    # Skip if not a directory
-    if [ ! -d "$package_dir" ]; then
-        continue
-    fi
-
-    # Get package name from directory path
+# Find all pubspec.yaml files and process each one
+for pubspec in $(find . -name "pubspec.yaml" -not -path "*/.dart_tool/*" -not -path "*/build/*" | sort); do
+    package_dir=$(dirname "$pubspec")
     package_name=$(basename "$package_dir")
 
-    # Skip if no pubspec.yaml exists
-    if [ ! -f "$package_dir/pubspec.yaml" ]; then
-        echo "⚠️  Skipping $package_name (no pubspec.yaml found)"
-        continue
+    # Use "root" as name if it's the root directory
+    if [ "$package_dir" = "." ]; then
+        package_name="root"
     fi
 
     PACKAGE_COUNT=$((PACKAGE_COUNT + 1))
