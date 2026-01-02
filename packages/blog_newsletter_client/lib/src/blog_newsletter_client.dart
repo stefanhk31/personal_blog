@@ -23,7 +23,7 @@ class BlogNewsletterClient {
   Future<Response> publishNewsletter({
     required BlogNewsletterPublishRequest request,
   }) async {
-    final uri = Uri.https(_baseUrl, '/newsletters');
+    final uri = Uri.http(_baseUrl, '/newsletters');
     return _httpClient.post(uri, body: request.toJson());
   }
 }
