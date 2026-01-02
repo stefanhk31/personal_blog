@@ -132,3 +132,16 @@ final newsletterContentJson = <String, String>{
   'html': newsletterContent.html,
   'text': newsletterContent.text,
 };
+
+/// Mock [RailwayLogMessage] data. For testing purposes only.
+final railwayLogMessage = RailwayLogMessage(
+  message: 'Hello',
+  timestamp: DateTime(2026),
+);
+
+/// Mock [RailwayLogMessage] data in JSON format. For testing purposes only.
+final railwayLogMessageJson = <String, String>{
+  'message': railwayLogMessage.message,
+  'timestamp': railwayLogMessage.timestamp.toIso8601String(),
+  'log_level': 'info',
+};
