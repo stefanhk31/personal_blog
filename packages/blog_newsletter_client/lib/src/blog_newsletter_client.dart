@@ -26,6 +26,11 @@ class BlogNewsletterClient {
     required BlogNewsletterPublishRequest request,
   }) async {
     final uri = Uri.http(_baseUrl, '/newsletters');
-    return _httpClient.post(uri, body: jsonEncode(request.toJson()));
+    final body = jsonEncode(request.toJson());
+    return _httpClient.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body: body,
+    );
   }
 }

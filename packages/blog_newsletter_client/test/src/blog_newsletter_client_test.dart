@@ -50,6 +50,7 @@ void main() {
                 path,
               ),
             ),
+            headers: any(named: 'headers'),
             body: any(named: 'body'),
           ),
         ).thenAnswer(
@@ -76,6 +77,7 @@ void main() {
                 path,
               ),
             ),
+            headers: any(named: 'headers'),
             body: any(named: 'body'),
           ),
         ).thenAnswer(
