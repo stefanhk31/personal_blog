@@ -185,7 +185,8 @@ void main() {
         );
       });
 
-      test('continues processing when individual blog publish fails', () async {
+      test('continues processing when individual blog publish '
+          'returns unsuccessful response code', () async {
         final now = DateTime.now();
         final blog1 = _TestData.blog(
           now.subtract(const Duration(minutes: 30)),
@@ -215,7 +216,6 @@ void main() {
           ),
         );
 
-        //TODO: this should fail #1 and succeed #2.
         when(
           () => blogNewsletterClient.publishNewsletter(
             request: any(named: 'request'),
@@ -223,6 +223,55 @@ void main() {
         ).thenAnswer(
           (_) async => http.Response('Error', 500),
         );
+
+        await handler.publishRecentPosts();
+
+        verify(
+          () => butterCmsClient.fetchBlogPosts(),
+        ).called(1);
+        verify(
+          () => blogNewsletterClient.publishNewsletter(
+            request: any(named: 'request'),
+          ),
+        ).called(2);
+      });
+
+      test('continues processing when individual blog publish '
+          'throws exception', () async {
+        final now = DateTime.now();
+        final blog1 = _TestData.blog(
+          now.subtract(const Duration(minutes: 30)),
+          slug: 'blog-1',
+          title: 'Blog 1',
+          body: '<p>Blog 1 content</p>',
+        );
+
+        final blog2 = _TestData.blog(
+          now.subtract(const Duration(minutes: 20)),
+          slug: 'blog-2',
+          title: 'Blog 2',
+          body: '<p>Blog 2 content</p>',
+        );
+
+        final blogsResponse = BlogsResponse(
+          meta: const BlogsMeta(count: 2),
+          data: [blog1, blog2],
+        );
+
+        when(
+          () => butterCmsClient.fetchBlogPosts(),
+        ).thenAnswer(
+          (_) async => http.Response(
+            jsonEncode(blogsResponse.toJson()),
+            200,
+          ),
+        );
+
+        when(
+          () => blogNewsletterClient.publishNewsletter(
+            request: any(named: 'request'),
+          ),
+        ).thenThrow(Exception('error'));
 
         await handler.publishRecentPosts();
 
