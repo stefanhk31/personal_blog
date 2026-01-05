@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:blog_newsletter_client/blog_newsletter_client.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:butter_cms_client/butter_cms_client.dart';
 import 'package:dart_frog/dart_frog.dart';
@@ -28,9 +29,22 @@ Handler middleware(Handler handler) {
         );
       },
     ),
-  ).use(
+  ).use(provider<BlogNewsletterClient>(
+    (context) {
+      final baseUrl = Platform.environment['NEWSLETTER_BASE_URL'];
+
+      if (baseUrl == null) {
+        throw StateError('Could not fetch NEWSLETTER_BASE_URL');
+      }
+
+      return BlogNewsletterClient(
+        httpClient: context.read<Client>(),
+        baseUrl: baseUrl,
+      );
+    },
+  )).use(
     provider<ButterCmsClient>(
-      (_) {
+      (context) {
         final apiKey = Platform.environment['BUTTER_CMS_API_KEY'];
 
         if (apiKey == null) {
@@ -38,10 +52,14 @@ Handler middleware(Handler handler) {
         }
 
         return ButterCmsClient(
-          httpClient: Client(),
+          httpClient: context.read<Client>(),
           apiKey: apiKey,
         );
       },
+    ),
+  ).use(
+    provider<Client>(
+      (_) => Client(),
     ),
   );
 }

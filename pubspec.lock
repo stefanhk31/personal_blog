@@ -40,6 +40,13 @@ packages:
       relative: true
     source: path
     version: "0.1.0+1"
+  blog_newsletter_client:
+    dependency: "direct main"
+    description:
+      path: "packages/blog_newsletter_client"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   blog_repository:
     dependency: "direct main"
     description:
