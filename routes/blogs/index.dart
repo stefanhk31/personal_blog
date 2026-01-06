@@ -14,15 +14,14 @@ Future<Response> onRequest(RequestContext context) async {
 Future<Response> _get(RequestContext context) async {
   final request = BlogsRequest.fromJson(context.request.uri.queryParameters);
 
-  final (statusCode, html) =
-      await context.read<BlogRepository>().getBlogOverviewHtml(
-            limit: request.limit,
-            offset: request.offset,
-          );
+  final response = await context.read<BlogRepository>().getBlogOverviewHtml(
+        limit: request.limit,
+        offset: request.offset,
+      );
 
   return Response(
-    statusCode: statusCode,
-    body: html,
+    statusCode: response.statusCode,
+    body: response.html,
     headers: {'content-type': 'text/html'},
   );
 }

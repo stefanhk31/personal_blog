@@ -6,12 +6,6 @@ import 'package:blog_repository/src/constants.dart';
 import 'package:butter_cms_client/butter_cms_client.dart';
 import 'package:template_engine/template_engine.dart';
 
-/// {@template rendered_api_data}
-/// A tuple containing the status code of the API call
-/// and the rendered HTML content.
-/// {@endtemplate}
-typedef RenderedContent = (int, String);
-
 /// {@template blog_repository}
 /// A repository for fetching blog data from the CMS
 /// and generating HTML for the client.
@@ -38,7 +32,7 @@ class BlogRepository {
   };
 
   /// Fetches a detailed blog post by [slug] and generates HTML for the client.
-  Future<RenderedContent> getBlogDetailHtml(String slug) async {
+  Future<HtmlResponse> getBlogDetailHtml(String slug) async {
     try {
       final response = await _cmsClient.fetchBlogPost(slug: slug);
 
@@ -70,14 +64,14 @@ class BlogRepository {
           ..._globalContext,
         },
       );
-      return (200, html);
+      return HtmlResponse(statusCode: 200, html: html);
     } on Exception catch (e) {
       return _renderErrorPage(message: e.toString());
     }
   }
 
   /// Fetches a list of blog post previews and generates HTML for the client.
-  Future<RenderedContent> getBlogOverviewHtml({
+  Future<HtmlResponse> getBlogOverviewHtml({
     int limit = defaultRequestLimit,
     int offset = defaultRequestOffset,
   }) async {
@@ -133,7 +127,7 @@ class BlogRepository {
               },
             );
 
-      return (200, html);
+      return HtmlResponse(statusCode: 200, html: html);
     } on Exception catch (e) {
       return _renderErrorPage(message: e.toString());
     }
@@ -145,7 +139,7 @@ class BlogRepository {
         'Body: $body';
   }
 
-  Future<RenderedContent> _renderErrorPage({
+  Future<HtmlResponse> _renderErrorPage({
     required String message,
     int statusCode = 500,
   }) async {
@@ -153,6 +147,6 @@ class BlogRepository {
       filePath: 'error_page.html',
       context: {'message': message, ..._defaultMetaContext, ..._globalContext},
     );
-    return (statusCode, errorHtml);
+    return HtmlResponse(statusCode: statusCode, html: errorHtml);
   }
 }
