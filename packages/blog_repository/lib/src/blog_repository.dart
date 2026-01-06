@@ -55,7 +55,6 @@ class BlogRepository {
       );
       return HtmlResponse(statusCode: 200, html: html);
     } on Exception catch (e) {
-      final msg = e.toString();
       return _templateEngine.renderErrorPage(message: e.toString());
     }
   }

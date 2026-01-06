@@ -3,3 +3,4 @@ library;
 
 export 'src/constants.dart';
 export 'src/template_engine.dart';
+export 'src/utils.dart';
