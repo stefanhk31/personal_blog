@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:blog_models/blog_models.dart';
 import 'package:logging/logging.dart';
+import 'package:template_engine/src/constants.dart';
 
 /// {@template TemplateEngine}
 /// Engine to read the content of an HTML file and
@@ -184,5 +186,18 @@ class TemplateEngine {
 
     buffer.write(file.substring(startIndex));
     return buffer.toString();
+  }
+
+  /// Renders an error page and returns it in a [HtmlResponse]
+  /// with a given [statusCode].
+  Future<HtmlResponse> renderErrorPage({
+    required String message,
+    int statusCode = 500,
+  }) async {
+    final errorHtml = await render(
+      filePath: 'error_page.html',
+      context: {'message': message, ...defaultMetaContext, ...globalContext},
+    );
+    return HtmlResponse(statusCode: statusCode, html: errorHtml);
   }
 }

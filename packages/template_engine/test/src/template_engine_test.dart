@@ -157,5 +157,15 @@ void main() {
         verify(() => logger.severe(any())).called(1);
       });
     });
+
+    group('renderErrorPage', () {
+      test('renders error page', () async {
+        final engine = TemplateEngine(basePath: basePath, logger: logger);
+        final result = await engine.renderErrorPage(
+          message: 'Error message',
+        );
+        expect(result, contains('<p>Error message</p>'));
+      });
+    });
   });
 }
