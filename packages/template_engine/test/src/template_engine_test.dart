@@ -164,7 +164,8 @@ void main() {
         final result = await engine.renderErrorPage(
           message: 'Error message',
         );
-        expect(result, contains('<p>Error message</p>'));
+        expect(result.statusCode, equals(500));
+        expect(result.html, contains('<p>Error message</p>'));
       });
     });
   });
