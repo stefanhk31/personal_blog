@@ -2,15 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:blog_models/blog_models.dart';
-import 'package:blog_repository/src/constants.dart';
 import 'package:butter_cms_client/butter_cms_client.dart';
 import 'package:template_engine/template_engine.dart';
-
-/// {@template rendered_api_data}
-/// A tuple containing the status code of the API call
-/// and the rendered HTML content.
-/// {@endtemplate}
-typedef RenderedContent = (int, String);
 
 /// {@template blog_repository}
 /// A repository for fetching blog data from the CMS
@@ -27,24 +20,14 @@ class BlogRepository {
   final ButterCmsClient _cmsClient;
   final TemplateEngine _templateEngine;
 
-  final _defaultMetaContext = {
-    'metaTitle': defaultMetaTitle,
-    'metaDescription': defaultMetaDescription,
-  };
-
-  final _globalContext = {
-    'baseBlogsUrl': Platform.environment['BASE_BLOGS_URL'] ?? '',
-    'year': currentYear,
-  };
-
   /// Fetches a detailed blog post by [slug] and generates HTML for the client.
-  Future<RenderedContent> getBlogDetailHtml(String slug) async {
+  Future<HtmlResponse> getBlogDetailHtml(String slug) async {
     try {
       final response = await _cmsClient.fetchBlogPost(slug: slug);
 
       if (response.statusCode != 200) {
-        return _renderErrorPage(
-          message: _httpErrorMessage(response.statusCode, response.body),
+        return _templateEngine.renderErrorPage(
+          message: httpErrorMessage(response.statusCode, response.body),
           statusCode: response.statusCode,
         );
       }
@@ -67,17 +50,17 @@ class BlogRepository {
           'metaTitle': blogDetail.seoTitle,
           'metaDescription': blogDetail.metaDescription,
           'metaImageUrl': blogDetail.featuredImage ?? defaultMetaImageUrl,
-          ..._globalContext,
+          ...globalContext,
         },
       );
-      return (200, html);
+      return HtmlResponse(statusCode: 200, html: html);
     } on Exception catch (e) {
-      return _renderErrorPage(message: e.toString());
+      return _templateEngine.renderErrorPage(message: e.toString());
     }
   }
 
   /// Fetches a list of blog post previews and generates HTML for the client.
-  Future<RenderedContent> getBlogOverviewHtml({
+  Future<HtmlResponse> getBlogOverviewHtml({
     int limit = defaultRequestLimit,
     int offset = defaultRequestOffset,
   }) async {
@@ -89,8 +72,8 @@ class BlogRepository {
       );
 
       if (response.statusCode != 200) {
-        return _renderErrorPage(
-          message: _httpErrorMessage(response.statusCode, response.body),
+        return _templateEngine.renderErrorPage(
+          message: httpErrorMessage(response.statusCode, response.body),
           statusCode: response.statusCode,
         );
       }
@@ -121,8 +104,8 @@ class BlogRepository {
               filePath: 'blog_overview_page.html',
               context: {
                 'posts': posts,
-                ..._defaultMetaContext,
-                ..._globalContext,
+                ...defaultMetaContext,
+                ...globalContext,
               },
             )
           : await _templateEngine.render(
@@ -133,26 +116,9 @@ class BlogRepository {
               },
             );
 
-      return (200, html);
+      return HtmlResponse(statusCode: 200, html: html);
     } on Exception catch (e) {
-      return _renderErrorPage(message: e.toString());
+      return _templateEngine.renderErrorPage(message: e.toString());
     }
-  }
-
-  String _httpErrorMessage(int statusCode, String body) {
-    return 'Http call failed: \n '
-        'Status Code: $statusCode \n '
-        'Body: $body';
-  }
-
-  Future<RenderedContent> _renderErrorPage({
-    required String message,
-    int statusCode = 500,
-  }) async {
-    final errorHtml = await _templateEngine.render(
-      filePath: 'error_page.html',
-      context: {'message': message, ..._defaultMetaContext, ..._globalContext},
-    );
-    return (statusCode, errorHtml);
   }
 }

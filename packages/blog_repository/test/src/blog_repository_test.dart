@@ -62,22 +62,25 @@ void main() {
 
       test('uses template engine to render error page '
           'when api call is not successful', () async {
+        const badRequestMessage = 'bad request';
         when(
           () => cmsClient.fetchBlogPost(slug: any(named: 'slug')),
-        ).thenAnswer((_) async => Response('bad request', 400));
+        ).thenAnswer((_) async => Response(badRequestMessage, 400));
 
         when(
-          () => templateEngine.render(
-            filePath: 'error_page.html',
-            context: any(named: 'context'),
+          () => templateEngine.renderErrorPage(
+            message: httpErrorMessage(400, badRequestMessage),
+            statusCode: 400,
           ),
-        ).thenAnswer((_) async => '<html></html>');
+        ).thenAnswer(
+          (_) async => HtmlResponse(statusCode: 400, html: '<html></html>'),
+        );
 
         await blogRepository.getBlogDetailHtml('my-blog-post');
         verify(
-          () => templateEngine.render(
-            filePath: 'error_page.html',
-            context: any(named: 'context'),
+          () => templateEngine.renderErrorPage(
+            message: httpErrorMessage(400, badRequestMessage),
+            statusCode: 400,
           ),
         ).called(1);
       });
@@ -93,25 +96,26 @@ void main() {
           ),
         );
 
+        const errorMessage = 'error rendering template';
         when(
           () => templateEngine.render(
             filePath: 'blog_detail_page.html',
             context: any(named: 'context'),
           ),
-        ).thenThrow(Exception('error rendering template'));
+        ).thenThrow(Exception(errorMessage));
 
         when(
-          () => templateEngine.render(
-            filePath: 'error_page.html',
-            context: any(named: 'context'),
+          () => templateEngine.renderErrorPage(
+            message: 'Exception: $errorMessage',
           ),
-        ).thenAnswer((_) async => '<html></html>');
+        ).thenAnswer(
+          (_) async => HtmlResponse(statusCode: 500, html: '<html></html>'),
+        );
 
         await blogRepository.getBlogDetailHtml('my-blog-post');
         verify(
-          () => templateEngine.render(
-            filePath: 'error_page.html',
-            context: any(named: 'context'),
+          () => templateEngine.renderErrorPage(
+            message: 'Exception: $errorMessage',
           ),
         ).called(1);
       });
@@ -188,25 +192,28 @@ void main() {
 
       test('uses template engine to render error page '
           'when api call is not successful', () async {
+        const badRequestMessage = 'bad request';
         when(
           () => cmsClient.fetchBlogPosts(
             excludeBody: true,
             limit: any(named: 'limit'),
           ),
-        ).thenAnswer((_) async => Response('bad request', 400));
+        ).thenAnswer((_) async => Response(badRequestMessage, 400));
 
         when(
-          () => templateEngine.render(
-            filePath: 'error_page.html',
-            context: any(named: 'context'),
+          () => templateEngine.renderErrorPage(
+            message: httpErrorMessage(400, badRequestMessage),
+            statusCode: 400,
           ),
-        ).thenAnswer((_) async => '<html></html>');
+        ).thenAnswer(
+          (_) async => HtmlResponse(statusCode: 400, html: '<html></html>'),
+        );
 
         await blogRepository.getBlogOverviewHtml();
         verify(
-          () => templateEngine.render(
-            filePath: 'error_page.html',
-            context: any(named: 'context'),
+          () => templateEngine.renderErrorPage(
+            message: httpErrorMessage(400, badRequestMessage),
+            statusCode: 400,
           ),
         ).called(1);
       });
@@ -228,25 +235,26 @@ void main() {
           ),
         );
 
+        const errorMessage = 'error rendering template';
         when(
           () => templateEngine.render(
             filePath: 'blog_overview_page.html',
             context: any(named: 'context'),
           ),
-        ).thenThrow(Exception('error rendering template'));
+        ).thenThrow(Exception(errorMessage));
 
         when(
-          () => templateEngine.render(
-            filePath: 'error_page.html',
-            context: any(named: 'context'),
+          () => templateEngine.renderErrorPage(
+            message: 'Exception: $errorMessage',
           ),
-        ).thenAnswer((_) async => '<html></html>');
+        ).thenAnswer(
+          (_) async => HtmlResponse(statusCode: 500, html: '<html></html>'),
+        );
 
         await blogRepository.getBlogOverviewHtml();
         verify(
-          () => templateEngine.render(
-            filePath: 'error_page.html',
-            context: any(named: 'context'),
+          () => templateEngine.renderErrorPage(
+            message: 'Exception: $errorMessage',
           ),
         ).called(1);
       });

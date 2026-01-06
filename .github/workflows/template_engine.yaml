@@ -12,7 +12,7 @@ on:
     paths:
       - ".github/workflows/template_engine_verify_and_test.yaml"
       - "packages/template_engine/**"
-
+      - "packages/blog_models/**"
   push:
     branches:
       - master
@@ -20,7 +20,7 @@ on:
     paths:
       - ".github/workflows/**"
       - "packages/template_engine/**"
-
+      - "packages/blog_models/**"
 
 jobs:
   verify_and_test:

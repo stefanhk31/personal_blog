@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:blog_models/blog_models.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:mocktail/mocktail.dart';
@@ -25,7 +26,7 @@ void main() {
       test('responds with a 200', () async {
         final context = _MockRequestContext();
         final request = Request('GET', Uri.parse('http://127.0.0.1/'));
-        const htmlResponse = '<html>test</html>';
+        const htmlContent = '<html>test</html>';
 
         when(() => context.request).thenReturn(request);
         when(() => context.read<BlogRepository>()).thenReturn(blogRepository);
@@ -35,14 +36,14 @@ void main() {
             offset: any(named: 'offset'),
           ),
         ).thenAnswer(
-          (_) async => (200, htmlResponse),
+          (_) async => const HtmlResponse(statusCode: 200, html: htmlContent),
         );
         final response = await route.onRequest(context);
         expect(response.statusCode, equals(HttpStatus.ok));
         expect(
           response.body(),
           completion(
-            equals(htmlResponse),
+            equals(htmlContent),
           ),
         );
       });
