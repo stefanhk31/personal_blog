@@ -5,6 +5,7 @@ import 'package:blog_repository/blog_repository.dart';
 import 'package:butter_cms_client/butter_cms_client.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:http/http.dart';
+import 'package:subscriptions_repository/subscriptions_repository.dart';
 import 'package:template_engine/template_engine.dart';
 
 Handler middleware(Handler handler) {
@@ -14,6 +15,14 @@ Handler middleware(Handler handler) {
         provider<BlogRepository>(
           (context) => BlogRepository(
             cmsClient: context.read<ButterCmsClient>(),
+            templateEngine: context.read<TemplateEngine>(),
+          ),
+        ),
+      )
+      .use(
+        provider<SubscriptionsRepository>(
+          (context) => SubscriptionsRepository(
+            blogNewsletterClient: context.read<BlogNewsletterClient>(),
             templateEngine: context.read<TemplateEngine>(),
           ),
         ),

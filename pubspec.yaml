@@ -18,6 +18,8 @@ dependencies:
   dart_frog: ^1.2.6
   http: ^1.6.0
   intl: ^0.20.2
+  subscriptions_repository:
+    path: packages/subscriptions_repository
   template_engine:
     path: packages/template_engine
 
