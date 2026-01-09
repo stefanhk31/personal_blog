@@ -38,20 +38,22 @@ Handler middleware(Handler handler) {
         );
       },
     ),
-  ).use(provider<BlogNewsletterClient>(
-    (context) {
-      final baseUrl = Platform.environment['NEWSLETTER_BASE_URL'];
+  ).use(
+    provider<BlogNewsletterClient>(
+      (context) {
+        final baseUrl = Platform.environment['NEWSLETTER_BASE_URL'];
 
-      if (baseUrl == null) {
-        throw StateError('Could not fetch NEWSLETTER_BASE_URL');
-      }
+        if (baseUrl == null) {
+          throw StateError('Could not fetch NEWSLETTER_BASE_URL');
+        }
 
-      return BlogNewsletterClient(
-        httpClient: context.read<Client>(),
-        baseUrl: baseUrl,
-      );
-    },
-  )).use(
+        return BlogNewsletterClient(
+          httpClient: context.read<Client>(),
+          baseUrl: baseUrl,
+        );
+      },
+    ),
+  ).use(
     provider<ButterCmsClient>(
       (context) {
         final apiKey = Platform.environment['BUTTER_CMS_API_KEY'];

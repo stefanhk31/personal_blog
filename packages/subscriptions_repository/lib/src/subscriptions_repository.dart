@@ -18,7 +18,7 @@ class SubscriptionsRepository {
 
   /// Unsubscribes a user from the email newsletter.
   ///
-  /// Takes an [encodedEmail] and attempts to remove the subscriber
+  /// Takes an [email] and attempts to remove the subscriber
   /// from the newsletter service.
   ///
   /// Returns an [HtmlResponse] with:
