@@ -12,7 +12,9 @@ on:
     paths:
       - ".github/workflows/subscriptions_repository_verify_and_test.yaml"
       - "packages/subscriptions_repository/**"
-
+      - "packages/blog_models/**"
+      - "packages/blog_newsletter_client/**"
+      - "packages/template_engine/**"
   push:
     branches:
       - master
@@ -20,7 +22,9 @@ on:
     paths:
       - ".github/workflows/**"
       - "packages/subscriptions_repository/**"
-
+      - "packages/blog_models/**"
+      - "packages/blog_newsletter_client/**"
+      - "packages/template_engine/**"
 
 jobs:
   verify_and_test:

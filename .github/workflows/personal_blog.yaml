@@ -16,6 +16,7 @@ on:
       - "packages/blog_newsletter_client/**"
       - "packages/blog_repository/**"
       - "packages/butter_cms_client/**"
+      - "packages/subscriptions_repository/**"
       - "packages/template_engine/**"
   push:
     branches:
@@ -28,6 +29,7 @@ on:
       - "packages/blog_newsletter_client/**"
       - "packages/blog_repository/**"
       - "packages/butter_cms_client/**"
+      - "packages/subscriptions_repository/**"
       - "packages/template_engine/**"
 
 jobs:
