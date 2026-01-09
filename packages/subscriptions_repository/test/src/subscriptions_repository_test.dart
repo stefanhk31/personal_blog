@@ -49,7 +49,7 @@ void main() {
           ).thenAnswer((_) async => '<html>Success</html>');
 
           final result = await subscriptionsRepository.unsubscribe(
-            encodedEmail: encodedEmail,
+            email: encodedEmail,
           );
 
           expect(result.statusCode, equals(200));
@@ -91,7 +91,7 @@ void main() {
           );
 
           final result = await subscriptionsRepository.unsubscribe(
-            encodedEmail: encodedEmail,
+            email: encodedEmail,
           );
 
           expect(result.statusCode, equals(400));
@@ -133,7 +133,7 @@ void main() {
           );
 
           final result = await subscriptionsRepository.unsubscribe(
-            encodedEmail: encodedEmail,
+            email: encodedEmail,
           );
 
           expect(result.statusCode, equals(500));

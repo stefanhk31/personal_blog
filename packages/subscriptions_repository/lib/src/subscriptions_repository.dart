@@ -24,9 +24,9 @@ class SubscriptionsRepository {
   /// Returns an [HtmlResponse] with:
   /// - Success page (200) if unsubscribe succeeds
   /// - Error page (with appropriate status code) if it fails
-  Future<HtmlResponse> unsubscribe({required String encodedEmail}) async {
+  Future<HtmlResponse> unsubscribe({required String email}) async {
     final response = await _blogNewsletterClient.removeSubscriber(
-      subscriberEmail: encodedEmail,
+      subscriberEmail: email,
     );
 
     if (response.statusCode >= 200 && response.statusCode < 300) {

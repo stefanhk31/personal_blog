@@ -17,9 +17,8 @@ Future<Response> _get(RequestContext context) async {
     return Response(statusCode: 400, body: 'Email is required');
   }
 
-  final response = await context
-      .read<SubscriptionsRepository>()
-      .unsubscribe(encodedEmail: email);
+  final response =
+      await context.read<SubscriptionsRepository>().unsubscribe(email: email);
 
   return Response(
     statusCode: response.statusCode,

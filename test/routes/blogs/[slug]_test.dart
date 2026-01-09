@@ -26,7 +26,7 @@ void main() {
       });
       test('responds with a 200', () async {
         final context = _MockRequestContext();
-        final request = Request('GET', Uri.parse('http://127.0.0.1/'));
+        final request = Request('GET', Uri.parse('http://127.0.0.1/$slug'));
         const htmlContent = '<html>test</html>';
         when(() => context.request).thenReturn(request);
         when(() => context.read<BlogRepository>()).thenReturn(blogRepository);
