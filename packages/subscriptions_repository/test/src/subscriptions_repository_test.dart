@@ -37,7 +37,7 @@ void main() {
           final mockResponse = Response('', 200);
           when(
             () => blogNewsletterClient.removeSubscriber(
-              encodedSubscriberEmail: encodedEmail,
+              subscriberEmail: encodedEmail,
             ),
           ).thenAnswer((_) async => mockResponse);
 
@@ -56,7 +56,7 @@ void main() {
           expect(result.html, contains('Success'));
           verify(
             () => blogNewsletterClient.removeSubscriber(
-              encodedSubscriberEmail: encodedEmail,
+              subscriberEmail: encodedEmail,
             ),
           ).called(1);
           verify(
@@ -74,7 +74,7 @@ void main() {
           final mockResponse = Response('Bad Request', 400);
           when(
             () => blogNewsletterClient.removeSubscriber(
-              encodedSubscriberEmail: encodedEmail,
+              subscriberEmail: encodedEmail,
             ),
           ).thenAnswer((_) async => mockResponse);
 
@@ -98,7 +98,7 @@ void main() {
           expect(result.html, contains('Error'));
           verify(
             () => blogNewsletterClient.removeSubscriber(
-              encodedSubscriberEmail: encodedEmail,
+              subscriberEmail: encodedEmail,
             ),
           ).called(1);
           verify(
@@ -116,7 +116,7 @@ void main() {
           final mockResponse = Response('Internal Server Error', 500);
           when(
             () => blogNewsletterClient.removeSubscriber(
-              encodedSubscriberEmail: encodedEmail,
+              subscriberEmail: encodedEmail,
             ),
           ).thenAnswer((_) async => mockResponse);
 
@@ -140,7 +140,7 @@ void main() {
           expect(result.html, contains('Error'));
           verify(
             () => blogNewsletterClient.removeSubscriber(
-              encodedSubscriberEmail: encodedEmail,
+              subscriberEmail: encodedEmail,
             ),
           ).called(1);
           verify(

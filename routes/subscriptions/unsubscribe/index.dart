@@ -1,25 +1,17 @@
 import 'package:dart_frog/dart_frog.dart';
 import 'package:subscriptions_repository/subscriptions_repository.dart';
 
-/// Request handler for the `/subscriptions` route.
-/// Supports POST and DELETE requests.
+/// Request handler for the `/subscriptions/unsubscribe` route.
+/// Supports GET requests.
 Future<Response> onRequest(RequestContext context) async {
   return switch (context.request.method) {
-    HttpMethod.post => await _post(context),
-    HttpMethod.delete => await _delete(context),
+    HttpMethod.get => await _get(context),
     _ => Response(statusCode: 405, body: 'Method Not Allowed'),
   };
 }
 
-Future<Response> _post(RequestContext context) async {
-  throw UnimplementedError(
-    'POST has not yet been implemented for subscriptions',
-  );
-}
-
-Future<Response> _delete(RequestContext context) async {
-  final formData = await context.request.formData();
-  final email = formData.fields['email'];
+Future<Response> _get(RequestContext context) async {
+  final email = context.request.uri.queryParameters['email'];
 
   if (email == null) {
     return Response(statusCode: 400, body: 'Email is required');
