@@ -33,4 +33,22 @@ class BlogNewsletterClient {
       body: body,
     );
   }
+
+  /// Deletes a subscriber from the blog newsletter service's database
+  /// of email subscribers.
+  ///
+  /// Takes an encoded [String] of the subscriber's email.
+  ///
+  /// Returns  the [Response] from the newsletter service.
+  Future<Response> removeSubscriber({
+    required String subscriberEmail,
+  }) async {
+    final uri = Uri.http(_baseUrl, '/subscriptions/unsubscribe');
+    final encodedEmail = Uri.encodeComponent(subscriberEmail);
+    return _httpClient.delete(
+      uri,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: 'email=$encodedEmail',
+    );
+  }
 }

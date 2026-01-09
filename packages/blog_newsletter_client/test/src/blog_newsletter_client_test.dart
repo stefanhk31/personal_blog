@@ -94,5 +94,96 @@ void main() {
         expect(result.body, equals(errorMessage));
       });
     });
+
+    group('removeSubscriber', () {
+      const path = '/subscriptions/unsubscribe';
+      const subscriberEmail = 'test@example.com';
+      const errorMessage = 'error';
+
+      test('returns 200 with response body '
+          'when the call completes successfully', () async {
+        when(
+          () => httpClient.delete(
+            any(
+              that: isA<Uri>().having(
+                (uri) => uri.path,
+                'path',
+                path,
+              ),
+            ),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          ),
+        ).thenAnswer(
+          (_) async => Response(
+            '{"success": true}',
+            200,
+            headers: {'content-type': 'application/json'},
+          ),
+        );
+
+        final result = await blogNewsletterClient.removeSubscriber(
+          subscriberEmail: subscriberEmail,
+        );
+        expect(result.statusCode, equals(HttpStatus.ok));
+      });
+
+      test('returns failure with body when call fails', () async {
+        when(
+          () => httpClient.delete(
+            any(
+              that: isA<Uri>().having(
+                (uri) => uri.path,
+                'path',
+                path,
+              ),
+            ),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          ),
+        ).thenAnswer(
+          (_) async => Response(
+            errorMessage,
+            HttpStatus.notFound,
+          ),
+        );
+
+        final result = await blogNewsletterClient.removeSubscriber(
+          subscriberEmail: subscriberEmail,
+        );
+        expect(result.statusCode, equals(HttpStatus.notFound));
+        expect(result.body, equals(errorMessage));
+      });
+
+      test('encodes email in request body', () async {
+        when(
+          () => httpClient.delete(
+            any(
+              that: isA<Uri>().having(
+                (uri) => uri.path,
+                'path',
+                path,
+              ),
+            ),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          ),
+        ).thenAnswer(
+          (_) async => Response('{"success": true}', 200),
+        );
+
+        await blogNewsletterClient.removeSubscriber(
+          subscriberEmail: subscriberEmail,
+        );
+
+        verify(
+          () => httpClient.delete(
+            any(),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'email=test%40example.com',
+          ),
+        ).called(1);
+      });
+    });
   });
 }

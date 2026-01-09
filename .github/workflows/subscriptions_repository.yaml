@@ -1,4 +1,4 @@
-name: Personal Blog Verify and Test
+name: Subscriptions Repository Verify and Test
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,13 +10,10 @@ on:
       - master
       - main
     paths:
-      - ".github/workflows/personal_blog_verify_and_test.yaml"
-      - "**"
+      - ".github/workflows/subscriptions_repository_verify_and_test.yaml"
+      - "packages/subscriptions_repository/**"
       - "packages/blog_models/**"
       - "packages/blog_newsletter_client/**"
-      - "packages/blog_repository/**"
-      - "packages/butter_cms_client/**"
-      - "packages/subscriptions_repository/**"
       - "packages/template_engine/**"
   push:
     branches:
@@ -24,12 +21,9 @@ on:
       - main
     paths:
       - ".github/workflows/**"
-      - "**"
+      - "packages/subscriptions_repository/**"
       - "packages/blog_models/**"
       - "packages/blog_newsletter_client/**"
-      - "packages/blog_repository/**"
-      - "packages/butter_cms_client/**"
-      - "packages/subscriptions_repository/**"
       - "packages/template_engine/**"
 
 jobs:
@@ -37,7 +31,7 @@ jobs:
     name: Verify and Test
     defaults:
       run:
-        working-directory: .
+        working-directory: packages/subscriptions_repository
 
     runs-on: ubuntu-latest
 
@@ -54,19 +48,18 @@ jobs:
         run: dart pub get
 
       - name: ✨ Check Formatting
-        run: dart format --set-exit-if-changed routes test
+        run: dart format --set-exit-if-changed lib test
       
       - name: 🕵️ Analyze
-        run: dart analyze --fatal-infos --fatal-warnings routes test
+        run: dart analyze --fatal-infos --fatal-warnings lib test
 
       - name: 🧪 Run Tests
         run: |
           dart pub global activate coverage 1.15.0
-          dart test -j 4 --coverage=coverage --platform=vm && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=routes
+          dart test -j 4 --coverage=coverage --platform=vm && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib
 
       - name: 📊 Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
-          path: ./coverage/lcov.info
-          exclude: "**/_middleware.dart"
+          path: packages/subscriptions_repository/coverage/lcov.info
           min_coverage: 100
