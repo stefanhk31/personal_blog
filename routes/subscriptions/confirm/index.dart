@@ -1,7 +1,7 @@
 import 'package:dart_frog/dart_frog.dart';
 import 'package:subscriptions_repository/subscriptions_repository.dart';
 
-/// Request handler for the `/subscriptions/unsubscribe` route.
+/// Request handler for the `/subscriptions/confirm` route.
 /// Supports GET requests.
 Future<Response> onRequest(RequestContext context) async {
   return switch (context.request.method) {
@@ -11,15 +11,16 @@ Future<Response> onRequest(RequestContext context) async {
 }
 
 Future<Response> _get(RequestContext context) async {
-  final email = context.request.uri.queryParameters['email'];
+  final subscriptionToken =
+      context.request.uri.queryParameters['subscription_token'];
 
-  if (email == null) {
-    return Response(statusCode: 400, body: 'Email is required');
+  if (subscriptionToken == null) {
+    return Response(statusCode: 400, body: 'Subscription token is required');
   }
 
   final response = await context
       .read<SubscriptionsRepository>()
-      .getUnsubscribeHtml(email: email);
+      .getConfirmHtml(subscriptionToken: subscriptionToken);
 
   return Response(
     statusCode: response.statusCode,

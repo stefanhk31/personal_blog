@@ -48,7 +48,7 @@ void main() {
             ),
           ).thenAnswer((_) async => '<html>Success</html>');
 
-          final result = await subscriptionsRepository.unsubscribe(
+          final result = await subscriptionsRepository.getUnsubscribeHtml(
             email: encodedEmail,
           );
 
@@ -93,7 +93,7 @@ void main() {
             ),
           );
 
-          final result = await subscriptionsRepository.unsubscribe(
+          final result = await subscriptionsRepository.getUnsubscribeHtml(
             email: encodedEmail,
           );
 
@@ -139,7 +139,7 @@ void main() {
             ),
           );
 
-          final result = await subscriptionsRepository.unsubscribe(
+          final result = await subscriptionsRepository.getUnsubscribeHtml(
             email: encodedEmail,
           );
 

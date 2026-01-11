@@ -17,6 +17,21 @@ class BlogNewsletterClient {
   final ApiClient _apiClient;
   final String _baseUrl;
 
+  /// Confirms a subscription to the blog's newsletter service.
+  ///
+  /// Takes a [subscriptionToken] to confirm the subscription.
+  ///
+  /// Returns the [Response] from the newsletter service.
+  Future<Response> confirmSubscription({
+    required String subscriptionToken,
+  }) async {
+    final uri = Uri.http(
+      _baseUrl,
+      '/subscriptions/confirm?subscription_token=$subscriptionToken',
+    );
+    return _httpClient.get(uri);
+  }
+
   /// Publishes a newsletter to the blog's newsletter service.
   ///
   /// Takes a [request] containing the newsletter content to be published.

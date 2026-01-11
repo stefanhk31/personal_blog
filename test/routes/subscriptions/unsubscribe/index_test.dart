@@ -41,7 +41,7 @@ void main() {
         when(() => context.read<SubscriptionsRepository>())
             .thenReturn(subscriptionsRepository);
         when(
-          () => subscriptionsRepository.unsubscribe(
+          () => subscriptionsRepository.getUnsubscribeHtml(
             email: any(named: 'email'),
           ),
         ).thenAnswer(
@@ -60,7 +60,7 @@ void main() {
         );
 
         verify(
-          () => subscriptionsRepository.unsubscribe(
+          () => subscriptionsRepository.getUnsubscribeHtml(
             email: 'test@example.com',
           ),
         ).called(1);
@@ -76,7 +76,7 @@ void main() {
         when(() => context.read<SubscriptionsRepository>())
             .thenReturn(subscriptionsRepository);
         when(
-          () => subscriptionsRepository.unsubscribe(
+          () => subscriptionsRepository.getUnsubscribeHtml(
             email: any(named: 'email'),
           ),
         ).thenAnswer(
@@ -108,7 +108,7 @@ void main() {
         );
 
         verifyNever(
-          () => subscriptionsRepository.unsubscribe(
+          () => subscriptionsRepository.getUnsubscribeHtml(
             email: any(named: 'email'),
           ),
         );
