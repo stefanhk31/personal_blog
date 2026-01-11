@@ -25,18 +25,7 @@ class BlogRepository {
     try {
       final response = await _cmsClient.fetchBlogPost(slug: slug);
 
-      if (response.statusCode != 200) {
-        return _templateEngine.renderErrorPage(
-          message: httpErrorMessage(response.statusCode, response.body),
-          statusCode: response.statusCode,
-        );
-      }
-
-      final blogResponse = BlogResponse.fromJson(
-        jsonDecode(response.body) as Map<String, dynamic>,
-      );
-
-      final blogDetail = BlogDetail.fromBlog(blogResponse.data);
+      final blogDetail = BlogDetail.fromBlog(response.data);
 
       final html = await _templateEngine.render(
         filePath: 'blog_detail_page.html',
@@ -71,18 +60,7 @@ class BlogRepository {
         offset: offset,
       );
 
-      if (response.statusCode != 200) {
-        return _templateEngine.renderErrorPage(
-          message: httpErrorMessage(response.statusCode, response.body),
-          statusCode: response.statusCode,
-        );
-      }
-
-      final blogsResponse = BlogsResponse.fromJson(
-        jsonDecode(response.body) as Map<String, dynamic>,
-      );
-
-      final blogPreviews = blogsResponse.data.map((blog) {
+      final blogPreviews = response.data.map((blog) {
         return BlogPreview.fromBlog(blog);
       }).toList();
 

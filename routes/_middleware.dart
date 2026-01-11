@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:api_client/api_client.dart';
 import 'package:blog_newsletter_client/blog_newsletter_client.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:butter_cms_client/butter_cms_client.dart';
@@ -48,7 +49,7 @@ Handler middleware(Handler handler) {
         }
 
         return BlogNewsletterClient(
-          httpClient: context.read<Client>(),
+          httpClient: Client(),
           baseUrl: baseUrl,
         );
       },
@@ -63,14 +64,12 @@ Handler middleware(Handler handler) {
         }
 
         return ButterCmsClient(
-          httpClient: context.read<Client>(),
+          apiClient: context.read<ApiClient>(),
           apiKey: apiKey,
         );
       },
     ),
   ).use(
-    provider<Client>(
-      (_) => Client(),
-    ),
+    provider<ApiClient>((_) => ApiClient(client: Client())),
   );
 }
