@@ -1,6 +1,5 @@
 import 'package:api_client/api_client.dart';
 import 'package:blog_models/blog_models.dart';
-import 'package:http/http.dart';
 
 /// {@template butter_cms_client}
 /// Client to interact with the ButterCMS API.
