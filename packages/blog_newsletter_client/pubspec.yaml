@@ -12,6 +12,8 @@ dev_dependencies:
   very_good_analysis: ^10.0.0
 
 dependencies:
+  api_client:
+    path: ../api_client
   blog_models:
     path: ../blog_models
   http: ^1.6.0

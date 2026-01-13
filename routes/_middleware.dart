@@ -49,7 +49,7 @@ Handler middleware(Handler handler) {
         }
 
         return BlogNewsletterClient(
-          httpClient: Client(),
+          apiClient: context.read<ApiClient>(),
           baseUrl: baseUrl,
         );
       },

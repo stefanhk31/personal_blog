@@ -34,7 +34,7 @@ void main() {
       test(
         'returns success HtmlResponse when removeSubscriber succeeds',
         () async {
-          final mockResponse = Response('', 200);
+          const mockResponse = RemoveSubscriberResponse(statusCode: 200);
           when(
             () => blogNewsletterClient.removeSubscriber(
               subscriberEmail: encodedEmail,
@@ -71,12 +71,15 @@ void main() {
       test(
         'returns error HtmlResponse when removeSubscriber fails with 400',
         () async {
-          final mockResponse = Response('Bad Request', 400);
+          final exception = RequestFailedException(
+            message: 'Bad Request',
+            statusCode: 400,
+          );
           when(
             () => blogNewsletterClient.removeSubscriber(
               subscriberEmail: encodedEmail,
             ),
-          ).thenAnswer((_) async => mockResponse);
+          ).thenThrow(exception);
 
           when(
             () => templateEngine.renderErrorPage(
@@ -90,35 +93,37 @@ void main() {
             ),
           );
 
-          final result = await subscriptionsRepository.unsubscribe(
-            email: encodedEmail,
+          expect(
+            () => subscriptionsRepository.unsubscribe(email: encodedEmail),
+            throwsA(isA<RequestFailedException>()),
           );
 
-          expect(result.statusCode, equals(400));
-          expect(result.html, contains('Error'));
           verify(
             () => blogNewsletterClient.removeSubscriber(
               subscriberEmail: encodedEmail,
             ),
           ).called(1);
-          verify(
+          verifyNever(
             () => templateEngine.renderErrorPage(
-              message: 'Failed to unsubscribe. Please try again later.',
-              statusCode: 400,
+              message: any(named: 'message'),
+              statusCode: any(named: 'statusCode'),
             ),
-          ).called(1);
+          );
         },
       );
 
       test(
         'returns error HtmlResponse when removeSubscriber fails with 500',
         () async {
-          final mockResponse = Response('Internal Server Error', 500);
+          final exception = RequestFailedException(
+            message: 'Internal Server Error',
+            statusCode: 500,
+          );
           when(
             () => blogNewsletterClient.removeSubscriber(
               subscriberEmail: encodedEmail,
             ),
-          ).thenAnswer((_) async => mockResponse);
+          ).thenThrow(exception);
 
           when(
             () => templateEngine.renderErrorPage(
@@ -132,23 +137,22 @@ void main() {
             ),
           );
 
-          final result = await subscriptionsRepository.unsubscribe(
-            email: encodedEmail,
+          expect(
+            () => subscriptionsRepository.unsubscribe(email: encodedEmail),
+            throwsA(isA<RequestFailedException>()),
           );
 
-          expect(result.statusCode, equals(500));
-          expect(result.html, contains('Error'));
           verify(
             () => blogNewsletterClient.removeSubscriber(
               subscriberEmail: encodedEmail,
             ),
           ).called(1);
-          verify(
+          verifyNever(
             () => templateEngine.renderErrorPage(
-              message: 'Failed to unsubscribe. Please try again later.',
+              message: any(named: 'message'),
               statusCode: any(named: 'statusCode'),
             ),
-          ).called(1);
+          );
         },
       );
     });
