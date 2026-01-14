@@ -12,6 +12,7 @@ on:
     paths:
       - ".github/workflows/blog_repository_verify_and_test.yaml"
       - "packages/blog_repository/**"
+      - "packages/api_client/**"
       - "packages/blog_models/**"
       - "packages/butter_cms_client/**"
       - "packages/template_engine/**"
@@ -22,6 +23,7 @@ on:
     paths:
       - ".github/workflows/**"
       - "packages/blog_repository/**"
+      - "packages/api_client/**"
       - "packages/blog_models/**"
       - "packages/butter_cms_client/**"
       - "packages/template_engine/**"

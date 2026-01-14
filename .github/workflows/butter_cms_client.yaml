@@ -12,6 +12,7 @@ on:
     paths:
       - ".github/workflows/butter_cms_client_verify_and_test.yaml"
       - "packages/butter_cms_client/**"
+      - "packages/api_client/**"
       - "packages/blog_models/**"
   push:
     branches:
@@ -20,6 +21,7 @@ on:
     paths:
       - ".github/workflows/**"
       - "packages/butter_cms_client/**"
+      - "packages/api_client/**"
       - "packages/blog_models/**"
 
 jobs:

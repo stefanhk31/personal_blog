@@ -1,4 +1,4 @@
-name: Subscriptions Repository Verify and Test
+name: Api Client Verify and Test
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,30 +10,24 @@ on:
       - master
       - main
     paths:
-      - ".github/workflows/subscriptions_repository_verify_and_test.yaml"
-      - "packages/subscriptions_repository/**"
+      - ".github/workflows/api_client_verify_and_test.yaml"
       - "packages/api_client/**"
-      - "packages/blog_models/**"
-      - "packages/blog_newsletter_client/**"
-      - "packages/template_engine/**"
+
   push:
     branches:
       - master
       - main
     paths:
       - ".github/workflows/**"
-      - "packages/subscriptions_repository/**"
       - "packages/api_client/**"
-      - "packages/blog_models/**"
-      - "packages/blog_newsletter_client/**"
-      - "packages/template_engine/**"
+
 
 jobs:
   verify_and_test:
     name: Verify and Test
     defaults:
       run:
-        working-directory: packages/subscriptions_repository
+        working-directory: packages/api_client
 
     runs-on: ubuntu-latest
 
@@ -63,5 +57,5 @@ jobs:
       - name: 📊 Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
-          path: packages/subscriptions_repository/coverage/lcov.info
+          path: packages/api_client/coverage/lcov.info
           min_coverage: 100
