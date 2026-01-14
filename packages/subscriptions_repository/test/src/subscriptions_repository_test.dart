@@ -32,7 +32,7 @@ void main() {
       const token = '12345';
 
       test(
-        'returns success HtmlResponse when confirmSusbcriber succeeds',
+        'returns success HtmlResponse when confirmSubscriber succeeds',
         () async {
           const mockResponse = ConfirmSubscriberResponse(statusCode: 200);
           when(
