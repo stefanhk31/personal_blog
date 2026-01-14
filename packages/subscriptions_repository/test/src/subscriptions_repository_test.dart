@@ -93,22 +93,24 @@ void main() {
             ),
           );
 
-          expect(
-            () => subscriptionsRepository.unsubscribe(email: encodedEmail),
-            throwsA(isA<RequestFailedException>()),
+          final result = await subscriptionsRepository.unsubscribe(
+            email: encodedEmail,
           );
+
+          expect(result.statusCode, equals(400));
+          expect(result.html, contains('Error'));
 
           verify(
             () => blogNewsletterClient.removeSubscriber(
               subscriberEmail: encodedEmail,
             ),
           ).called(1);
-          verifyNever(
+          verify(
             () => templateEngine.renderErrorPage(
               message: any(named: 'message'),
               statusCode: any(named: 'statusCode'),
             ),
-          );
+          ).called(1);
         },
       );
 
@@ -137,22 +139,24 @@ void main() {
             ),
           );
 
-          expect(
-            () => subscriptionsRepository.unsubscribe(email: encodedEmail),
-            throwsA(isA<RequestFailedException>()),
+          final result = await subscriptionsRepository.unsubscribe(
+            email: encodedEmail,
           );
+
+          expect(result.statusCode, equals(500));
+          expect(result.html, contains('Error'));
 
           verify(
             () => blogNewsletterClient.removeSubscriber(
               subscriberEmail: encodedEmail,
             ),
           ).called(1);
-          verifyNever(
+          verify(
             () => templateEngine.renderErrorPage(
               message: any(named: 'message'),
               statusCode: any(named: 'statusCode'),
             ),
-          );
+          ).called(1);
         },
       );
     });
