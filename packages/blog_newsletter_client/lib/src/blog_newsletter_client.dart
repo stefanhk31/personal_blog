@@ -22,7 +22,7 @@ class BlogNewsletterClient {
   /// Takes a [subscriptionToken] to confirm the subscription.
   ///
   /// Returns a [ConfirmSubscriberResponse].
-  Future<ConfirmSubscriberResponse> confirmSubscription({
+  Future<ConfirmSubscriberResponse> confirmSubscriber({
     required String subscriptionToken,
   }) async {
     final uri = Uri.http(

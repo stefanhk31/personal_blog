@@ -28,7 +28,7 @@ void main() {
       expect(subscriptionsRepository, isNotNull);
     });
 
-    group('unsubscribe', () {
+    group('getUnsubscribeHtml', () {
       const encodedEmail = 'test%40example.com';
 
       test(

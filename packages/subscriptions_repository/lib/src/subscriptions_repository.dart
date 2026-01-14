@@ -25,7 +25,7 @@ class SubscriptionsRepository {
     required String subscriptionToken,
   }) async {
     try {
-      await _blogNewsletterClient.confirmSubscription(
+      await _blogNewsletterClient.confirmSubscriber(
         subscriptionToken: subscriptionToken,
       );
 
