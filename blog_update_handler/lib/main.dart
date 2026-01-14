@@ -32,6 +32,8 @@ Future<void> main() async {
 
   final httpClient = http.Client();
 
+  final apiClient = ApiClient(client: httpClient);
+
   final butterCmsClient = ButterCmsClient(
     apiKey: butterCmsApiKey,
     apiClient: ApiClient(client: httpClient),
@@ -39,7 +41,7 @@ Future<void> main() async {
 
   final blogNewsletterClient = BlogNewsletterClient(
     baseUrl: newsletterBaseUrl,
-    httpClient: httpClient,
+    apiClient: apiClient,
   );
 
   final handler = BlogUpdateHandler(

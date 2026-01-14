@@ -2,7 +2,6 @@ import 'package:blog_models/blog_models.dart';
 import 'package:blog_newsletter_client/blog_newsletter_client.dart';
 import 'package:blog_update_handler/blog_update_handler.dart';
 import 'package:butter_cms_client/butter_cms_client.dart';
-import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -89,7 +88,9 @@ void main() {
           () => blogNewsletterClient.publishNewsletter(
             request: any(named: 'request'),
           ),
-        ).thenAnswer((_) async => http.Response('{"success": true}', 200));
+        ).thenAnswer(
+          (_) async => const PublishNewsletterResponse(statusCode: 200),
+        );
 
         // Act
         await handler.publishRecentPosts();
@@ -183,7 +184,8 @@ void main() {
             request: any(named: 'request'),
           ),
         ).thenAnswer(
-          (_) async => http.Response('Error', 500),
+          (_) async =>
+              const PublishNewsletterResponse(statusCode: 500, body: 'Error'),
         );
 
         await handler.publishRecentPosts();

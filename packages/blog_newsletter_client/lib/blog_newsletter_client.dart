@@ -1,5 +1,5 @@
-/// A Very Good Project created by Very Good CLI.
+/// A client for interacting with the blog newsletter service.
 library;
 
-export 'package:http/http.dart' show Response;
+export 'package:api_client/api_client.dart' show RequestFailedException;
 export 'src/blog_newsletter_client.dart';
