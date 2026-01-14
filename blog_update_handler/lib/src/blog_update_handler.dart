@@ -97,7 +97,7 @@ class BlogUpdateHandler {
       } else {
         logMessage(
           'Failed to publish "${blog.title}": '
-          '${response.statusCode} - ${response.body}',
+          '${response.statusCode} - ${response.message}',
           LogLevel.error,
         );
       }

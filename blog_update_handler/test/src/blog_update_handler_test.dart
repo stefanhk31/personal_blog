@@ -184,8 +184,10 @@ void main() {
             request: any(named: 'request'),
           ),
         ).thenAnswer(
-          (_) async =>
-              const PublishNewsletterResponse(statusCode: 500, body: 'Error'),
+          (_) async => const PublishNewsletterResponse(
+            statusCode: 500,
+            message: 'Error',
+          ),
         );
 
         await handler.publishRecentPosts();

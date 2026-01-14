@@ -1,20 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'publish_newsletter_response.dart';
+part of 'confirm_subscriber_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-PublishNewsletterResponse _$PublishNewsletterResponseFromJson(
+ConfirmSubscriberResponse _$ConfirmSubscriberResponseFromJson(
   Map<String, dynamic> json,
-) => PublishNewsletterResponse(
+) => ConfirmSubscriberResponse(
   statusCode: (json['statusCode'] as num?)?.toInt() ?? 200,
   message: json['message'] as String?,
 );
 
-Map<String, dynamic> _$PublishNewsletterResponseToJson(
-  PublishNewsletterResponse instance,
+Map<String, dynamic> _$ConfirmSubscriberResponseToJson(
+  ConfirmSubscriberResponse instance,
 ) => <String, dynamic>{
   'statusCode': instance.statusCode,
   'message': instance.message,

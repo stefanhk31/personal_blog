@@ -2,8 +2,8 @@ import 'package:blog_models/blog_models.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('BaseHttpResponse', () {
-    const response = BaseHttpResponse(
+  group('ConfirmSubscriberResponse', () {
+    const response = ConfirmSubscriberResponse(
       statusCode: 200,
       message: '{"success": true}',
     );
@@ -14,7 +14,10 @@ void main() {
 
     test('supports value equality', () {
       expect(
-        BaseHttpResponse(statusCode: 200, message: '{"success": true}'),
+        ConfirmSubscriberResponse(
+          statusCode: 200,
+          message: '{"success": true}',
+        ),
         equals(response),
       );
     });
@@ -22,13 +25,13 @@ void main() {
     group('JSON serialization', () {
       final jsonMap = {
         'statusCode': 200,
-        'body': '{"success": true}',
+        'message': '{"success": true}',
       };
 
       test('can be created from JSON', () {
         expect(
-          BaseHttpResponse.fromJson(jsonMap),
-          isA<BaseHttpResponse>(),
+          ConfirmSubscriberResponse.fromJson(jsonMap),
+          isA<ConfirmSubscriberResponse>(),
         );
       });
 
@@ -37,8 +40,12 @@ void main() {
       });
     });
 
+    test('extends BaseHttpResponse', () {
+      expect(response, isA<BaseHttpResponse>());
+    });
+
     test('supports optional body', () {
-      const responseWithoutBody = BaseHttpResponse(statusCode: 204);
+      const responseWithoutBody = ConfirmSubscriberResponse(statusCode: 204);
       expect(responseWithoutBody.message, isNull);
       expect(responseWithoutBody.statusCode, equals(204));
     });

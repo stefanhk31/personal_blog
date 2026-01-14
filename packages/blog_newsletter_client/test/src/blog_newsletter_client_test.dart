@@ -43,7 +43,7 @@ void main() {
           'when the call completes successfully', () async {
         const expectedResponse = PublishNewsletterResponse(
           statusCode: 200,
-          body: '{"success": true}',
+          message: '{"success": true}',
         );
 
         when(
@@ -68,7 +68,7 @@ void main() {
 
         expect(result, equals(expectedResponse));
         expect(result.statusCode, equals(HttpStatus.ok));
-        expect(result.body, equals('{"success": true}'));
+        expect(result.message, equals('{"success": true}'));
       });
 
       test('throws RequestFailedException when call fails', () async {
@@ -113,7 +113,7 @@ void main() {
           'when the call completes successfully', () async {
         const expectedResponse = RemoveSubscriberResponse(
           statusCode: 200,
-          body: '{"success": true}',
+          message: '{"success": true}',
         );
 
         when(
@@ -138,7 +138,7 @@ void main() {
 
         expect(result, equals(expectedResponse));
         expect(result.statusCode, equals(HttpStatus.ok));
-        expect(result.body, equals('{"success": true}'));
+        expect(result.message, equals('{"success": true}'));
       });
 
       test('throws RequestFailedException when call fails', () async {

@@ -11,7 +11,7 @@ class PublishNewsletterResponse extends BaseHttpResponse {
   /// {@macro publish_newsletter_response}
   const PublishNewsletterResponse({
     required super.statusCode,
-    super.body,
+    super.message,
   });
 
   /// Factory for JSON deserialization

@@ -9,8 +9,11 @@ part of 'base_http_response.dart';
 BaseHttpResponse _$BaseHttpResponseFromJson(Map<String, dynamic> json) =>
     BaseHttpResponse(
       statusCode: (json['statusCode'] as num?)?.toInt() ?? 200,
-      body: json['body'] as String?,
+      message: json['message'] as String?,
     );
 
 Map<String, dynamic> _$BaseHttpResponseToJson(BaseHttpResponse instance) =>
-    <String, dynamic>{'statusCode': instance.statusCode, 'body': instance.body};
+    <String, dynamic>{
+      'statusCode': instance.statusCode,
+      'message': instance.message,
+    };
