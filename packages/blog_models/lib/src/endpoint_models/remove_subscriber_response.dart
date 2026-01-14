@@ -11,7 +11,7 @@ class RemoveSubscriberResponse extends BaseHttpResponse {
   /// {@macro remove_subscriber_response}
   const RemoveSubscriberResponse({
     required super.statusCode,
-    super.body,
+    super.message,
   });
 
   /// Factory for JSON deserialization

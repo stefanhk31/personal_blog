@@ -11,7 +11,7 @@ class BaseHttpResponse extends Equatable {
   /// {@macro base_http_response}
   const BaseHttpResponse({
     required this.statusCode,
-    this.body,
+    this.message,
   });
 
   /// Factory for JSON deserialization
@@ -25,9 +25,9 @@ class BaseHttpResponse extends Equatable {
   @JsonKey(name: 'statusCode', defaultValue: 200)
   final int statusCode;
 
-  /// Optional response body
-  final String? body;
+  /// Optional response message
+  final String? message;
 
   @override
-  List<Object?> get props => [statusCode, body];
+  List<Object?> get props => [statusCode, message];
 }

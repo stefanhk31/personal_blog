@@ -2,8 +2,8 @@ import 'package:blog_models/blog_models.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('PublishNewsletterResponse', () {
-    const response = PublishNewsletterResponse(
+  group('ConfirmSubscriberResponse', () {
+    const response = ConfirmSubscriberResponse(
       statusCode: 200,
       message: '{"success": true}',
     );
@@ -14,7 +14,7 @@ void main() {
 
     test('supports value equality', () {
       expect(
-        PublishNewsletterResponse(
+        ConfirmSubscriberResponse(
           statusCode: 200,
           message: '{"success": true}',
         ),
@@ -30,8 +30,8 @@ void main() {
 
       test('can be created from JSON', () {
         expect(
-          PublishNewsletterResponse.fromJson(jsonMap),
-          isA<PublishNewsletterResponse>(),
+          ConfirmSubscriberResponse.fromJson(jsonMap),
+          isA<ConfirmSubscriberResponse>(),
         );
       });
 
@@ -45,7 +45,7 @@ void main() {
     });
 
     test('supports optional body', () {
-      const responseWithoutBody = PublishNewsletterResponse(statusCode: 204);
+      const responseWithoutBody = ConfirmSubscriberResponse(statusCode: 204);
       expect(responseWithoutBody.message, isNull);
       expect(responseWithoutBody.statusCode, equals(204));
     });

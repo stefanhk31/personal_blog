@@ -5,7 +5,7 @@ void main() {
   group('BaseHttpResponse', () {
     const response = BaseHttpResponse(
       statusCode: 200,
-      body: '{"success": true}',
+      message: '{"success": true}',
     );
 
     test('can be instantiated', () {
@@ -14,7 +14,7 @@ void main() {
 
     test('supports value equality', () {
       expect(
-        BaseHttpResponse(statusCode: 200, body: '{"success": true}'),
+        BaseHttpResponse(statusCode: 200, message: '{"success": true}'),
         equals(response),
       );
     });
@@ -22,7 +22,7 @@ void main() {
     group('JSON serialization', () {
       final jsonMap = {
         'statusCode': 200,
-        'body': '{"success": true}',
+        'message': '{"success": true}',
       };
 
       test('can be created from JSON', () {
@@ -39,7 +39,7 @@ void main() {
 
     test('supports optional body', () {
       const responseWithoutBody = BaseHttpResponse(statusCode: 204);
-      expect(responseWithoutBody.body, isNull);
+      expect(responseWithoutBody.message, isNull);
       expect(responseWithoutBody.statusCode, equals(204));
     });
   });

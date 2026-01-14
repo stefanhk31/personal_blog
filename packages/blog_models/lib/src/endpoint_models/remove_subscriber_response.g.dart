@@ -10,12 +10,12 @@ RemoveSubscriberResponse _$RemoveSubscriberResponseFromJson(
   Map<String, dynamic> json,
 ) => RemoveSubscriberResponse(
   statusCode: (json['statusCode'] as num?)?.toInt() ?? 200,
-  body: json['body'] as String?,
+  message: json['message'] as String?,
 );
 
 Map<String, dynamic> _$RemoveSubscriberResponseToJson(
   RemoveSubscriberResponse instance,
 ) => <String, dynamic>{
   'statusCode': instance.statusCode,
-  'body': instance.body,
+  'message': instance.message,
 };
