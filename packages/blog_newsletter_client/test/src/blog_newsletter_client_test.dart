@@ -31,6 +31,90 @@ void main() {
       expect(blogNewsletterClient, isNotNull);
     });
 
+    group('confirmSubscriber', () {
+      const token = '12345';
+      const path = '/subscriptions/confirm';
+      const queryParameters = {'subscription_token': token};
+
+      test(
+        'returns ConfirmSubscriberResponse when call completes successfully',
+        () async {
+          const expectedResponse = ConfirmSubscriberResponse(
+            statusCode: 200,
+            message: 'Confirmation Successful',
+          );
+
+          when(
+            () => apiClient.sendRequest<ConfirmSubscriberResponse>(
+              any(
+                that: isA<Uri>()
+                    .having(
+                      (uri) => uri.path,
+                      'path',
+                      path,
+                    )
+                    .having(
+                      (uri) => uri.queryParameters,
+                      'queryParameters',
+                      queryParameters,
+                    ),
+              ),
+              method: HttpMethod.get,
+              headers: any(named: 'headers'),
+              fromJson: ConfirmSubscriberResponse.fromJson,
+            ),
+          ).thenAnswer((_) async => expectedResponse);
+
+          final result = await blogNewsletterClient.confirmSubscriber(
+            subscriptionToken: token,
+          );
+
+          expect(result, equals(expectedResponse));
+          expect(result.statusCode, equals(HttpStatus.ok));
+          expect(result.message, equals('Confirmation Successful'));
+        },
+      );
+
+      test('throws RequestFailedException when call fails', () async {
+        const errorMessage = 'error';
+        final exception = RequestFailedException(
+          message: errorMessage,
+          statusCode: HttpStatus.notFound,
+        );
+
+        when(
+          () => apiClient.sendRequest<ConfirmSubscriberResponse>(
+            any(
+              that: isA<Uri>()
+                  .having(
+                    (uri) => uri.path,
+                    'path',
+                    path,
+                  )
+                  .having(
+                    (uri) => uri.queryParameters,
+                    'queryParameters',
+                    queryParameters,
+                  ),
+            ),
+            method: HttpMethod.get,
+            headers: any(named: 'headers'),
+            fromJson: ConfirmSubscriberResponse.fromJson,
+          ),
+        ).thenThrow(exception);
+
+        expect(
+          () =>
+              blogNewsletterClient.confirmSubscriber(subscriptionToken: token),
+          throwsA(
+            isA<RequestFailedException>()
+                .having((e) => e.statusCode, 'statusCode', HttpStatus.notFound)
+                .having((e) => e.message, 'message', errorMessage),
+          ),
+        );
+      });
+    });
+
     group('publishNewsletter', () {
       const path = '/newsletters';
       const request = BlogNewsletterPublishRequest(
@@ -43,7 +127,7 @@ void main() {
           'when the call completes successfully', () async {
         const expectedResponse = PublishNewsletterResponse(
           statusCode: 200,
-          message: '{"success": true}',
+          message: 'Publish successful',
         );
 
         when(
@@ -68,7 +152,7 @@ void main() {
 
         expect(result, equals(expectedResponse));
         expect(result.statusCode, equals(HttpStatus.ok));
-        expect(result.message, equals('{"success": true}'));
+        expect(result.message, equals('Publish successful'));
       });
 
       test('throws RequestFailedException when call fails', () async {
