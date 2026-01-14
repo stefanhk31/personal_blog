@@ -22,7 +22,7 @@ void main() {
     group('JSON serialization', () {
       final jsonMap = {
         'statusCode': 200,
-        'body': '{"success": true}',
+        'message': '{"success": true}',
       };
 
       test('can be created from JSON', () {
