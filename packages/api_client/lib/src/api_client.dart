@@ -80,14 +80,10 @@ class ApiClient {
     }
 
     Map<String, dynamic>? json;
-    if (response.body.isNotEmpty) {
-      try {
-        json = jsonDecode(response.body) as Map<String, dynamic>;
-      } catch (e) {
-        throw JsonSerializationException(message: e.toString());
-      }
-    } else {
-      json = {};
+    try {
+      json = jsonDecode(response.body) as Map<String, dynamic>;
+    } catch (e) {
+      throw JsonSerializationException(message: e.toString());
     }
 
     return fromJson(json);
