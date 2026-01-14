@@ -13,7 +13,4 @@ NewsletterContent _$NewsletterContentFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$NewsletterContentToJson(NewsletterContent instance) =>
-    <String, dynamic>{
-      'html': instance.html,
-      'text': instance.text,
-    };
+    <String, dynamic>{'html': instance.html, 'text': instance.text};

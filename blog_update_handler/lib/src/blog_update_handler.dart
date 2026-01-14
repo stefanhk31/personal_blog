@@ -33,21 +33,10 @@ class BlogUpdateHandler {
       logMessage('Fetching blog posts from Butter CMS');
       final response = await _butterCmsClient.fetchBlogPosts();
 
-      if (response.statusCode != 200) {
-        logMessage(
-          'Failed to fetch blogs: ${response.statusCode}',
-          LogLevel.error,
-        );
-        return;
-      }
-
-      final blogsResponse = BlogsResponse.fromJson(
-        jsonDecode(response.body) as Map<String, dynamic>,
-      );
-      logMessage('Fetched ${blogsResponse.data.length} total blog posts');
+      logMessage('Fetched ${response.data.length} total blog posts');
 
       final cutoffDate = DateTime.now().subtract(_publishDuration);
-      final recentBlogs = blogsResponse.data.where((blog) {
+      final recentBlogs = response.data.where((blog) {
         return blog.published.isAfter(cutoffDate) ||
             blog.published.isAtSameMomentAs(cutoffDate);
       }).toList();

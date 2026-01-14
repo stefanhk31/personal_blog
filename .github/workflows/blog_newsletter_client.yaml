@@ -12,6 +12,7 @@ on:
     paths:
       - ".github/workflows/blog_newsletter_client_verify_and_test.yaml"
       - "packages/blog_newsletter_client/**"
+      - "packages/api_client/**"
       - "packages/blog_models/**"
   push:
     branches:
@@ -20,6 +21,7 @@ on:
     paths:
       - ".github/workflows/**"
       - "packages/blog_newsletter_client/**"
+      - "packages/api_client/**"
       - "packages/blog_models/**"
 
 jobs:

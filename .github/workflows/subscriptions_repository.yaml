@@ -12,6 +12,7 @@ on:
     paths:
       - ".github/workflows/subscriptions_repository_verify_and_test.yaml"
       - "packages/subscriptions_repository/**"
+      - "packages/api_client/**"
       - "packages/blog_models/**"
       - "packages/blog_newsletter_client/**"
       - "packages/template_engine/**"
@@ -22,6 +23,7 @@ on:
     paths:
       - ".github/workflows/**"
       - "packages/subscriptions_repository/**"
+      - "packages/api_client/**"
       - "packages/blog_models/**"
       - "packages/blog_newsletter_client/**"
       - "packages/template_engine/**"

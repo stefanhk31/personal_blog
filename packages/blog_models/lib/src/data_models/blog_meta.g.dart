@@ -7,15 +7,15 @@ part of 'blog_meta.dart';
 // **************************************************************************
 
 BlogMeta _$BlogMetaFromJson(Map<String, dynamic> json) => BlogMeta(
-      nextPost: json['next_post'] == null
-          ? null
-          : BlogSummary.fromJson(json['next_post'] as Map<String, dynamic>),
-      previousPost: json['previous_post'] == null
-          ? null
-          : BlogSummary.fromJson(json['previous_post'] as Map<String, dynamic>),
-    );
+  nextPost: json['next_post'] == null
+      ? null
+      : BlogSummary.fromJson(json['next_post'] as Map<String, dynamic>),
+  previousPost: json['previous_post'] == null
+      ? null
+      : BlogSummary.fromJson(json['previous_post'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$BlogMetaToJson(BlogMeta instance) => <String, dynamic>{
-      'next_post': instance.nextPost?.toJson(),
-      'previous_post': instance.previousPost?.toJson(),
-    };
+  'next_post': instance.nextPost?.toJson(),
+  'previous_post': instance.previousPost?.toJson(),
+};

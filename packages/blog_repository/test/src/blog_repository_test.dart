@@ -1,10 +1,8 @@
-// ignore_for_file: prefer_const_constructors
-import 'dart:convert';
-
+// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages
+import 'package:api_client/api_client.dart';
 import 'package:blog_models/blog_models.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:butter_cms_client/butter_cms_client.dart';
-import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:template_engine/template_engine.dart';
 import 'package:test/test.dart';
@@ -35,14 +33,14 @@ void main() {
     group('getBlogDetailHtml', () {
       test('uses template engine to render blog detail page '
           'when api call is successful', () async {
+        final blogResponse = BlogResponse(
+          meta: BlogMeta.fromJson(blogMetaJson),
+          data: Blog.fromJson(blogJson),
+        );
+
         when(
           () => cmsClient.fetchBlogPost(slug: any(named: 'slug')),
-        ).thenAnswer(
-          (_) async => Response(
-            jsonEncode({'meta': blogMetaJson, 'data': blogJson}),
-            200,
-          ),
-        );
+        ).thenAnswer((_) async => blogResponse);
 
         when(
           () => templateEngine.render(
@@ -61,40 +59,44 @@ void main() {
       });
 
       test('uses template engine to render error page '
-          'when api call is not successful', () async {
-        const badRequestMessage = 'bad request';
+          'when api call throws RequestFailedException', () async {
+        final exception = RequestFailedException(
+          message: 'bad request',
+          statusCode: 400,
+        );
+
         when(
           () => cmsClient.fetchBlogPost(slug: any(named: 'slug')),
-        ).thenAnswer((_) async => Response(badRequestMessage, 400));
+        ).thenThrow(exception);
 
         when(
           () => templateEngine.renderErrorPage(
-            message: httpErrorMessage(400, badRequestMessage),
-            statusCode: 400,
+            message:
+                'Request Failed. \nstatus code: 400 \nmessage: bad request',
           ),
         ).thenAnswer(
-          (_) async => HtmlResponse(statusCode: 400, html: '<html></html>'),
+          (_) async => HtmlResponse(statusCode: 500, html: '<html></html>'),
         );
 
         await blogRepository.getBlogDetailHtml('my-blog-post');
         verify(
           () => templateEngine.renderErrorPage(
-            message: httpErrorMessage(400, badRequestMessage),
-            statusCode: 400,
+            message:
+                'Request Failed. \nstatus code: 400 \nmessage: bad request',
           ),
         ).called(1);
       });
 
       test('uses template engine to render error page '
           'when an unexpected error occurs', () async {
+        final blogResponse = BlogResponse(
+          meta: BlogMeta.fromJson(blogMetaJson),
+          data: Blog.fromJson(blogJson),
+        );
+
         when(
           () => cmsClient.fetchBlogPost(slug: any(named: 'slug')),
-        ).thenAnswer(
-          (_) async => Response(
-            jsonEncode({'meta': blogMetaJson, 'data': blogJson}),
-            200,
-          ),
-        );
+        ).thenAnswer((_) async => blogResponse);
 
         const errorMessage = 'error rendering template';
         when(
@@ -124,20 +126,17 @@ void main() {
     group('getBlogOverviewHtml', () {
       test('uses template engine to render blog overview page '
           'when api call is successful and offset is zero', () async {
+        final blogsResponse = BlogsResponse(
+          meta: BlogsMeta.fromJson(blogsMetaJson),
+          data: [Blog.fromJson(blogJson)],
+        );
+
         when(
           () => cmsClient.fetchBlogPosts(
             excludeBody: true,
             limit: any(named: 'limit'),
           ),
-        ).thenAnswer(
-          (_) async => Response(
-            jsonEncode({
-              'meta': blogsMetaJson,
-              'data': [blogJson],
-            }),
-            200,
-          ),
-        );
+        ).thenAnswer((_) async => blogsResponse);
 
         when(
           () => templateEngine.render(
@@ -158,21 +157,18 @@ void main() {
       test('uses template engine to render new blog preview list data '
           'when api call is successful '
           'and offset is greater than zero', () async {
+        final blogsResponse = BlogsResponse(
+          meta: BlogsMeta.fromJson(blogsMetaJson),
+          data: [Blog.fromJson(blogJson)],
+        );
+
         when(
           () => cmsClient.fetchBlogPosts(
             excludeBody: true,
             limit: any(named: 'limit'),
             offset: 1,
           ),
-        ).thenAnswer(
-          (_) async => Response(
-            jsonEncode({
-              'meta': blogsMetaJson,
-              'data': [blogJson],
-            }),
-            200,
-          ),
-        );
+        ).thenAnswer((_) async => blogsResponse);
 
         when(
           () => templateEngine.render(
@@ -191,49 +187,50 @@ void main() {
       });
 
       test('uses template engine to render error page '
-          'when api call is not successful', () async {
-        const badRequestMessage = 'bad request';
+          'when api call throws RequestFailedException', () async {
+        final exception = RequestFailedException(
+          message: 'bad request',
+          statusCode: 400,
+        );
+
         when(
           () => cmsClient.fetchBlogPosts(
             excludeBody: true,
             limit: any(named: 'limit'),
           ),
-        ).thenAnswer((_) async => Response(badRequestMessage, 400));
+        ).thenThrow(exception);
 
         when(
           () => templateEngine.renderErrorPage(
-            message: httpErrorMessage(400, badRequestMessage),
-            statusCode: 400,
+            message:
+                'Request Failed. \nstatus code: 400 \nmessage: bad request',
           ),
         ).thenAnswer(
-          (_) async => HtmlResponse(statusCode: 400, html: '<html></html>'),
+          (_) async => HtmlResponse(statusCode: 500, html: '<html></html>'),
         );
 
         await blogRepository.getBlogOverviewHtml();
         verify(
           () => templateEngine.renderErrorPage(
-            message: httpErrorMessage(400, badRequestMessage),
-            statusCode: 400,
+            message:
+                'Request Failed. \nstatus code: 400 \nmessage: bad request',
           ),
         ).called(1);
       });
 
       test('uses template engine to render error page '
           'when an unexpected error occurs', () async {
+        final blogsResponse = BlogsResponse(
+          meta: BlogsMeta.fromJson(blogsMetaJson),
+          data: [Blog.fromJson(blogJson)],
+        );
+
         when(
           () => cmsClient.fetchBlogPosts(
             excludeBody: true,
             limit: any(named: 'limit'),
           ),
-        ).thenAnswer(
-          (_) async => Response(
-            jsonEncode({
-              'meta': blogsMetaJson,
-              'data': [blogJson],
-            }),
-            200,
-          ),
-        );
+        ).thenAnswer((_) async => blogsResponse);
 
         const errorMessage = 'error rendering template';
         when(

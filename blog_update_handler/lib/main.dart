@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:api_client/api_client.dart';
 import 'package:blog_newsletter_client/blog_newsletter_client.dart';
 import 'package:blog_update_handler/blog_update_handler.dart';
 import 'package:butter_cms_client/butter_cms_client.dart';
@@ -31,14 +32,16 @@ Future<void> main() async {
 
   final httpClient = http.Client();
 
+  final apiClient = ApiClient(client: httpClient);
+
   final butterCmsClient = ButterCmsClient(
     apiKey: butterCmsApiKey,
-    httpClient: httpClient,
+    apiClient: ApiClient(client: httpClient),
   );
 
   final blogNewsletterClient = BlogNewsletterClient(
     baseUrl: newsletterBaseUrl,
-    httpClient: httpClient,
+    apiClient: apiClient,
   );
 
   final handler = BlogUpdateHandler(

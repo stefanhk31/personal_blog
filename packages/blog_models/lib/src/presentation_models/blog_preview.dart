@@ -19,14 +19,14 @@ class BlogPreview extends Equatable {
 
   /// Creates a [BlogPreview] from the [Blog] data model.
   factory BlogPreview.fromBlog(Blog blog) => BlogPreview(
-        title: blog.title,
-        description: blog.summary,
-        published: blog.published,
-        authorName: '${blog.author.firstName} ${blog.author.lastName}',
-        slug: blog.slug,
-        authorImage: blog.author.profileImage,
-        image: blog.featuredImage,
-      );
+    title: blog.title,
+    description: blog.summary,
+    published: blog.published,
+    authorName: '${blog.author.firstName} ${blog.author.lastName}',
+    slug: blog.slug,
+    authorImage: blog.author.profileImage,
+    image: blog.featuredImage,
+  );
 
   /// Returns the date of publication in the format `Month Day, Year`.
   String get publishDateFormatted => DateFormat.yMMMMd().format(published);
@@ -54,12 +54,12 @@ class BlogPreview extends Equatable {
 
   @override
   List<Object?> get props => [
-        title,
-        description,
-        published,
-        authorName,
-        slug,
-        authorImage,
-        image,
-      ];
+    title,
+    description,
+    published,
+    authorName,
+    slug,
+    authorImage,
+    image,
+  ];
 }

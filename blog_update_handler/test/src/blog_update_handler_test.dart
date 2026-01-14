@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:blog_models/blog_models.dart';
 import 'package:blog_newsletter_client/blog_newsletter_client.dart';
 import 'package:blog_update_handler/blog_update_handler.dart';
 import 'package:butter_cms_client/butter_cms_client.dart';
-import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
@@ -71,32 +68,11 @@ void main() {
     group('publishRecentPosts', () {
       test('successfully fetches and publishes recent blogs', () async {
         final now = DateTime.now();
-        final recentBlog = Blog(
-          created: now.subtract(const Duration(minutes: 30)),
-          updated: now.subtract(const Duration(minutes: 30)),
-          published: now.subtract(const Duration(minutes: 30)),
+        final recentBlog = _TestData.blog(
+          now.subtract(const Duration(minutes: 30)),
           slug: 'recent-blog',
           title: 'Recent Blog',
           body: '<p>Recent blog content</p>',
-          summary: 'Summary',
-          seoTitle: 'SEO Title',
-          metaDescription: 'Meta description',
-          status: 'published',
-          featuredImageAlt: 'Alt text',
-          author: const Author(
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'john@example.com',
-            slug: 'john-doe',
-            bio: 'Bio',
-            title: 'Writer',
-            linkedinUrl: '',
-            facebookUrl: '',
-            twitterHandle: '',
-            profileImage: '',
-          ),
-          categories: const [],
-          tags: const [],
         );
 
         final blogsResponse = BlogsResponse(
@@ -106,18 +82,15 @@ void main() {
 
         when(
           () => butterCmsClient.fetchBlogPosts(),
-        ).thenAnswer(
-          (_) async => http.Response(
-            jsonEncode(blogsResponse.toJson()),
-            200,
-          ),
-        );
+        ).thenAnswer((_) async => blogsResponse);
 
         when(
           () => blogNewsletterClient.publishNewsletter(
             request: any(named: 'request'),
           ),
-        ).thenAnswer((_) async => http.Response('{"success": true}', 200));
+        ).thenAnswer(
+          (_) async => const PublishNewsletterResponse(statusCode: 200),
+        );
 
         // Act
         await handler.publishRecentPosts();
@@ -149,12 +122,7 @@ void main() {
 
         when(
           () => butterCmsClient.fetchBlogPosts(),
-        ).thenAnswer(
-          (_) async => http.Response(
-            jsonEncode(blogsResponse.toJson()),
-            200,
-          ),
-        );
+        ).thenAnswer((_) async => blogsResponse);
 
         await handler.publishRecentPosts();
 
@@ -171,7 +139,7 @@ void main() {
       test('handles fetch error gracefully', () async {
         when(
           () => butterCmsClient.fetchBlogPosts(),
-        ).thenAnswer((_) async => http.Response('Error', 500));
+        ).thenThrow(Exception('Network error'));
 
         await handler.publishRecentPosts();
 
@@ -209,19 +177,15 @@ void main() {
 
         when(
           () => butterCmsClient.fetchBlogPosts(),
-        ).thenAnswer(
-          (_) async => http.Response(
-            jsonEncode(blogsResponse.toJson()),
-            200,
-          ),
-        );
+        ).thenAnswer((_) async => blogsResponse);
 
         when(
           () => blogNewsletterClient.publishNewsletter(
             request: any(named: 'request'),
           ),
         ).thenAnswer(
-          (_) async => http.Response('Error', 500),
+          (_) async =>
+              const PublishNewsletterResponse(statusCode: 500, body: 'Error'),
         );
 
         await handler.publishRecentPosts();
@@ -260,12 +224,7 @@ void main() {
 
         when(
           () => butterCmsClient.fetchBlogPosts(),
-        ).thenAnswer(
-          (_) async => http.Response(
-            jsonEncode(blogsResponse.toJson()),
-            200,
-          ),
-        );
+        ).thenAnswer((_) async => blogsResponse);
 
         when(
           () => blogNewsletterClient.publishNewsletter(
@@ -302,12 +261,7 @@ void main() {
 
         when(
           () => butterCmsClient.fetchBlogPosts(),
-        ).thenAnswer(
-          (_) async => http.Response(
-            jsonEncode(blogsResponse.toJson()),
-            200,
-          ),
-        );
+        ).thenAnswer((_) async => blogsResponse);
 
         await handler.publishRecentPosts();
 

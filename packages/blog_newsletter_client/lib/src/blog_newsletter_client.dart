@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:api_client/api_client.dart';
 import 'package:blog_models/blog_models.dart';
-import 'package:http/http.dart';
 
 /// {@template blog_newsletter_client}
 /// Client to interact with the blog's newsletter service.
@@ -9,28 +9,31 @@ import 'package:http/http.dart';
 class BlogNewsletterClient {
   /// {@macro blog_newsletter_client}
   const BlogNewsletterClient({
-    required Client httpClient,
+    required ApiClient apiClient,
     required String baseUrl,
-  }) : _httpClient = httpClient,
+  }) : _apiClient = apiClient,
        _baseUrl = baseUrl;
 
-  final Client _httpClient;
+  final ApiClient _apiClient;
   final String _baseUrl;
 
   /// Publishes a newsletter to the blog's newsletter service.
   ///
   /// Takes a [request] containing the newsletter content to be published.
   ///
-  /// Returns the [Response] from the newsletter service.
-  Future<Response> publishNewsletter({
+  /// Returns a [PublishNewsletterResponse] with status code and optional body.
+  Future<PublishNewsletterResponse> publishNewsletter({
     required BlogNewsletterPublishRequest request,
   }) async {
     final uri = Uri.http(_baseUrl, '/newsletters');
     final body = jsonEncode(request.toJson());
-    return _httpClient.post(
+
+    return _apiClient.sendRequest<PublishNewsletterResponse>(
       uri,
+      method: HttpMethod.post,
       headers: {'Content-Type': 'application/json'},
       body: body,
+      fromJson: PublishNewsletterResponse.fromJson,
     );
   }
 
@@ -39,16 +42,19 @@ class BlogNewsletterClient {
   ///
   /// Takes an encoded [String] of the subscriber's email.
   ///
-  /// Returns  the [Response] from the newsletter service.
-  Future<Response> removeSubscriber({
+  /// Returns a [RemoveSubscriberResponse] with status code and optional body.
+  Future<RemoveSubscriberResponse> removeSubscriber({
     required String subscriberEmail,
   }) async {
     final uri = Uri.http(_baseUrl, '/subscriptions/unsubscribe');
     final encodedEmail = Uri.encodeComponent(subscriberEmail);
-    return _httpClient.delete(
+
+    return _apiClient.sendRequest<RemoveSubscriberResponse>(
       uri,
+      method: HttpMethod.delete,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: 'email=$encodedEmail',
+      fromJson: RemoveSubscriberResponse.fromJson,
     );
   }
 }

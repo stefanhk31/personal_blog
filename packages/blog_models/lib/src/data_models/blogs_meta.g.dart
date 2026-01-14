@@ -7,13 +7,13 @@ part of 'blogs_meta.dart';
 // **************************************************************************
 
 BlogsMeta _$BlogsMetaFromJson(Map<String, dynamic> json) => BlogsMeta(
-      count: (json['count'] as num).toInt(),
-      nextPage: (json['next_page'] as num?)?.toInt(),
-      previousPage: (json['previous_page'] as num?)?.toInt(),
-    );
+  count: (json['count'] as num).toInt(),
+  nextPage: (json['next_page'] as num?)?.toInt(),
+  previousPage: (json['previous_page'] as num?)?.toInt(),
+);
 
 Map<String, dynamic> _$BlogsMetaToJson(BlogsMeta instance) => <String, dynamic>{
-      'count': instance.count,
-      'next_page': instance.nextPage,
-      'previous_page': instance.previousPage,
-    };
+  'count': instance.count,
+  'next_page': instance.nextPage,
+  'previous_page': instance.previousPage,
+};

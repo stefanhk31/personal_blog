@@ -7,8 +7,10 @@ import 'package:test/test.dart';
 void main() {
   group('BlogPreviews', () {
     test('can be created from blogs response', () {
-      final blogsResponse =
-          BlogsResponse(meta: const BlogsMeta(count: 1), data: [blog]);
+      final blogsResponse = BlogsResponse(
+        meta: const BlogsMeta(count: 1),
+        data: [blog],
+      );
 
       final blogPreviews = BlogPreviews.fromBlogs(blogsResponse);
 

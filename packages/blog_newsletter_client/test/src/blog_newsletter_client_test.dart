@@ -1,29 +1,30 @@
 import 'dart:io';
 
+import 'package:api_client/api_client.dart';
 import 'package:blog_models/blog_models.dart';
 import 'package:blog_newsletter_client/blog_newsletter_client.dart';
-import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class _MockHttpClient extends Mock implements Client {}
+class _MockApiClient extends Mock implements ApiClient {}
 
 void main() {
   group('BlogNewsletterClient', () {
-    late Client httpClient;
+    late ApiClient apiClient;
     late BlogNewsletterClient blogNewsletterClient;
     const baseUrl = 'test';
 
     setUp(() {
-      httpClient = _MockHttpClient();
+      apiClient = _MockApiClient();
       blogNewsletterClient = BlogNewsletterClient(
-        httpClient: httpClient,
+        apiClient: apiClient,
         baseUrl: baseUrl,
       );
     });
 
     setUpAll(() {
       registerFallbackValue(Uri());
+      registerFallbackValue(HttpMethod.post);
     });
 
     test('can be instantiated', () {
@@ -37,12 +38,16 @@ void main() {
         content: newsletterContent,
         idempotencyKey: newsletterIdempotencyKey,
       );
-      const errorMessage = 'error';
 
-      test('returns 200 with response body '
+      test('returns PublishNewsletterResponse '
           'when the call completes successfully', () async {
+        const expectedResponse = PublishNewsletterResponse(
+          statusCode: 200,
+          body: '{"success": true}',
+        );
+
         when(
-          () => httpClient.post(
+          () => apiClient.sendRequest<PublishNewsletterResponse>(
             any(
               that: isA<Uri>().having(
                 (uri) => uri.path,
@@ -50,26 +55,31 @@ void main() {
                 path,
               ),
             ),
+            method: HttpMethod.post,
             headers: any(named: 'headers'),
             body: any(named: 'body'),
+            fromJson: PublishNewsletterResponse.fromJson,
           ),
-        ).thenAnswer(
-          (_) async => Response(
-            '{"success": true}',
-            200,
-            headers: {'content-type': 'application/json'},
-          ),
-        );
+        ).thenAnswer((_) async => expectedResponse);
 
         final result = await blogNewsletterClient.publishNewsletter(
           request: request,
         );
+
+        expect(result, equals(expectedResponse));
         expect(result.statusCode, equals(HttpStatus.ok));
+        expect(result.body, equals('{"success": true}'));
       });
 
-      test('returns failure with body when call fails', () async {
+      test('throws RequestFailedException when call fails', () async {
+        const errorMessage = 'error';
+        final exception = RequestFailedException(
+          message: errorMessage,
+          statusCode: HttpStatus.notFound,
+        );
+
         when(
-          () => httpClient.post(
+          () => apiClient.sendRequest<PublishNewsletterResponse>(
             any(
               that: isA<Uri>().having(
                 (uri) => uri.path,
@@ -77,33 +87,37 @@ void main() {
                 path,
               ),
             ),
+            method: HttpMethod.post,
             headers: any(named: 'headers'),
             body: any(named: 'body'),
+            fromJson: PublishNewsletterResponse.fromJson,
           ),
-        ).thenAnswer(
-          (_) async => Response(
-            errorMessage,
-            HttpStatus.notFound,
-          ),
-        );
+        ).thenThrow(exception);
 
-        final result = await blogNewsletterClient.publishNewsletter(
-          request: request,
+        expect(
+          () => blogNewsletterClient.publishNewsletter(request: request),
+          throwsA(
+            isA<RequestFailedException>()
+                .having((e) => e.statusCode, 'statusCode', HttpStatus.notFound)
+                .having((e) => e.message, 'message', errorMessage),
+          ),
         );
-        expect(result.statusCode, equals(HttpStatus.notFound));
-        expect(result.body, equals(errorMessage));
       });
     });
 
     group('removeSubscriber', () {
       const path = '/subscriptions/unsubscribe';
       const subscriberEmail = 'test@example.com';
-      const errorMessage = 'error';
 
-      test('returns 200 with response body '
+      test('returns RemoveSubscriberResponse '
           'when the call completes successfully', () async {
+        const expectedResponse = RemoveSubscriberResponse(
+          statusCode: 200,
+          body: '{"success": true}',
+        );
+
         when(
-          () => httpClient.delete(
+          () => apiClient.sendRequest<RemoveSubscriberResponse>(
             any(
               that: isA<Uri>().having(
                 (uri) => uri.path,
@@ -111,26 +125,31 @@ void main() {
                 path,
               ),
             ),
+            method: HttpMethod.delete,
             headers: any(named: 'headers'),
             body: any(named: 'body'),
+            fromJson: RemoveSubscriberResponse.fromJson,
           ),
-        ).thenAnswer(
-          (_) async => Response(
-            '{"success": true}',
-            200,
-            headers: {'content-type': 'application/json'},
-          ),
-        );
+        ).thenAnswer((_) async => expectedResponse);
 
         final result = await blogNewsletterClient.removeSubscriber(
           subscriberEmail: subscriberEmail,
         );
+
+        expect(result, equals(expectedResponse));
         expect(result.statusCode, equals(HttpStatus.ok));
+        expect(result.body, equals('{"success": true}'));
       });
 
-      test('returns failure with body when call fails', () async {
+      test('throws RequestFailedException when call fails', () async {
+        const errorMessage = 'error';
+        final exception = RequestFailedException(
+          message: errorMessage,
+          statusCode: HttpStatus.notFound,
+        );
+
         when(
-          () => httpClient.delete(
+          () => apiClient.sendRequest<RemoveSubscriberResponse>(
             any(
               that: isA<Uri>().having(
                 (uri) => uri.path,
@@ -138,49 +157,49 @@ void main() {
                 path,
               ),
             ),
+            method: HttpMethod.delete,
             headers: any(named: 'headers'),
             body: any(named: 'body'),
+            fromJson: RemoveSubscriberResponse.fromJson,
           ),
-        ).thenAnswer(
-          (_) async => Response(
-            errorMessage,
-            HttpStatus.notFound,
-          ),
-        );
+        ).thenThrow(exception);
 
-        final result = await blogNewsletterClient.removeSubscriber(
-          subscriberEmail: subscriberEmail,
+        expect(
+          () => blogNewsletterClient.removeSubscriber(
+            subscriberEmail: subscriberEmail,
+          ),
+          throwsA(
+            isA<RequestFailedException>()
+                .having((e) => e.statusCode, 'statusCode', HttpStatus.notFound)
+                .having((e) => e.message, 'message', errorMessage),
+          ),
         );
-        expect(result.statusCode, equals(HttpStatus.notFound));
-        expect(result.body, equals(errorMessage));
       });
 
       test('encodes email in request body', () async {
+        const expectedResponse = RemoveSubscriberResponse(statusCode: 200);
+
         when(
-          () => httpClient.delete(
-            any(
-              that: isA<Uri>().having(
-                (uri) => uri.path,
-                'path',
-                path,
-              ),
-            ),
+          () => apiClient.sendRequest<RemoveSubscriberResponse>(
+            any(),
+            method: HttpMethod.delete,
             headers: any(named: 'headers'),
             body: any(named: 'body'),
+            fromJson: RemoveSubscriberResponse.fromJson,
           ),
-        ).thenAnswer(
-          (_) async => Response('{"success": true}', 200),
-        );
+        ).thenAnswer((_) async => expectedResponse);
 
         await blogNewsletterClient.removeSubscriber(
           subscriberEmail: subscriberEmail,
         );
 
         verify(
-          () => httpClient.delete(
+          () => apiClient.sendRequest<RemoveSubscriberResponse>(
             any(),
+            method: HttpMethod.delete,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: 'email=test%40example.com',
+            fromJson: RemoveSubscriberResponse.fromJson,
           ),
         ).called(1);
       });

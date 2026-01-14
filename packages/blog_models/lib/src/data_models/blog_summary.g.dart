@@ -7,10 +7,10 @@ part of 'blog_summary.dart';
 // **************************************************************************
 
 BlogSummary _$BlogSummaryFromJson(Map<String, dynamic> json) => BlogSummary(
-      slug: json['slug'] as String,
-      title: json['title'] as String,
-      featuredImage: json['featured_image'] as String?,
-    );
+  slug: json['slug'] as String,
+  title: json['title'] as String,
+  featuredImage: json['featured_image'] as String?,
+);
 
 Map<String, dynamic> _$BlogSummaryToJson(BlogSummary instance) =>
     <String, dynamic>{

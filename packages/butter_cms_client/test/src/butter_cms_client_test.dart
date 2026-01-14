@@ -1,30 +1,31 @@
-import 'dart:io';
-
+import 'package:api_client/api_client.dart';
+import 'package:blog_models/blog_models.dart';
 import 'package:butter_cms_client/butter_cms_client.dart';
-import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import '../helpers/constants.dart';
-
-class _MockHttpClient extends Mock implements Client {}
+class _MockApiClient extends Mock implements ApiClient {}
 
 void main() {
   group('ButterCmsClient', () {
-    late Client httpClient;
+    late ApiClient apiClient;
     late ButterCmsClient butterCmsClient;
     const baseUrl = '127.0.0.1';
     const apiKey = '12345';
-    const errorMessage = 'error';
+    final notFoundException = RequestFailedException(
+      message: 'Not found',
+      statusCode: 404,
+    );
 
     setUpAll(() {
       registerFallbackValue(Uri());
+      registerFallbackValue(HttpMethod.get);
     });
 
     setUp(() {
-      httpClient = _MockHttpClient();
+      apiClient = _MockApiClient();
       butterCmsClient = ButterCmsClient(
-        httpClient: httpClient,
+        apiClient: apiClient,
         apiKey: apiKey,
         baseUrl: baseUrl,
       );
@@ -36,11 +37,17 @@ void main() {
 
     group('fetchBlogPosts', () {
       const path = '/v2/posts';
+
       test(
-          'returns 200 with json blog data '
+          'returns BlogsResponse '
           'when the call completes successfully', () async {
+        const expectedResponse = BlogsResponse(
+          meta: BlogsMeta(count: 1),
+          data: [],
+        );
+
         when(
-          () => httpClient.get(
+          () => apiClient.sendRequest<BlogsResponse>(
             any(
               that: isA<Uri>().having(
                 (uri) => uri.path,
@@ -48,23 +55,19 @@ void main() {
                 path,
               ),
             ),
+            method: HttpMethod.get,
+            fromJson: BlogsResponse.fromJson,
           ),
-        ).thenAnswer(
-          (_) async => Response(
-            rawJsonBlogsResponse,
-            200,
-            headers: {'content-type': 'application/json'},
-          ),
-        );
+        ).thenAnswer((_) async => expectedResponse);
 
         final result = await butterCmsClient.fetchBlogPosts();
-        expect(result.statusCode, equals(HttpStatus.ok));
-        expect(result.body, equals(rawJsonBlogsResponse));
+        expect(result, equals(expectedResponse));
+        expect(result.meta.count, equals(1));
       });
 
-      test('returns failure with body when call fails', () async {
+      test('throws RequestFailedException when call fails', () async {
         when(
-          () => httpClient.get(
+          () => apiClient.sendRequest<BlogsResponse>(
             any(
               that: isA<Uri>().having(
                 (uri) => uri.path,
@@ -72,17 +75,19 @@ void main() {
                 path,
               ),
             ),
+            method: HttpMethod.get,
+            fromJson: BlogsResponse.fromJson,
           ),
-        ).thenAnswer(
-          (_) async => Response(
-            errorMessage,
-            HttpStatus.notFound,
+        ).thenThrow(notFoundException);
+
+        expect(
+          () => butterCmsClient.fetchBlogPosts(),
+          throwsA(
+            isA<RequestFailedException>()
+                .having((e) => e.statusCode, 'statusCode', 404)
+                .having((e) => e.message, 'message', 'Not found'),
           ),
         );
-
-        final result = await butterCmsClient.fetchBlogPosts();
-        expect(result.statusCode, equals(HttpStatus.notFound));
-        expect(result.body, equals(errorMessage));
       });
     });
 
@@ -91,10 +96,41 @@ void main() {
       const slug = 'blog-post-slug';
 
       test(
-          'returns 200 with json blog data '
+          'returns BlogResponse '
           'when the call completes successfully', () async {
+        final expectedResponse = BlogResponse(
+          meta: const BlogMeta(),
+          data: Blog(
+            created: DateTime(2024),
+            updated: DateTime(2024),
+            published: DateTime(2024),
+            slug: slug,
+            title: 'Test',
+            body: '<p>Test</p>',
+            summary: 'Test',
+            seoTitle: 'Test',
+            metaDescription: 'Test',
+            status: 'published',
+            featuredImageAlt: '',
+            author: const Author(
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@example.com',
+              slug: 'test-user',
+              bio: '',
+              title: '',
+              linkedinUrl: '',
+              facebookUrl: '',
+              twitterHandle: '',
+              profileImage: '',
+            ),
+            categories: const [],
+            tags: const [],
+          ),
+        );
+
         when(
-          () => httpClient.get(
+          () => apiClient.sendRequest<BlogResponse>(
             any(
               that: isA<Uri>().having(
                 (uri) => uri.path,
@@ -102,23 +138,19 @@ void main() {
                 path,
               ),
             ),
+            method: HttpMethod.get,
+            fromJson: BlogResponse.fromJson,
           ),
-        ).thenAnswer(
-          (_) async => Response(
-            rawJsonBlogResponse,
-            200,
-            headers: {'content-type': 'application/json'},
-          ),
-        );
+        ).thenAnswer((_) async => expectedResponse);
 
         final result = await butterCmsClient.fetchBlogPost(slug: slug);
-        expect(result.statusCode, equals(HttpStatus.ok));
-        expect(result.body, equals(rawJsonBlogResponse));
+        expect(result, equals(expectedResponse));
+        expect(result.data.slug, equals(slug));
       });
 
-      test('returns failure with body when call fails', () async {
+      test('throws RequestFailedException when call fails', () async {
         when(
-          () => httpClient.get(
+          () => apiClient.sendRequest<BlogResponse>(
             any(
               that: isA<Uri>().having(
                 (uri) => uri.path,
@@ -126,17 +158,19 @@ void main() {
                 path,
               ),
             ),
+            method: HttpMethod.get,
+            fromJson: BlogResponse.fromJson,
           ),
-        ).thenAnswer(
-          (_) async => Response(
-            errorMessage,
-            HttpStatus.notFound,
+        ).thenThrow(notFoundException);
+
+        expect(
+          () => butterCmsClient.fetchBlogPost(slug: slug),
+          throwsA(
+            isA<RequestFailedException>()
+                .having((e) => e.statusCode, 'statusCode', 404)
+                .having((e) => e.message, 'message', 'Not found'),
           ),
         );
-
-        final result = await butterCmsClient.fetchBlogPost(slug: slug);
-        expect(result.statusCode, equals(HttpStatus.notFound));
-        expect(result.body, equals(errorMessage));
       });
     });
   });
