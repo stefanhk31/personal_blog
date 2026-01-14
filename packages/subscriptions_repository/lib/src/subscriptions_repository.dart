@@ -24,11 +24,11 @@ class SubscriptionsRepository {
   Future<HtmlResponse> getConfirmHtml({
     required String subscriptionToken,
   }) async {
-    final response = await _blogNewsletterClient.confirmSubscription(
-      subscriptionToken: subscriptionToken,
-    );
+    try {
+      await _blogNewsletterClient.confirmSubscription(
+        subscriptionToken: subscriptionToken,
+      );
 
-    if (response.statusCode >= 200 && response.statusCode < 300) {
       final successHtml = await _templateEngine.render(
         filePath: 'confirm_success_page.html',
         context: {
@@ -37,13 +37,13 @@ class SubscriptionsRepository {
         },
       );
 
-      return HtmlResponse(statusCode: response.statusCode, html: successHtml);
+      return HtmlResponse(statusCode: 200, html: successHtml);
+    } on RequestFailedException catch (e) {
+      return _templateEngine.renderErrorPage(
+        message: 'Failed to confirm subscription: $e. Please try again later.',
+        statusCode: e.statusCode,
+      );
     }
-
-    return _templateEngine.renderErrorPage(
-      message: 'Failed to confirm subscription. Please try again later.',
-      statusCode: response.statusCode,
-    );
   }
 
   /// Unsubscribes a user from the email newsletter.

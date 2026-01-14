@@ -27,7 +27,8 @@ class BlogNewsletterClient {
   }) async {
     final uri = Uri.http(
       _baseUrl,
-      '/subscriptions/confirm?subscription_token=$subscriptionToken',
+      '/subscriptions/confirm',
+      {'subscription_token': subscriptionToken},
     );
     return _apiClient.sendRequest<ConfirmSubscriberResponse>(
       uri,

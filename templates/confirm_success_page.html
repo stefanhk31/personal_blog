@@ -1,28 +1,23 @@
 <!doctype html>
 <html>
-    {{>header}}
+{{>header}}
 
-    <body class="mx-auto bg-background-light dark:bg-background-dark">
-        <div class="py-24 items-center min-h-svh">
-            <h1
-                class="text-4xl font-bold text-center text-green-600 dark:text-green-200"
-            >
-                Confirmed Successfully
-            </h1>
-            <p
-                class="text-center text-secondary-dark dark:text-secondary-light mt-4"
-            >
-                Congratulations! You've signed up to receive email updates of
-                new blog posts.
-                <br />
-                Click
-                <a href="{{baseBlogsUrl}}" class="text-blue-500 hover:underline"
-                    >here</a
-                >
-                to see existing posts.
-            </p>
-        </div>
-    </body>
+<body class="mx-auto bg-background-light dark:bg-background-dark">
+    <div class="py-24 items-center min-h-svh">
+        <h1 class="text-4xl font-bold text-center text-green-600 dark:text-green-200">
+            Confirmed Successfully
+        </h1>
+        <p class="text-center text-secondary-dark dark:text-secondary-light mt-4">
+            Congratulations! You've signed up to receive email updates of
+            new blog posts.
+            <br />
+            Click
+            <a href="{{baseBlogsUrl}}" class="text-blue-500 dark:text-blue-200 hover:underline">here</a>
+            to see existing posts.
+        </p>
+    </div>
+</body>
 
-    {{>footer}}
+{{>footer}}
+
 </html>
