@@ -10,7 +10,8 @@ RailwayLogMessage _$RailwayLogMessageFromJson(Map<String, dynamic> json) =>
     RailwayLogMessage(
       message: json['message'] as String,
       timestamp: DateTime.parse(json['timestamp'] as String),
-      logLevel: $enumDecodeNullable(_$LogLevelEnumMap, json['log_level']) ??
+      logLevel:
+          $enumDecodeNullable(_$LogLevelEnumMap, json['log_level']) ??
           LogLevel.info,
     );
 
@@ -21,7 +22,4 @@ Map<String, dynamic> _$RailwayLogMessageToJson(RailwayLogMessage instance) =>
       'timestamp': instance.timestamp.toIso8601String(),
     };
 
-const _$LogLevelEnumMap = {
-  LogLevel.info: 'info',
-  LogLevel.error: 'error',
-};
+const _$LogLevelEnumMap = {LogLevel.info: 'info', LogLevel.error: 'error'};

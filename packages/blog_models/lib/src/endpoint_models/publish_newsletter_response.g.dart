@@ -7,15 +7,15 @@ part of 'publish_newsletter_response.dart';
 // **************************************************************************
 
 PublishNewsletterResponse _$PublishNewsletterResponseFromJson(
-        Map<String, dynamic> json) =>
-    PublishNewsletterResponse(
-      statusCode: (json['statusCode'] as num).toInt(),
-      body: json['body'] as String?,
-    );
+  Map<String, dynamic> json,
+) => PublishNewsletterResponse(
+  statusCode: (json['statusCode'] as num?)?.toInt() ?? 200,
+  body: json['body'] as String?,
+);
 
 Map<String, dynamic> _$PublishNewsletterResponseToJson(
-        PublishNewsletterResponse instance) =>
-    <String, dynamic>{
-      'statusCode': instance.statusCode,
-      'body': instance.body,
-    };
+  PublishNewsletterResponse instance,
+) => <String, dynamic>{
+  'statusCode': instance.statusCode,
+  'body': instance.body,
+};

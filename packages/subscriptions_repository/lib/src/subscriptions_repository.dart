@@ -25,11 +25,10 @@ class SubscriptionsRepository {
   /// - Success page (200) if unsubscribe succeeds
   /// - Error page (with appropriate status code) if it fails
   Future<HtmlResponse> unsubscribe({required String email}) async {
-    final response = await _blogNewsletterClient.removeSubscriber(
-      subscriberEmail: email,
-    );
-
-    if (response.statusCode >= 200 && response.statusCode < 300) {
+    try {
+      await _blogNewsletterClient.removeSubscriber(
+        subscriberEmail: email,
+      );
       final successHtml = await _templateEngine.render(
         filePath: 'unsubscribe_success_page.html',
         context: {
@@ -38,11 +37,11 @@ class SubscriptionsRepository {
         },
       );
       return HtmlResponse(statusCode: 200, html: successHtml);
+    } on RequestFailedException catch (e) {
+      return _templateEngine.renderErrorPage(
+        message: 'Failed to unsubscribe: $e. Please try again later.',
+        statusCode: e.statusCode,
+      );
     }
-
-    return _templateEngine.renderErrorPage(
-      message: 'Failed to unsubscribe. Please try again later.',
-      statusCode: response.statusCode,
-    );
   }
 }

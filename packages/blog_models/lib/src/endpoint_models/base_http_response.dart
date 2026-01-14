@@ -22,7 +22,7 @@ class BaseHttpResponse extends Equatable {
   Map<String, dynamic> toJson() => _$BaseHttpResponseToJson(this);
 
   /// HTTP status code of the response
-  @JsonKey(name: 'statusCode')
+  @JsonKey(name: 'statusCode', defaultValue: 200)
   final int statusCode;
 
   /// Optional response body
