@@ -28,6 +28,139 @@ void main() {
       expect(subscriptionsRepository, isNotNull);
     });
 
+    group('getConfirmHtml', () {
+      const token = '12345';
+
+      test(
+        'returns success HtmlResponse when confirmSusbcriber succeeds',
+        () async {
+          const mockResponse = ConfirmSubscriberResponse(statusCode: 200);
+          when(
+            () => blogNewsletterClient.confirmSubscriber(
+              subscriptionToken: token,
+            ),
+          ).thenAnswer((_) async => mockResponse);
+
+          when(
+            () => templateEngine.render(
+              filePath: 'confirm_success_page.html',
+              context: any(named: 'context'),
+            ),
+          ).thenAnswer((_) async => '<html>Success</html>');
+
+          final result = await subscriptionsRepository.getConfirmHtml(
+            subscriptionToken: token,
+          );
+
+          expect(result.statusCode, equals(200));
+          expect(result.html, contains('Success'));
+          verify(
+            () => blogNewsletterClient.confirmSubscriber(
+              subscriptionToken: token,
+            ),
+          ).called(1);
+          verify(
+            () => templateEngine.render(
+              filePath: 'confirm_success_page.html',
+              context: any(named: 'context'),
+            ),
+          ).called(1);
+        },
+      );
+
+      test(
+        'returns error HtmlResponse when confirmSubscriber fails with 400',
+        () async {
+          final exception = RequestFailedException(
+            message: 'Bad Request',
+            statusCode: 400,
+          );
+          when(
+            () => blogNewsletterClient.confirmSubscriber(
+              subscriptionToken: token,
+            ),
+          ).thenThrow(exception);
+
+          when(
+            () => templateEngine.renderErrorPage(
+              message: any(named: 'message'),
+              statusCode: any(named: 'statusCode'),
+            ),
+          ).thenAnswer(
+            (_) async => const HtmlResponse(
+              statusCode: 400,
+              html: '<html>Error</html>',
+            ),
+          );
+
+          final result = await subscriptionsRepository.getConfirmHtml(
+            subscriptionToken: token,
+          );
+
+          expect(result.statusCode, equals(400));
+          expect(result.html, contains('Error'));
+
+          verify(
+            () => blogNewsletterClient.confirmSubscriber(
+              subscriptionToken: token,
+            ),
+          ).called(1);
+          verify(
+            () => templateEngine.renderErrorPage(
+              message: any(named: 'message'),
+              statusCode: any(named: 'statusCode'),
+            ),
+          ).called(1);
+        },
+      );
+
+      test(
+        'returns error HtmlResponse when removeSubscriber fails with 500',
+        () async {
+          final exception = RequestFailedException(
+            message: 'Internal Server Error',
+            statusCode: 500,
+          );
+          when(
+            () => blogNewsletterClient.confirmSubscriber(
+              subscriptionToken: token,
+            ),
+          ).thenThrow(exception);
+
+          when(
+            () => templateEngine.renderErrorPage(
+              message: any(named: 'message'),
+              statusCode: any(named: 'statusCode'),
+            ),
+          ).thenAnswer(
+            (_) async => const HtmlResponse(
+              statusCode: 500,
+              html: '<html>Error</html>',
+            ),
+          );
+
+          final result = await subscriptionsRepository.getConfirmHtml(
+            subscriptionToken: token,
+          );
+
+          expect(result.statusCode, equals(500));
+          expect(result.html, contains('Error'));
+
+          verify(
+            () => blogNewsletterClient.confirmSubscriber(
+              subscriptionToken: token,
+            ),
+          ).called(1);
+          verify(
+            () => templateEngine.renderErrorPage(
+              message: any(named: 'message'),
+              statusCode: any(named: 'statusCode'),
+            ),
+          ).called(1);
+        },
+      );
+    });
+
     group('getUnsubscribeHtml', () {
       const encodedEmail = 'test%40example.com';
 
