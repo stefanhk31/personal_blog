@@ -16,7 +16,7 @@ class RequestFailedException implements Exception {
 
   @override
   String toString() =>
-      'Reqeust Failed. \n'
+      'Request Failed. \n'
       'status code: $statusCode \n'
       'message: $message';
 }

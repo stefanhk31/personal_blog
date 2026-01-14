@@ -77,13 +77,13 @@ class BlogsRequest extends Equatable {
 
   @override
   List<Object?> get props => [
-        excludeBody,
-        limit,
-        offset,
-        authorSlug,
-        categorySlug,
-        tagSlug,
-      ];
+    excludeBody,
+    limit,
+    offset,
+    authorSlug,
+    categorySlug,
+    tagSlug,
+  ];
 }
 
 /// Default limit for how many blog posts to fetch per API call.

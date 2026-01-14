@@ -72,7 +72,7 @@ void main() {
         when(
           () => templateEngine.renderErrorPage(
             message:
-                'Reqeust Failed. \nstatus code: 400 \nmessage: bad request',
+                'Request Failed. \nstatus code: 400 \nmessage: bad request',
           ),
         ).thenAnswer(
           (_) async => HtmlResponse(statusCode: 500, html: '<html></html>'),
@@ -82,7 +82,7 @@ void main() {
         verify(
           () => templateEngine.renderErrorPage(
             message:
-                'Reqeust Failed. \nstatus code: 400 \nmessage: bad request',
+                'Request Failed. \nstatus code: 400 \nmessage: bad request',
           ),
         ).called(1);
       });
@@ -203,7 +203,7 @@ void main() {
         when(
           () => templateEngine.renderErrorPage(
             message:
-                'Reqeust Failed. \nstatus code: 400 \nmessage: bad request',
+                'Request Failed. \nstatus code: 400 \nmessage: bad request',
           ),
         ).thenAnswer(
           (_) async => HtmlResponse(statusCode: 500, html: '<html></html>'),
@@ -213,7 +213,7 @@ void main() {
         verify(
           () => templateEngine.renderErrorPage(
             message:
-                'Reqeust Failed. \nstatus code: 400 \nmessage: bad request',
+                'Request Failed. \nstatus code: 400 \nmessage: bad request',
           ),
         ).called(1);
       });

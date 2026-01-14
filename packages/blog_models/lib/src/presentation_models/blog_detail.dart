@@ -25,19 +25,19 @@ class BlogDetail extends Equatable {
   /// Creates a [BlogDetail] from the [Blog] data model.
 
   factory BlogDetail.fromBlog(Blog blog) => BlogDetail(
-        title: blog.title,
-        published: blog.published,
-        body: blog.body ?? '',
-        slug: blog.slug,
-        url: blog.url,
-        author: blog.author,
-        tags: blog.tags,
-        categories: blog.categories,
-        featuredImage: blog.featuredImage,
-        featuredImageAlt: blog.featuredImageAlt,
-        seoTitle: blog.seoTitle,
-        metaDescription: blog.metaDescription,
-      );
+    title: blog.title,
+    published: blog.published,
+    body: blog.body ?? '',
+    slug: blog.slug,
+    url: blog.url,
+    author: blog.author,
+    tags: blog.tags,
+    categories: blog.categories,
+    featuredImage: blog.featuredImage,
+    featuredImageAlt: blog.featuredImageAlt,
+    seoTitle: blog.seoTitle,
+    metaDescription: blog.metaDescription,
+  );
 
   /// Returns the full name of the author.
   String get authorName => '${author.firstName} ${author.lastName}';
@@ -83,17 +83,17 @@ class BlogDetail extends Equatable {
 
   @override
   List<Object?> get props => [
-        title,
-        published,
-        body,
-        slug,
-        author,
-        tags,
-        categories,
-        featuredImage,
-        featuredImageAlt,
-        url,
-        seoTitle,
-        metaDescription,
-      ];
+    title,
+    published,
+    body,
+    slug,
+    author,
+    tags,
+    categories,
+    featuredImage,
+    featuredImageAlt,
+    url,
+    seoTitle,
+    metaDescription,
+  ];
 }
