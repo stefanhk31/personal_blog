@@ -1144,6 +1144,10 @@ video {
   margin-top: 2.5rem;
 }
 
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
 .block {
   display: block;
 }
@@ -1270,6 +1274,11 @@ video {
 
 .gap-y-8 {
   row-gap: 2rem;
+}
+
+.gap-x-2 {
+  -moz-column-gap: 0.5rem;
+       column-gap: 0.5rem;
 }
 
 .overflow-hidden {
@@ -1407,6 +1416,16 @@ video {
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
+}
+
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .pb-2 {
