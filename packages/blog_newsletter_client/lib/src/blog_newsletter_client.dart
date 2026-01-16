@@ -35,7 +35,7 @@ class BlogNewsletterClient {
     final encodedEmail = Uri.encodeComponent(email);
     return _apiClient.sendRequest<AddSubscriberResponse>(
       uri,
-      method: HttpMethod.get,
+      method: HttpMethod.post,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: 'name=$encodedName&email=$encodedEmail',
       fromJson: AddSubscriberResponse.fromJson,

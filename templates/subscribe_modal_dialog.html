@@ -1,8 +1,25 @@
+<script>
+    function handleSubscriptionResponse(event) {
+        if (event.detail.xhr.status >= 400) {
+            document.getElementById("form-submitted").innerHTML =
+                event.detail.xhr.responseText;
+        } else {
+            event.target.reset();
+        }
+    }
+
+    function resetSubscriptionModal() {
+        document.getElementById("subscription-form").reset();
+        document.getElementById("form-submitted").innerHTML = "";
+    }
+</script>
+
 <el-dialog>
     <dialog
         id="dialog"
         aria-labelledby="dialog-title"
         class="fixed inset-0 m-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent p-0 backdrop:bg-transparent"
+        onclose="resetSubscriptionModal()"
     >
         <el-dialog-backdrop
             class="fixed inset-0 bg-gray-900/50 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
@@ -14,7 +31,13 @@
             <el-dialog-panel
                 class="relative transform overflow-hidden rounded-lg bg-gray-800 text-left shadow-xl outline outline-1 -outline-offset-1 outline-white/10 transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
             >
-                <form hx-post="/subscriptions">
+                <form
+                    id="subscription-form"
+                    hx-post="/subscriptions"
+                    hx-target="#form-submitted"
+                    hx-swap="innerHTML"
+                    hx-on::after-request="handleSubscriptionResponse(event)"
+                >
                     <div class="bg-gray-800 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
                             <div
@@ -35,10 +58,8 @@
 
                                 <div
                                     class="mt-2 grid grid-cols-1 gap-x-2 gap-y-8 sm:grid-cols-6"
-                                    hx-target="#form-submitted"
-                                    hx-swap="innerHTML"
                                 >
-                                    <div class="sm:col-span-3">
+                                    <div class="sm:col-span-3 error">
                                         <label
                                             for="name"
                                             class="block text-sm/6 font-medium text-white"
@@ -78,8 +99,6 @@
                     <div class="px-4 py-4 sm:flex sm:flex-row-reverse sm:px-6">
                         <button
                             type="submit"
-                            command="close"
-                            commandfor="dialog"
                             class="inline-flex w-full justify-center rounded-md bg-secondary-light dark:bg-secondary-dark px-3 py-2 text-sm font-semibold hover:bg-blue-900 hover:text-white sm:ml-3 sm:w-auto"
                         >
                             Enter
@@ -94,8 +113,8 @@
                         </button>
                     </div>
                 </form>
+                <div id="form-submitted" class="bg-gray-800 px-4 pb-4"></div>
             </el-dialog-panel>
         </div>
     </dialog>
 </el-dialog>
-<div id="form-submitted"></div>

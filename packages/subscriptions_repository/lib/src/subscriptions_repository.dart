@@ -40,20 +40,18 @@ class SubscriptionsRepository {
         statusCode: 200,
         html: html,
       );
-    } on RequestFailedException catch (e) {
+    } on Exception catch (e) {
       final html = await _templateEngine.render(
-        filePath: 'subscribe_success_message.html',
+        filePath: 'subscribe_error_message.html',
         context: {
           ...defaultMetaContext,
-          'message': e.message,
+          'message': e.toString(),
         },
       );
       return HtmlResponse(
-        statusCode: e.statusCode,
+        statusCode: e is RequestFailedException ? e.statusCode : 500,
         html: html,
       );
-    } on Exception catch (e) {
-      return _templateEngine.renderErrorPage(message: e.toString());
     }
   }
 
