@@ -1,6 +1,8 @@
 import 'package:dart_frog/dart_frog.dart';
 import 'package:subscriptions_repository/subscriptions_repository.dart';
 
+import '../../utils/utils.dart';
+
 /// Request handler for the `/subscriptions` route.
 /// Supports POST requests.
 Future<Response> onRequest(RequestContext context) async {
@@ -19,11 +21,11 @@ Future<Response> _post(RequestContext context) async {
   final emailMissing = email == null || email.isEmpty;
 
   if (nameMissing && emailMissing) {
-    return _missingFormData('Name and Email are required');
+    return badRequestMessage('Name and Email are required');
   } else if (nameMissing) {
-    return _missingFormData('Name is required');
+    return badRequestMessage('Name is required');
   } else if (emailMissing) {
-    return _missingFormData('Email is required');
+    return badRequestMessage('Email is required');
   }
 
   final response = await context
@@ -33,14 +35,6 @@ Future<Response> _post(RequestContext context) async {
   return Response(
     statusCode: response.statusCode,
     body: response.html,
-    headers: {'content-type': 'text/html'},
-  );
-}
-
-Response _missingFormData(String message) {
-  return Response(
-    statusCode: 400,
-    body: '<p class="text-red-600 dark:text-red-300">$message</p>',
     headers: {'content-type': 'text/html'},
   );
 }

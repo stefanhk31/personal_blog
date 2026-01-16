@@ -1164,6 +1164,10 @@ video {
   display: grid;
 }
 
+.hidden {
+  display: none;
+}
+
 .size-auto {
   width: auto;
   height: auto;
@@ -1400,6 +1404,10 @@ video {
 
 .pt-5 {
   padding-top: 1.25rem;
+}
+
+.pb-20 {
+  padding-bottom: 5rem;
 }
 
 .text-left {
