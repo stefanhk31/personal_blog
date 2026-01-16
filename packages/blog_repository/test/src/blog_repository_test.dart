@@ -71,8 +71,7 @@ void main() {
 
         when(
           () => templateEngine.renderErrorPage(
-            message:
-                'Request Failed. \nstatus code: 400 \nmessage: bad request',
+            message: RequestFailedException.errorMessage('bad request', 400),
           ),
         ).thenAnswer(
           (_) async => HtmlResponse(statusCode: 500, html: '<html></html>'),
@@ -81,8 +80,7 @@ void main() {
         await blogRepository.getBlogDetailHtml('my-blog-post');
         verify(
           () => templateEngine.renderErrorPage(
-            message:
-                'Request Failed. \nstatus code: 400 \nmessage: bad request',
+            message: RequestFailedException.errorMessage('bad request', 400),
           ),
         ).called(1);
       });
@@ -202,8 +200,7 @@ void main() {
 
         when(
           () => templateEngine.renderErrorPage(
-            message:
-                'Request Failed. \nstatus code: 400 \nmessage: bad request',
+            message: RequestFailedException.errorMessage('bad request', 400),
           ),
         ).thenAnswer(
           (_) async => HtmlResponse(statusCode: 500, html: '<html></html>'),
@@ -212,8 +209,7 @@ void main() {
         await blogRepository.getBlogOverviewHtml();
         verify(
           () => templateEngine.renderErrorPage(
-            message:
-                'Request Failed. \nstatus code: 400 \nmessage: bad request',
+            message: RequestFailedException.errorMessage('bad request', 400),
           ),
         ).called(1);
       });

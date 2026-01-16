@@ -56,7 +56,7 @@ void main() {
                 path,
               ),
             ),
-            method: HttpMethod.get,
+            method: HttpMethod.post,
             headers: any(named: 'headers'),
             body: any(named: 'body'),
             fromJson: AddSubscriberResponse.fromJson,
@@ -90,7 +90,7 @@ void main() {
                 path,
               ),
             ),
-            method: HttpMethod.get,
+            method: HttpMethod.post,
             headers: any(named: 'headers'),
             body: any(named: 'body'),
             fromJson: AddSubscriberResponse.fromJson,
@@ -124,7 +124,7 @@ void main() {
         when(
           () => apiClient.sendRequest<AddSubscriberResponse>(
             any(),
-            method: HttpMethod.get,
+            method: HttpMethod.post,
             headers: any(named: 'headers'),
             body: any(named: 'body'),
             fromJson: AddSubscriberResponse.fromJson,
@@ -139,7 +139,7 @@ void main() {
         verify(
           () => apiClient.sendRequest<AddSubscriberResponse>(
             any(),
-            method: HttpMethod.get,
+            method: HttpMethod.post,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: 'name=John%20Doe&email=john%40example.com',
             fromJson: AddSubscriberResponse.fromJson,

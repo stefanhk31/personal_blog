@@ -44,8 +44,9 @@ void main() {
 
       test('can be mapped to JSON', () {
         final serialized = response.toJson();
-        expect(serialized['id'], equals('email-123'));
-        expect(serialized['request.recipient'], equals('user@example.com'));
+        expect(serialized['id'], equals(emailID));
+        expect(serialized['html_content'], equals(htmlContent));
+        expect(serialized['text_content'], equals(textContent));
       });
     });
   });

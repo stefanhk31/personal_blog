@@ -28,6 +28,147 @@ void main() {
       expect(subscriptionsRepository, isNotNull);
     });
 
+    group('getSubscribeHtml', () {
+      const name = 'John Doe';
+      const email = 'john.doe@example.com';
+      const emailId = 'email-123';
+      const htmlContent = '<p>Test</p>';
+      const textContent = 'test';
+
+      test(
+        'returns success HtmlResponse when confirmSubscriber succeeds',
+        () async {
+          const mockResponse = AddSubscriberResponse(
+            id: emailId,
+            htmlContent: htmlContent,
+            textContent: textContent,
+          );
+          when(
+            () => blogNewsletterClient.addSubscriber(
+              name: name,
+              email: email,
+            ),
+          ).thenAnswer((_) async => mockResponse);
+
+          when(
+            () => templateEngine.render(
+              filePath: 'subscribe_success_message.html',
+              context: any(named: 'context'),
+            ),
+          ).thenAnswer((_) async => '<html>Success</html>');
+
+          final result = await subscriptionsRepository.getSubscribeHtml(
+            name: name,
+            email: email,
+          );
+
+          expect(result.statusCode, equals(200));
+          expect(result.html, contains('Success'));
+          verify(
+            () => blogNewsletterClient.addSubscriber(
+              name: name,
+              email: email,
+            ),
+          ).called(1);
+          verify(
+            () => templateEngine.render(
+              filePath: 'subscribe_success_message.html',
+              context: any(named: 'context'),
+            ),
+          ).called(1);
+        },
+      );
+
+      test(
+        'returns error HtmlResponse when confirmSubscriber fails with 400',
+        () async {
+          final exception = RequestFailedException(
+            message: 'Bad Request',
+            statusCode: 400,
+          );
+          when(
+            () => blogNewsletterClient.addSubscriber(
+              name: name,
+              email: email,
+            ),
+          ).thenThrow(exception);
+
+          when(
+            () => templateEngine.render(
+              filePath: 'subscribe_error_message.html',
+              context: any(named: 'context'),
+            ),
+          ).thenAnswer(
+            (_) async => '<html>Error</html>',
+          );
+
+          final result = await subscriptionsRepository.getSubscribeHtml(
+            name: name,
+            email: email,
+          );
+
+          expect(result.statusCode, equals(400));
+          expect(result.html, contains('Error'));
+
+          verify(
+            () => blogNewsletterClient.addSubscriber(
+              name: name,
+              email: email,
+            ),
+          ).called(1);
+          verify(
+            () => templateEngine.render(
+              filePath: 'subscribe_error_message.html',
+              context: any(named: 'context'),
+            ),
+          ).called(1);
+        },
+      );
+
+      test(
+        'returns error HtmlResponse when removeSubscriber fails with 500',
+        () async {
+          final exception = RequestFailedException(
+            message: 'Internal Server Error',
+            statusCode: 500,
+          );
+          when(
+            () => blogNewsletterClient.addSubscriber(
+              name: name,
+              email: email,
+            ),
+          ).thenThrow(exception);
+
+          when(
+            () => templateEngine.render(
+              filePath: 'subscribe_error_message.html',
+              context: any(named: 'context'),
+            ),
+          ).thenAnswer(
+            (_) async => '<html>Error</html>',
+          );
+
+          final result = await subscriptionsRepository.getSubscribeHtml(
+            name: name,
+            email: email,
+          );
+
+          expect(result.statusCode, equals(500));
+          expect(result.html, contains('Error'));
+
+          verify(
+            () => blogNewsletterClient.addSubscriber(name: name, email: email),
+          ).called(1);
+          verify(
+            () => templateEngine.render(
+              filePath: 'subscribe_error_message.html',
+              context: any(named: 'context'),
+            ),
+          ).called(1);
+        },
+      );
+    });
+
     group('getConfirmHtml', () {
       const token = '12345';
 

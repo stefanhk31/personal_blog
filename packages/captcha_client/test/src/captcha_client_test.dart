@@ -33,6 +33,17 @@ void main() {
       );
     });
 
+    test('can be instantiated with custom logger', () {
+      expect(captchaClient, isNotNull);
+    });
+
+    test('can be instantiated with default logger', () {
+      expect(
+        CaptchaClient(apiClient: apiClient, secretKey: secretKey),
+        isNotNull,
+      );
+    });
+
     group('verifyCaptcha', () {
       test('returns true when verification succeeds', () async {
         const token = 'valid-token';
