@@ -1,20 +1,22 @@
 <!doctype html>
 <html>
-{{>header}}
+    {{>header}}
 
-<body class="bg-background-light dark:bg-background-dark">
-    <div class="bg-primary-light dark:bg-primary-dark p-4 w-full flex flex-row justify-between items-center">
-        <h1 class="text-2xl md:text-4xl font-bold">Stefan's Blog</h1>
-        <button command="show-modal" commandfor="dialog"
-            class="rounded-md bg-secondary-light dark:bg-secondary-dark px-2.5 py-1.5 text-sm font-semibold ring-1 ring-inset ring-white/5 hover:bg-blue-900 hover:text-white">
-            Subscribe
-        </button>
-    </div>
-    {{>blog_preview_list}}
-</body>
+    <body class="bg-background-light dark:bg-background-dark">
+        <div
+            class="bg-primary-light dark:bg-primary-dark p-4 w-full flex flex-row justify-between items-center"
+        >
+            <h1 class="text-2xl md:text-4xl font-bold">Stefan's Blog</h1>
+            <button
+                command="show-modal"
+                commandfor="dialog"
+                class="rounded-md bg-secondary-light dark:bg-secondary-dark px-2.5 py-1.5 text-sm font-semibold ring-1 ring-inset ring-white/5 hover:bg-hover hover:text-white"
+            >
+                Subscribe
+            </button>
+        </div>
+        {{>blog_preview_list}}
+    </body>
 
-{{>subscribe_modal_dialog}}
-
-{{>footer}}
-
+    {{>subscribe_modal_dialog}} {{>footer}}
 </html>
