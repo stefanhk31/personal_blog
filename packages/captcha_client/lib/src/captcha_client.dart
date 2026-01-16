@@ -1,20 +1,24 @@
 import 'package:api_client/api_client.dart';
 import 'package:blog_models/blog_models.dart';
+import 'package:logging/logging.dart';
 
 /// {@template captcha_client}
 /// Client to verify captcha tokens with a captcha service.
 /// {@endtemplate}
 class CaptchaClient {
   /// {@macro captcha_client}
-  const CaptchaClient({
+  CaptchaClient({
     required ApiClient apiClient,
     required String secretKey,
     String verifyUrl = 'https://www.google.com/recaptcha/api/siteverify',
+    Logger? logger,
   }) : _apiClient = apiClient,
        _secretKey = secretKey,
-       _verifyUrl = verifyUrl;
+       _verifyUrl = verifyUrl,
+       _logger = logger ?? Logger('CaptchaClient');
 
   final ApiClient _apiClient;
+  final Logger _logger;
   final String _secretKey;
   final String _verifyUrl;
 
@@ -42,14 +46,9 @@ class CaptchaClient {
         fromJson: CaptchaResponse.fromJson,
       );
 
-      // Log error codes if verification fails for debugging
-      if (!response.success && response.errorCodes != null) {
-        print('Captcha verification failed: ${response.errorCodes}');
-      }
-
       return response.success;
-    } catch (e) {
-      // Log error if needed, return false for safety
+    } on Exception catch (e) {
+      _logger.severe('Failed to verify captcha token', e);
       return false;
     }
   }

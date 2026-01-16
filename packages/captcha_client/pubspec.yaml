@@ -12,6 +12,7 @@ dependencies:
   blog_models:
     path: ../blog_models
   http: ^1.6.0
+  logging: ^1.3.0
 
 dev_dependencies:
   mocktail: ^1.0.4

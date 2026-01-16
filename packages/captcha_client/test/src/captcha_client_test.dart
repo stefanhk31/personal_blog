@@ -1,15 +1,19 @@
 import 'package:api_client/api_client.dart';
 import 'package:blog_models/blog_models.dart';
 import 'package:captcha_client/captcha_client.dart';
+import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 class _MockApiClient extends Mock implements ApiClient {}
 
+class _MockLogger extends Mock implements Logger {}
+
 void main() {
   group('CaptchaClient', () {
     late ApiClient apiClient;
     late CaptchaClient captchaClient;
+    late Logger logger;
     const secretKey = 'test-secret-key';
     const verifyUrl = 'https://example.com';
 
@@ -20,10 +24,12 @@ void main() {
 
     setUp(() {
       apiClient = _MockApiClient();
+      logger = _MockLogger();
       captchaClient = CaptchaClient(
         apiClient: apiClient,
         secretKey: secretKey,
         verifyUrl: verifyUrl,
+        logger: logger,
       );
     });
 
@@ -201,29 +207,12 @@ void main() {
         ).called(1);
       });
 
-      test('returns false when ApiClient throws exception', () async {
-        const token = 'test-token';
-
-        when(
-          () => apiClient.sendRequest<CaptchaResponse>(
-            any(),
-            method: HttpMethod.post,
-            headers: any(named: 'headers'),
-            body: any(named: 'body'),
-            fromJson: CaptchaResponse.fromJson,
-          ),
-        ).thenThrow(Exception('Network error'));
-
-        final result = await captchaClient.verifyCaptcha(token);
-
-        expect(result, isFalse);
-      });
-
       test(
-        'returns false when ApiClient throws RequestFailedException',
+        'returns false and logs error when ApiClient throws exception',
         () async {
           const token = 'test-token';
 
+          when(() => logger.severe(any(), any())).thenAnswer((_) {});
           when(
             () => apiClient.sendRequest<CaptchaResponse>(
               any(),
@@ -232,16 +221,24 @@ void main() {
               body: any(named: 'body'),
               fromJson: CaptchaResponse.fromJson,
             ),
-          ).thenThrow(
-            RequestFailedException(
-              message: 'Server error',
-              statusCode: 500,
-            ),
-          );
+          ).thenThrow(Exception('Network error'));
 
           final result = await captchaClient.verifyCaptcha(token);
 
           expect(result, isFalse);
+
+          verify(
+            () => logger.severe(
+              any(
+                that: isA<String>().having(
+                  (msg) => msg.toLowerCase(),
+                  'message',
+                  contains('captcha'),
+                ),
+              ),
+              any(),
+            ),
+          ).called(1);
         },
       );
     });
