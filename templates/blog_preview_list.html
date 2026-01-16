@@ -1,9 +1,14 @@
 {{#posts}}
 <div
-    class="mx-4 md:mx-auto my-6 md:w-2/3 bg-secondary-light dark:bg-secondary-dark border-4 border-transparent hover:border-primary-light hover:dark:border-primary-dark rounded-lg shadow-lg">
+    class="mx-4 md:mx-auto my-6 md:w-2/3 bg-secondary-light dark:bg-secondary-dark border-4 border-transparent hover:border-primary-light hover:dark:border-primary-dark rounded-lg shadow-lg"
+>
     <a href="{{baseBlogsUrl}}/{{slug}}">
         {{#featuredImage}}
-        <img src="{{featuredImage}}" alt="{{title}}" class="h-72 w-full object-cover">
+        <img
+            src="{{featuredImage}}"
+            alt="{{title}}"
+            class="h-72 w-full object-cover"
+        />
         {{/featuredImage}}
         <div class="p-4">
             <h2 class="pb-2 font-bold text=lg">{{title}}</h2>
@@ -14,7 +19,6 @@
 </div>
 {{#isLast}}
 <div hx-get="?offset={{offset}}" hx-trigger="revealed" hx-swap="afterend"></div>
-{{/isLast}}
-{{/posts}}
+{{/isLast}} {{/posts}}
 
 <script src="https://unpkg.com/htmx.org@2.0.4"></script>

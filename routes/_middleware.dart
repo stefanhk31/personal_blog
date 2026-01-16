@@ -4,6 +4,7 @@ import 'package:api_client/api_client.dart';
 import 'package:blog_newsletter_client/blog_newsletter_client.dart';
 import 'package:blog_repository/blog_repository.dart';
 import 'package:butter_cms_client/butter_cms_client.dart';
+import 'package:captcha_client/captcha_client.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:http/http.dart';
 import 'package:subscriptions_repository/subscriptions_repository.dart';
@@ -66,6 +67,21 @@ Handler middleware(Handler handler) {
         return ButterCmsClient(
           apiClient: context.read<ApiClient>(),
           apiKey: apiKey,
+        );
+      },
+    ),
+  ).use(
+    provider<CaptchaClient>(
+      (context) {
+        final secretKey = Platform.environment['CAPTCHA_SECRET_KEY'];
+
+        if (secretKey == null) {
+          throw StateError('Could not fetch CAPTCHA_SECRET_KEY');
+        }
+
+        return CaptchaClient(
+          apiClient: context.read<ApiClient>(),
+          secretKey: secretKey,
         );
       },
     ),

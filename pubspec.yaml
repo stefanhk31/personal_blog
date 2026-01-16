@@ -9,6 +9,8 @@ environment:
 dependencies:
   api_client:
     path: packages/api_client
+  captcha_client:
+    path: packages/captcha_client
   blog_models:
     path: packages/blog_models
   blog_newsletter_client:

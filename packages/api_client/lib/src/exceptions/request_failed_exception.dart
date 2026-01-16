@@ -15,8 +15,10 @@ class RequestFailedException implements Exception {
   final int statusCode;
 
   @override
-  String toString() =>
-      'Request Failed. \n'
-      'status code: $statusCode \n'
-      'message: $message';
+  String toString() => RequestFailedException.errorMessage(message, statusCode);
+
+  /// Default error message with [message] and [statusCode].
+  static String errorMessage(String message, int statusCode) {
+    return 'Request Failed. status code: $statusCode; message: $message';
+  }
 }

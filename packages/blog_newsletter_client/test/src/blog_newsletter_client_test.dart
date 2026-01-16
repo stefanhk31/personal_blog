@@ -31,6 +31,123 @@ void main() {
       expect(blogNewsletterClient, isNotNull);
     });
 
+    group('addSubscriber', () {
+      const path = '/subscriptions';
+      const name = 'John Doe';
+      const email = 'john@example.com';
+      const emailId = 'email-123';
+      const html = '<html><body><h1>Hello</h1></body></html>';
+      const text = 'Hello';
+
+      test('returns AddSubscriberResponse '
+          'when the call completes successfully', () async {
+        const expectedResponse = AddSubscriberResponse(
+          id: emailId,
+          htmlContent: html,
+          textContent: text,
+        );
+
+        when(
+          () => apiClient.sendRequest<AddSubscriberResponse>(
+            any(
+              that: isA<Uri>().having(
+                (uri) => uri.path,
+                'path',
+                path,
+              ),
+            ),
+            method: HttpMethod.post,
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+            fromJson: AddSubscriberResponse.fromJson,
+          ),
+        ).thenAnswer((_) async => expectedResponse);
+
+        final result = await blogNewsletterClient.addSubscriber(
+          name: name,
+          email: email,
+        );
+
+        expect(result, equals(expectedResponse));
+        expect(result.id, equals(emailId));
+        expect(result.htmlContent, equals(html));
+        expect(result.textContent, equals(text));
+      });
+
+      test('throws RequestFailedException when call fails', () async {
+        const errorMessage = 'error';
+        final exception = RequestFailedException(
+          message: errorMessage,
+          statusCode: HttpStatus.badRequest,
+        );
+
+        when(
+          () => apiClient.sendRequest<AddSubscriberResponse>(
+            any(
+              that: isA<Uri>().having(
+                (uri) => uri.path,
+                'path',
+                path,
+              ),
+            ),
+            method: HttpMethod.post,
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+            fromJson: AddSubscriberResponse.fromJson,
+          ),
+        ).thenThrow(exception);
+
+        expect(
+          () => blogNewsletterClient.addSubscriber(
+            name: name,
+            email: email,
+          ),
+          throwsA(
+            isA<RequestFailedException>()
+                .having(
+                  (e) => e.statusCode,
+                  'statusCode',
+                  HttpStatus.badRequest,
+                )
+                .having((e) => e.message, 'message', errorMessage),
+          ),
+        );
+      });
+
+      test('encodes name and email in request body', () async {
+        const expectedResponse = AddSubscriberResponse(
+          id: emailId,
+          htmlContent: html,
+          textContent: text,
+        );
+
+        when(
+          () => apiClient.sendRequest<AddSubscriberResponse>(
+            any(),
+            method: HttpMethod.post,
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+            fromJson: AddSubscriberResponse.fromJson,
+          ),
+        ).thenAnswer((_) async => expectedResponse);
+
+        await blogNewsletterClient.addSubscriber(
+          name: name,
+          email: email,
+        );
+
+        verify(
+          () => apiClient.sendRequest<AddSubscriberResponse>(
+            any(),
+            method: HttpMethod.post,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'name=John%20Doe&email=john%40example.com',
+            fromJson: AddSubscriberResponse.fromJson,
+          ),
+        ).called(1);
+      });
+    });
+
     group('confirmSubscriber', () {
       const token = '12345';
       const path = '/subscriptions/confirm';

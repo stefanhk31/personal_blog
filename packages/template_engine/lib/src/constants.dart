@@ -30,5 +30,6 @@ final defaultMetaContext = <String, String>{
 /// Should be injected into every template.
 final globalContext = <String, dynamic>{
   'baseBlogsUrl': Platform.environment['BASE_BLOGS_URL'] ?? '',
+  'captchaSiteKey': Platform.environment['CAPTCHA_SITE_KEY'] ?? '',
   'year': currentYear,
 };

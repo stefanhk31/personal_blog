@@ -1,15 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+    {{>header}}
 
-{{>header}}
+    <body class="mx-auto bg-background-light dark:bg-background-dark">
+        <div class="py-24 items-center min-h-svh">
+            <h1
+                class="text-4xl font-bold text-center text-error-light dark:text-error-dark"
+            >
+                Error
+            </h1>
+            <p
+                class="text-center text-secondary-dark dark:text-secondary-light"
+            >
+                {{message}}
+            </p>
+        </div>
+    </body>
 
-<body class="mx-auto bg-background-light dark:bg-background-dark">
-    <div class="py-24 items-center min-h-svh">
-        <h1 class="text-4xl font-bold text-center text-red-500">Error</h1>
-        <p class="text-center text-secondary-dark dark:text-secondary-light">{{message}}</p>
-    </div>
-</body>
-
-{{>footer}}
-
+    {{>footer}}
 </html>
