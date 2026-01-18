@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 Future<void> main() async {
   final butterCmsApiKey = Platform.environment['BUTTER_CMS_API_KEY'];
-  final newsletterBaseUrl = Platform.environment['NEWSLETTER_BASE_URL'];
+  final newsletterBaseUrl = Platform.environment['BASE_NEWSLETTER_URL'];
   final publishDurationMinutes = Platform.environment['PUBLISH_DURATION'];
 
   if (butterCmsApiKey == null || butterCmsApiKey.isEmpty) {
@@ -16,7 +16,7 @@ Future<void> main() async {
     exit(1);
   }
   if (newsletterBaseUrl == null || newsletterBaseUrl.isEmpty) {
-    print('Error: NEWSLETTER_BASE_URL environment variable not set');
+    print('Error: BASE_NEWSLETTER_URL environment variable not set');
     exit(1);
   }
   if (publishDurationMinutes == null || publishDurationMinutes.isEmpty) {

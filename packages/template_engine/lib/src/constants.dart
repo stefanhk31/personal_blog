@@ -29,7 +29,7 @@ final defaultMetaContext = <String, String>{
 /// Global context map for the blog site.
 /// Should be injected into every template.
 final globalContext = <String, dynamic>{
-  'baseBlogsUrl': Platform.environment['BASE_BLOGS_URL'] ?? '',
+  'baseAppUrl': Platform.environment['BASE_APP_URL'] ?? '',
   'captchaSiteKey': Platform.environment['CAPTCHA_SITE_KEY'] ?? '',
   'year': currentYear,
 };

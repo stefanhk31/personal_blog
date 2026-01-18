@@ -43,10 +43,10 @@ Handler middleware(Handler handler) {
   ).use(
     provider<BlogNewsletterClient>(
       (context) {
-        final baseUrl = Platform.environment['NEWSLETTER_BASE_URL'];
+        final baseUrl = Platform.environment['BASE_NEWSLETTER_URL'];
 
         if (baseUrl == null) {
-          throw StateError('Could not fetch NEWSLETTER_BASE_URL');
+          throw StateError('Could not fetch BASE_NEWSLETTER_URL');
         }
 
         return BlogNewsletterClient(
