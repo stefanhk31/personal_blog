@@ -89,7 +89,7 @@ class BlogRepository {
               filePath: 'blog_preview_list.html',
               context: {
                 'posts': posts,
-                'baseBlogsUrl': Platform.environment['BASE_BLOGS_URL'] ?? '',
+                'baseAppUrl': Platform.environment['BASE_APP_URL'] ?? '',
               },
             );
 
