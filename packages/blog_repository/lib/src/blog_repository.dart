@@ -81,6 +81,7 @@ class BlogRepository {
               filePath: 'blog_overview_page.html',
               context: {
                 'posts': posts,
+                'blogTabSelected': true,
                 ...defaultMetaContext,
                 ...globalContext,
               },
@@ -89,6 +90,7 @@ class BlogRepository {
               filePath: 'blog_preview_list.html',
               context: {
                 'posts': posts,
+                'blogTabSelected': true,
                 'baseAppUrl': Platform.environment['BASE_APP_URL'] ?? '',
               },
             );
