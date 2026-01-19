@@ -2,12 +2,32 @@
 <html>
     {{>header}}
 
-    <body class="bg-background-light dark:bg-background-dark">
+    <body
+        class="h-dvh flex flex-col bg-background-light dark:bg-background-dark"
+    >
         {{>title}} {{>tabs}}
-        <div
-            class="px-8 pt-2 pb-4 flex flex-row flex-wrap items-center text-secondary-light"
-        >
+        <div class="px-8 pt-2 flex flex-row flex-wrap text-secondary-light">
             <p>{{bio}}</p>
+        </div>
+        <div class="px-8 py-8 flex-auto flex-row justify-evenly">
+            <a
+                class="px-4 font-bold text-link-light dark:text-link-dark hover:underline"
+                target="_blank"
+                href="https://github.com/stefanhk31"
+                >GitHub</a
+            >
+            <a
+                class="px-4 font-bold text-link-light dark:text-link-dark hover:underline"
+                target="_blank"
+                href="https://linkedin.com/in/stefanhk31"
+                >LinkedIn</a
+            >
+            <a
+                class="px-4 font-bold text-link-light dark:text-link-dark hover:underline"
+                target="_blank"
+                href="https://bsky.app/profile/stefanhodgeskluck.com"
+                >BlueSky</a
+            >
         </div>
     </body>
 
