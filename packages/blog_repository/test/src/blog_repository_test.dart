@@ -30,6 +30,93 @@ void main() {
       expect(blogRepository, isNotNull);
     });
 
+    group('getAboutMeHtml', () {
+      test('uses template engine to render about me page '
+          'when api call is successful', () async {
+        final authorsResponse = AuthorsResponse(
+          data: [Author.fromJson(authorJson)],
+        );
+
+        when(
+          () => cmsClient.fetchAuthors(),
+        ).thenAnswer((_) async => authorsResponse);
+
+        when(
+          () => templateEngine.render(
+            filePath: 'about_me_page.html',
+            context: any(named: 'context'),
+          ),
+        ).thenAnswer((_) async => '<html></html>');
+
+        await blogRepository.getAboutMeHtml();
+        verify(
+          () => templateEngine.render(
+            filePath: 'about_me_page.html',
+            context: any(named: 'context'),
+          ),
+        ).called(1);
+      });
+
+      test('uses template engine to render error page '
+          'when api call throws RequestFailedException', () async {
+        final exception = RequestFailedException(
+          message: 'bad request',
+          statusCode: 400,
+        );
+
+        when(() => cmsClient.fetchAuthors()).thenThrow(exception);
+
+        when(
+          () => templateEngine.renderErrorPage(
+            message: RequestFailedException.errorMessage('bad request', 400),
+          ),
+        ).thenAnswer(
+          (_) async => HtmlResponse(statusCode: 400, html: '<html></html>'),
+        );
+
+        await blogRepository.getAboutMeHtml();
+        verify(
+          () => templateEngine.renderErrorPage(
+            message: RequestFailedException.errorMessage('bad request', 400),
+          ),
+        ).called(1);
+      });
+
+      test('uses template engine to render error page '
+          'when an unexpected error occurs', () async {
+        final authorsResponse = AuthorsResponse(
+          data: [Author.fromJson(authorJson)],
+        );
+
+        when(
+          () => cmsClient.fetchAuthors(),
+        ).thenAnswer((_) async => authorsResponse);
+
+        const errorMessage = 'error rendering template';
+        when(
+          () => templateEngine.render(
+            filePath: 'about_me_page.html',
+            context: any(named: 'context'),
+          ),
+        ).thenThrow(Exception(errorMessage));
+
+        when(
+          () => templateEngine.renderErrorPage(
+            message: 'Exception: $errorMessage',
+          ),
+        ).thenAnswer(
+          (_) async => HtmlResponse(statusCode: 500, html: '<html></html>'),
+        );
+
+        await blogRepository.getAboutMeHtml();
+        verify(
+          () => templateEngine.renderErrorPage(
+            message: 'Exception: $errorMessage',
+          ),
+        ).called(1);
+      });
+    });
+
     group('getBlogDetailHtml', () {
       test('uses template engine to render blog detail page '
           'when api call is successful', () async {
@@ -74,7 +161,7 @@ void main() {
             message: RequestFailedException.errorMessage('bad request', 400),
           ),
         ).thenAnswer(
-          (_) async => HtmlResponse(statusCode: 500, html: '<html></html>'),
+          (_) async => HtmlResponse(statusCode: 400, html: '<html></html>'),
         );
 
         await blogRepository.getBlogDetailHtml('my-blog-post');

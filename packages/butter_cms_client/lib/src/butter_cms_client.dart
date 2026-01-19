@@ -18,6 +18,17 @@ class ButterCmsClient {
   final String _apiKey;
   final String _baseUrl;
 
+  /// Fetches a list of authors from the ButterCMS API.
+  Future<AuthorsResponse> fetchAuthors() async {
+    final uri = Uri.https(_baseUrl, '/v2/authors', {'auth_token': _apiKey});
+
+    return _apiClient.sendRequest(
+      uri,
+      method: HttpMethod.get,
+      fromJson: AuthorsResponse.fromJson,
+    );
+  }
+
   /// Fetches a list of blog posts from the ButterCMS API.
   ///
   /// If [excludeBody] is set, the call will return blogs
