@@ -15,9 +15,17 @@
                 Subscribe
             </button>
         </div>
-        <div class="p-8 w-full flex flex-row justify-evenly items-center">
-            <a class="text-secondary-light" href"{{}}">Blog</a>
-            <a>About Me</a>
+        <div class="py-4 font-bold text-center">
+            <a
+                class="px-8 text-primary-light dark:text-primary-dark"
+                href="{{baseAppUrl}}/blogs"
+                >Blog</a
+            >
+            <a
+                class="px-8 text-link-light dark:text-link-dark"
+                href="{{baseAppUrl}}/about"
+                >About Me</a
+            >
         </div>
         {{>blog_preview_list}}
     </body>
