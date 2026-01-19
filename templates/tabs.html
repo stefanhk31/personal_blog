@@ -1,0 +1,26 @@
+<div class="py-4 font-bold text-center">
+    <a
+        class="px-8
+    {{#blogTabSelected}}
+    text-primary-light dark:text-primary-dark
+    {{/blogTabSelected}}
+    {{^blogTabSelected}}
+    text-link-light dark:text-link-dark
+    {{/blogTabSelected}}
+    "
+        href="{{baseAppUrl}}/blogs"
+        >Blog</a
+    >
+    <a
+        class="px-8
+    {{#aboutTabSelected}}
+    text-primary-light dark:text-primary-dark
+    {{/aboutTabSelected}}
+    {{^aboutTabSelected}}
+    text-link-light dark:text-link-dark
+    {{/aboutTabSelected}}
+    "
+        href="{{baseAppUrl}}/about"
+        >About Me</a
+    >
+</div>

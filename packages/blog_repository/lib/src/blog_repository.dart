@@ -5,7 +5,7 @@ import 'package:butter_cms_client/butter_cms_client.dart';
 import 'package:template_engine/template_engine.dart';
 
 /// {@template blog_repository}
-/// A repository for fetching blog data from the CMS
+/// A repository for fetching blog and author data from the CMS
 /// and generating HTML for the client.
 /// {@endtemplate}
 class BlogRepository {
@@ -18,6 +18,26 @@ class BlogRepository {
 
   final ButterCmsClient _cmsClient;
   final TemplateEngine _templateEngine;
+
+  /// Fetches author data from the CMS and generates HTML for the client.
+  Future<HtmlResponse> getAboutMeHtml() async {
+    try {
+      final response = await _cmsClient.fetchAuthors();
+      final author = response.data.first;
+      final html = await _templateEngine.render(
+        filePath: 'about_me_page.html',
+        context: {
+          'bio': author.bio,
+          'aboutTabSelected': true,
+          ...globalContext,
+          ...defaultMetaContext,
+        },
+      );
+      return HtmlResponse(statusCode: 200, html: html);
+    } on Exception catch (e) {
+      return _templateEngine.renderErrorPage(message: e.toString());
+    }
+  }
 
   /// Fetches a detailed blog post by [slug] and generates HTML for the client.
   Future<HtmlResponse> getBlogDetailHtml(String slug) async {
@@ -81,6 +101,7 @@ class BlogRepository {
               filePath: 'blog_overview_page.html',
               context: {
                 'posts': posts,
+                'blogTabSelected': true,
                 ...defaultMetaContext,
                 ...globalContext,
               },
@@ -89,6 +110,7 @@ class BlogRepository {
               filePath: 'blog_preview_list.html',
               context: {
                 'posts': posts,
+                'blogTabSelected': true,
                 'baseAppUrl': Platform.environment['BASE_APP_URL'] ?? '',
               },
             );

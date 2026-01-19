@@ -173,5 +173,60 @@ void main() {
         );
       });
     });
+
+    group('fetchAuthors', () {
+      const path = '/v2/authors';
+
+      test(
+          'returns AuthorsResponse '
+          'when the call completes successfully', () async {
+        const expectedResponse = AuthorsResponse(
+          data: [author],
+        );
+
+        when(
+          () => apiClient.sendRequest<AuthorsResponse>(
+            any(
+              that: isA<Uri>().having(
+                (uri) => uri.path,
+                'path',
+                path,
+              ),
+            ),
+            method: HttpMethod.get,
+            fromJson: AuthorsResponse.fromJson,
+          ),
+        ).thenAnswer((_) async => expectedResponse);
+
+        final result = await butterCmsClient.fetchAuthors();
+        expect(result, equals(expectedResponse));
+        expect(result.data.first, equals(author));
+      });
+
+      test('throws RequestFailedException when call fails', () async {
+        when(
+          () => apiClient.sendRequest<AuthorsResponse>(
+            any(
+              that: isA<Uri>().having(
+                (uri) => uri.path,
+                'path',
+                path,
+              ),
+            ),
+            method: HttpMethod.get,
+            fromJson: AuthorsResponse.fromJson,
+          ),
+        ).thenThrow(notFoundException);
+
+        expect(
+          () => butterCmsClient.fetchAuthors(),
+          throwsA(
+            isA<RequestFailedException>()
+                .having((e) => e.statusCode, 'statusCode', 404)
+                .having((e) => e.message, 'message', 'Not found'),
+          ),
+        );
+      });
+    });
   });
 }
