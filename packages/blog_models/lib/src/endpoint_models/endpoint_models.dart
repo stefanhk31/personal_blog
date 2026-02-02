@@ -8,5 +8,6 @@ export 'blogs_response.dart';
 export 'captcha_request.dart';
 export 'captcha_response.dart';
 export 'confirm_subscriber_response.dart';
+export 'pages_response.dart';
 export 'publish_newsletter_response.dart';
 export 'remove_subscriber_response.dart';

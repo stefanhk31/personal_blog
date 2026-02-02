@@ -74,4 +74,17 @@ class ButterCmsClient {
       fromJson: BlogResponse.fromJson,
     );
   }
+
+  /// Fetches all pages.
+  /// Can optionally provide a pageType to only fetch a specific type of page
+  Future<PagesResponse> fetchPages({String? pageType}) async {
+    final type = pageType ?? '*';
+    final uri = Uri.https(_baseUrl, '/v2/pages/$type', {'auth_token': _apiKey});
+
+    return _apiClient.sendRequest(
+      uri,
+      method: HttpMethod.get,
+      fromJson: PagesResponse.fromJson,
+    );
+  }
 }
