@@ -120,4 +120,35 @@ class BlogRepository {
       return _templateEngine.renderErrorPage(message: e.toString());
     }
   }
+
+  /// Fetches portfolio content and generates HTML for the client.
+  Future<HtmlResponse> getPortfolioHtml() async {
+    try {
+      final response = await _cmsClient.fetchPages(pageType: 'portfolio');
+
+      final portfolio = response.data.firstOrNull;
+      if (portfolio == null) {
+        return _templateEngine.renderErrorPage(
+          statusCode: 404,
+          message: 'Portfolio content not found',
+        );
+      }
+
+      final projects = portfolio.fields['projects'] as List<dynamic>;
+
+      final html = await _templateEngine.render(
+        filePath: 'portfolio_page.html',
+        context: {
+          'projects': projects,
+          'portfolioTabSelected': true,
+          ...defaultMetaContext,
+          ...globalContext,
+        },
+      );
+
+      return HtmlResponse(statusCode: 200, html: html);
+    } on Exception catch (e) {
+      return _templateEngine.renderErrorPage(message: e.toString());
+    }
+  }
 }

@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+    {{>header}}
+
+    <body
+        class="h-dvh flex flex-col bg-background-light dark:bg-background-dark"
+    >
+        {{>title}} {{>tabs}} {{#projects}}
+        <div
+            class="flex flex-col gap-2 mx-4 md:mx-auto my-2 md:w-2/3 bg-secondary-light dark:bg-secondary-dark border-4 border-transparent rounded-lg shadow-lg"
+        >
+            <img
+                src="{{image}}"
+                alt="{{name}}"
+                class="h-72 w-full object-cover"
+            />
+            <div class="flex flex-col gap-2 px-4">
+                <h3 class="text-xl font-bold">{{name}}</h3>
+                <p class="text-sm">{{description}}</p>
+                <div class="font-bold text-primary-light">{{links}}</div>
+                <p class="text-sm italic">{{skills}}</p>
+            </div>
+        </div>
+        {{/projects}}
+    </body>
+
+    {{>footer}}
+</html>
