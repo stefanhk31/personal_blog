@@ -169,7 +169,7 @@ final projectJson = <String, dynamic>{
 
 /// Mock [PagesResponse] data. For testing purposes only.
 final pagesResponse = PagesResponse(
-  meta: PagesMeta(count: 1, nextPage: null, previousPage: null),
+  meta: PagesMeta(count: 1),
   data: [page],
 );
 

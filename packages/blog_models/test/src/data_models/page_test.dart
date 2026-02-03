@@ -14,7 +14,7 @@ void main() {
         Page(
           slug: 'about-page',
           name: 'About',
-          published: DateTime(2023, 1, 1),
+          published: DateTime(2023),
           updated: DateTime(2023, 6, 15),
           scheduled: DateTime(2023, 1, 15),
           status: 'published',
@@ -28,7 +28,7 @@ void main() {
           Page(
             slug: 'about-page',
             name: 'About',
-            published: DateTime(2023, 1, 1),
+            published: DateTime(2023),
             updated: DateTime(2023, 6, 15),
             scheduled: DateTime(2023, 1, 15),
             status: 'published',

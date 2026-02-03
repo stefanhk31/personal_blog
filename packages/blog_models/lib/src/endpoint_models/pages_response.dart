@@ -16,7 +16,8 @@ class PagesResponse extends Equatable {
     required this.data,
   });
 
-  /// Factory constructor for creating a [PagesResponse] instance from a JSON map.
+  /// Factory constructor for creating a [PagesResponse]
+  /// instance from a JSON map.
   factory PagesResponse.fromJson(Map<String, dynamic> json) =>
       _$PagesResponseFromJson(json);
 

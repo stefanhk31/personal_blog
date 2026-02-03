@@ -340,7 +340,7 @@ void main() {
       });
     });
 
-    group('getPorfolioHtml', () {
+    group('getPortfolioHtml', () {
       test('uses template engine to render portfolio page '
           'when api call is successful', () async {
         final pagesResponse = PagesResponse(
