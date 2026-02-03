@@ -133,6 +133,7 @@ final page = Page(
   fields: const {
     'title': 'About Me',
     'content': 'Lorem ipsum dolor sit amet',
+    'projects': <dynamic>[],
   },
 );
 
@@ -171,6 +172,13 @@ final pagesResponse = PagesResponse(
   meta: PagesMeta(count: 1, nextPage: null, previousPage: null),
   data: [page],
 );
+
+/// Mock [PagesMeta] data in JSON format. For testing purposes only.
+const pagesMetaJson = <String, dynamic>{
+  'count': 1,
+  'next_post': null,
+  'previous_post': null,
+};
 
 /// Mock [PagesResponse] data in JSON format. For testing purposes only.
 final pagesResponseJson = <String, dynamic>{

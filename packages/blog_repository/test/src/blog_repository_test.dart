@@ -339,5 +339,129 @@ void main() {
         ).called(1);
       });
     });
+
+    group('getPorfolioHtml', () {
+      test('uses template engine to render portfolio page '
+          'when api call is successful', () async {
+        final pagesResponse = PagesResponse(
+          meta: PagesMeta.fromJson(pagesMetaJson),
+          data: [Page.fromJson(pageJson)],
+        );
+
+        when(
+          () =>
+              cmsClient.fetchPages(pageType: BlogRepository.portfolioPageType),
+        ).thenAnswer((_) async => pagesResponse);
+
+        when(
+          () => templateEngine.render(
+            filePath: 'portfolio_page.html',
+            context: any(named: 'context'),
+          ),
+        ).thenAnswer((_) async => '<html></html>');
+
+        await blogRepository.getPortfolioHtml();
+        verify(
+          () => templateEngine.render(
+            filePath: 'portfolio_page.html',
+            context: any(named: 'context'),
+          ),
+        ).called(1);
+      });
+
+      test('uses template engine to render error page '
+          'when portfolio page is not found', () async {
+        final pagesResponse = PagesResponse(
+          meta: PagesMeta.fromJson(pagesMetaJson),
+          data: const [],
+        );
+
+        when(
+          () =>
+              cmsClient.fetchPages(pageType: BlogRepository.portfolioPageType),
+        ).thenAnswer((_) async => pagesResponse);
+
+        when(
+          () => templateEngine.renderErrorPage(
+            statusCode: 404,
+            message: BlogRepository.portfolioContentNotFound,
+          ),
+        ).thenAnswer(
+          (_) async => HtmlResponse(statusCode: 404, html: '<html></html>'),
+        );
+
+        await blogRepository.getPortfolioHtml();
+        verify(
+          () => templateEngine.renderErrorPage(
+            statusCode: 404,
+            message: BlogRepository.portfolioContentNotFound,
+          ),
+        ).called(1);
+      });
+
+      test('uses template engine to render error page '
+          'when api call throws RequestFailedException', () async {
+        final exception = RequestFailedException(
+          message: 'bad request',
+          statusCode: 400,
+        );
+
+        when(
+          () =>
+              cmsClient.fetchPages(pageType: BlogRepository.portfolioPageType),
+        ).thenThrow(exception);
+
+        when(
+          () => templateEngine.renderErrorPage(
+            message: RequestFailedException.errorMessage('bad request', 400),
+          ),
+        ).thenAnswer(
+          (_) async => HtmlResponse(statusCode: 500, html: '<html></html>'),
+        );
+
+        await blogRepository.getPortfolioHtml();
+        verify(
+          () => templateEngine.renderErrorPage(
+            message: RequestFailedException.errorMessage('bad request', 400),
+          ),
+        ).called(1);
+      });
+
+      test('uses template engine to render error page '
+          'when an unexpected error occurs', () async {
+        final pagesResponse = PagesResponse(
+          meta: PagesMeta.fromJson(pagesMetaJson),
+          data: [Page.fromJson(pageJson)],
+        );
+
+        when(
+          () =>
+              cmsClient.fetchPages(pageType: BlogRepository.portfolioPageType),
+        ).thenAnswer((_) async => pagesResponse);
+
+        const errorMessage = 'error rendering template';
+        when(
+          () => templateEngine.render(
+            filePath: 'portfolio_page.html',
+            context: any(named: 'context'),
+          ),
+        ).thenThrow(Exception(errorMessage));
+
+        when(
+          () => templateEngine.renderErrorPage(
+            message: 'Exception: $errorMessage',
+          ),
+        ).thenAnswer(
+          (_) async => HtmlResponse(statusCode: 500, html: '<html></html>'),
+        );
+
+        await blogRepository.getPortfolioHtml();
+        verify(
+          () => templateEngine.renderErrorPage(
+            message: 'Exception: $errorMessage',
+          ),
+        ).called(1);
+      });
+    });
   });
 }
