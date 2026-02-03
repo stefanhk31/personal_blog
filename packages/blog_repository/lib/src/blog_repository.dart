@@ -19,6 +19,12 @@ class BlogRepository {
   final ButterCmsClient _cmsClient;
   final TemplateEngine _templateEngine;
 
+  /// Page type for fetching portfolio data
+  static const portfolioPageType = 'portfolio';
+
+  /// Error message to return when portfolio content is not found.
+  static const portfolioContentNotFound = 'Portfolio content not found';
+
   /// Fetches author data from the CMS and generates HTML for the client.
   Future<HtmlResponse> getAboutMeHtml() async {
     try {
@@ -114,6 +120,37 @@ class BlogRepository {
                 'baseAppUrl': Platform.environment['BASE_APP_URL'] ?? '',
               },
             );
+
+      return HtmlResponse(statusCode: 200, html: html);
+    } on Exception catch (e) {
+      return _templateEngine.renderErrorPage(message: e.toString());
+    }
+  }
+
+  /// Fetches portfolio content and generates HTML for the client.
+  Future<HtmlResponse> getPortfolioHtml() async {
+    try {
+      final response = await _cmsClient.fetchPages(pageType: portfolioPageType);
+
+      final portfolio = response.data.firstOrNull;
+      if (portfolio == null) {
+        return _templateEngine.renderErrorPage(
+          statusCode: 404,
+          message: portfolioContentNotFound,
+        );
+      }
+
+      final projects = portfolio.fields['projects'] as List<dynamic>;
+
+      final html = await _templateEngine.render(
+        filePath: 'portfolio_page.html',
+        context: {
+          'projects': projects,
+          'portfolioTabSelected': true,
+          ...defaultMetaContext,
+          ...globalContext,
+        },
+      );
 
       return HtmlResponse(statusCode: 200, html: html);
     } on Exception catch (e) {

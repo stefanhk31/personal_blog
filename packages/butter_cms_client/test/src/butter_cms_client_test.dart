@@ -228,5 +228,86 @@ void main() {
         );
       });
     });
+
+    group('fetchPages', () {
+      const path = '/v2/pages/*';
+
+      test(
+          'returns PagesResponse when the call completes successfully '
+          'and no page type is provided', () async {
+        final expectedResponse =
+            PagesResponse(meta: const PagesMeta(count: 1), data: [page]);
+
+        when(
+          () => apiClient.sendRequest<PagesResponse>(
+            any(
+              that: isA<Uri>().having(
+                (uri) => uri.path,
+                'path',
+                path,
+              ),
+            ),
+            method: HttpMethod.get,
+            fromJson: PagesResponse.fromJson,
+          ),
+        ).thenAnswer((_) async => expectedResponse);
+
+        final result = await butterCmsClient.fetchPages();
+        expect(result, equals(expectedResponse));
+        expect(result.data.first, equals(page));
+      });
+
+      test(
+          'returns PagesResponse when the call completes successfully '
+          'and page type is provided', () async {
+        const pathWithType = '/v2/pages/custom';
+
+        final expectedResponse =
+            PagesResponse(meta: const PagesMeta(count: 1), data: [page]);
+
+        when(
+          () => apiClient.sendRequest<PagesResponse>(
+            any(
+              that: isA<Uri>().having(
+                (uri) => uri.path,
+                'path',
+                pathWithType,
+              ),
+            ),
+            method: HttpMethod.get,
+            fromJson: PagesResponse.fromJson,
+          ),
+        ).thenAnswer((_) async => expectedResponse);
+
+        final result = await butterCmsClient.fetchPages(pageType: 'custom');
+        expect(result, equals(expectedResponse));
+        expect(result.data.first, equals(page));
+      });
+
+      test('throws RequestFailedException when call fails', () async {
+        when(
+          () => apiClient.sendRequest<PagesResponse>(
+            any(
+              that: isA<Uri>().having(
+                (uri) => uri.path,
+                'path',
+                path,
+              ),
+            ),
+            method: HttpMethod.get,
+            fromJson: PagesResponse.fromJson,
+          ),
+        ).thenThrow(notFoundException);
+
+        expect(
+          () => butterCmsClient.fetchPages(),
+          throwsA(
+            isA<RequestFailedException>()
+                .having((e) => e.statusCode, 'statusCode', 404)
+                .having((e) => e.message, 'message', 'Not found'),
+          ),
+        );
+      });
+    });
   });
 }

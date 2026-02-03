@@ -8,7 +8,7 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import '../../../routes/about/index.dart' as route;
+import '../../../routes/portfolio/index.dart' as route;
 import '../../helpers/method_not_allowed.dart';
 
 class _MockRequestContext extends Mock implements RequestContext {}
@@ -25,13 +25,13 @@ void main() {
       });
       test('responds with a 200', () async {
         final context = _MockRequestContext();
-        final request = Request('GET', Uri.parse('http://127.0.0.1/about'));
+        final request = Request('GET', Uri.parse('http://127.0.0.1/portfolio'));
         const htmlContent = '<html>test</html>';
 
         when(() => context.request).thenReturn(request);
         when(() => context.read<BlogRepository>()).thenReturn(blogRepository);
         when(
-          () => blogRepository.getAboutMeHtml(),
+          () => blogRepository.getPortfolioHtml(),
         ).thenAnswer(
           (_) async => const HtmlResponse(statusCode: 200, html: htmlContent),
         );

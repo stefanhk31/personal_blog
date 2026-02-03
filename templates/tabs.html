@@ -23,4 +23,16 @@
         href="{{baseAppUrl}}/about"
         >About Me</a
     >
+    <a
+        class="px-8
+    {{#portfolioTabSelected}}
+    text-primary-light dark:text-primary-dark
+    {{/portfolioTabSelected}}
+    {{^portfolioTabSelected}}
+    text-link-light dark:text-link-dark
+    {{/portfolioTabSelected}}
+    "
+        href="{{baseAppUrl}}/portfolio"
+        >Projects</a
+    >
 </div>

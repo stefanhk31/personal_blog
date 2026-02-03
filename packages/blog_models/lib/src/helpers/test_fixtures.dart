@@ -121,6 +121,75 @@ const newsletterHtmlContent = '<p>Hello, World!</p>';
 /// Mock newsletter plain text content. For testing purposes only.
 const newsletterTextContent = 'Hello, World!';
 
+/// Mock [Page] data. For testing purposes only.
+final page = Page(
+  slug: 'about-page',
+  name: 'About',
+  published: DateTime(2023),
+  updated: DateTime(2023, 6, 15),
+  scheduled: DateTime(2023, 1, 15),
+  status: 'published',
+  pageType: 'custom',
+  fields: const {
+    'title': 'About Me',
+    'content': 'Lorem ipsum dolor sit amet',
+    'projects': <dynamic>[],
+  },
+);
+
+/// Mock [Page] data in JSON format. For testing purposes only.
+final pageJson = <String, dynamic>{
+  'slug': page.slug,
+  'name': page.name,
+  'published': page.published.toIso8601String(),
+  'updated': page.updated.toIso8601String(),
+  'scheduled': page.scheduled?.toIso8601String(),
+  'status': page.status,
+  'page_type': page.pageType,
+  'fields': page.fields,
+};
+
+/// Mock [Project] data. For testing purposes only.
+final project = Project(
+  name: 'Personal Blog',
+  description: 'A modern blog built with Flutter and Dart',
+  image: 'https://example.com/project-image.jpg',
+  skills: 'Flutter, Dart, Web Development',
+  links: '<a href="https://github.com/example/blog">GitHub</a>',
+);
+
+/// Mock [Project] data in JSON format. For testing purposes only.
+final projectJson = <String, dynamic>{
+  'name': project.name,
+  'description': project.description,
+  'image': project.image,
+  'skills': project.skills,
+  'links': project.links,
+};
+
+/// Mock [PagesResponse] data. For testing purposes only.
+final pagesResponse = PagesResponse(
+  meta: PagesMeta(count: 1),
+  data: [page],
+);
+
+/// Mock [PagesMeta] data in JSON format. For testing purposes only.
+const pagesMetaJson = <String, dynamic>{
+  'count': 1,
+  'next_post': null,
+  'previous_post': null,
+};
+
+/// Mock [PagesResponse] data in JSON format. For testing purposes only.
+final pagesResponseJson = <String, dynamic>{
+  'meta': {
+    'count': 1,
+    'next_page': null,
+    'previous_page': null,
+  },
+  'data': [pageJson],
+};
+
 /// Mock [NewsletterContent] data. For testing purposes only.
 const newsletterContent = NewsletterContent(
   html: newsletterHtmlContent,
