@@ -9,6 +9,8 @@ environment:
 dependencies:
   api_client:
     path: packages/api_client
+  blog_models:
+    path: packages/blog_models
   blog_newsletter_client:
     path: packages/blog_newsletter_client
   blog_repository:

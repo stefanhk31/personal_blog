@@ -41,7 +41,7 @@ packages:
     source: hosted
     version: "2.13.0"
   blog_models:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "packages/blog_models"
       relative: true
