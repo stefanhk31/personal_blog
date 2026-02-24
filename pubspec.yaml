@@ -30,5 +30,5 @@ dependencies:
 dev_dependencies:
   mocktail: ^1.0.0
   # Pinning to 1.25.8 to fix empty coverage issue on 1.28.0
-  test: 1.25.8
+  test: 1.29.0
   very_good_analysis: ^10.0.0
