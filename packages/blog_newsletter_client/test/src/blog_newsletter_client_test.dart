@@ -236,6 +236,7 @@ void main() {
       const path = '/newsletters';
       const request = BlogNewsletterPublishRequest(
         title: newsletterTitle,
+        url: newsletterUrl,
         content: newsletterContent,
         idempotencyKey: newsletterIdempotencyKey,
       );

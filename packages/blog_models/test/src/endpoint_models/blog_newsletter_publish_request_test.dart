@@ -7,6 +7,7 @@ void main() {
   group('BlogNewsletterPublishRequest', () {
     final blogNewsletterPublishRequest = BlogNewsletterPublishRequest(
       title: newsletterTitle,
+      url: newsletterUrl,
       content: newsletterContent,
       idempotencyKey: newsletterIdempotencyKey,
     );
@@ -19,12 +20,14 @@ void main() {
       expect(
         BlogNewsletterPublishRequest(
           title: newsletterTitle,
+          url: newsletterUrl,
           content: newsletterContent,
           idempotencyKey: newsletterIdempotencyKey,
         ),
         equals(
           BlogNewsletterPublishRequest(
             title: newsletterTitle,
+            url: newsletterUrl,
             content: newsletterContent,
             idempotencyKey: newsletterIdempotencyKey,
           ),
