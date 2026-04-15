@@ -38,6 +38,7 @@ void main() {
     group('JSON Serialization', () {
       final blogNewsletterPublishRequestJson = {
         'title': newsletterTitle,
+        'url': newsletterUrl,
         'content': newsletterContentJson,
         'idempotency_key': newsletterIdempotencyKey,
       };
