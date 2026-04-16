@@ -1,4 +1,4 @@
-name: Personal Blog Verify and Test
+name: Personal Blog
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,7 +10,7 @@ on:
       - master
       - main
     paths:
-      - ".github/workflows/personal_blog_verify_and_test.yaml"
+      - ".github/workflows/personal_blog.yaml"
       - "**"
       - "packages/api_client/**"
       - "packages/blog_models/**"
