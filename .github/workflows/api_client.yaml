@@ -1,4 +1,4 @@
-name: Api Client Verify and Test
+name: Api Client
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,7 +10,7 @@ on:
       - master
       - main
     paths:
-      - ".github/workflows/api_client_verify_and_test.yaml"
+      - ".github/workflows/api_client.yaml"
       - "packages/api_client/**"
 
   push:
