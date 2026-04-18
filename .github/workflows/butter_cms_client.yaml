@@ -1,4 +1,4 @@
-name: Butter Cms Client Verify and Test
+name: Butter Cms Client
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,7 +10,7 @@ on:
       - master
       - main
     paths:
-      - ".github/workflows/butter_cms_client_verify_and_test.yaml"
+      - ".github/workflows/butter_cms_client.yaml"
       - "packages/butter_cms_client/**"
       - "packages/api_client/**"
       - "packages/blog_models/**"

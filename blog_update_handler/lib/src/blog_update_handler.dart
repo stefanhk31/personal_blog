@@ -81,6 +81,7 @@ class BlogUpdateHandler {
       const uuid = Uuid();
       final request = BlogNewsletterPublishRequest(
         title: blog.title,
+        url: blog.url ?? '',
         content: NewsletterContent(
           html: body,
           text: stripHtml(body),

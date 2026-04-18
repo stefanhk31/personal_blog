@@ -12,6 +12,7 @@ class BlogNewsletterPublishRequest extends Equatable {
   /// {@macro blog_newsletter_publish_request}
   const BlogNewsletterPublishRequest({
     required this.title,
+    required this.url,
     required this.content,
     required this.idempotencyKey,
   });
@@ -25,6 +26,9 @@ class BlogNewsletterPublishRequest extends Equatable {
 
   /// The title of the newsletter.
   final String title;
+
+  /// The web URL of the newsletter content.
+  final String url;
 
   /// The content of the newsletter.
   final NewsletterContent content;

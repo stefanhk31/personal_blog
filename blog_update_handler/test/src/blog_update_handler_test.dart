@@ -323,6 +323,7 @@ abstract class _TestData {
     metaDescription: 'Meta description',
     status: 'published',
     featuredImageAlt: 'Alt text',
+    url: 'https://example.com/blog/$slug',
     author: author,
     categories: const [],
     tags: const [],
