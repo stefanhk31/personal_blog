@@ -1,4 +1,4 @@
-name: Blog Models Verify and Test
+name: Blog Models
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,7 +10,7 @@ on:
       - master
       - main
     paths:
-      - ".github/workflows/blog_models_verify_and_test.yaml"
+      - ".github/workflows/blog_models.yaml"
       - "packages/blog_models/**"
 
   push:

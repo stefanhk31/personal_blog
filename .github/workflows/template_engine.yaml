@@ -1,4 +1,4 @@
-name: Template Engine Verify and Test
+name: Template Engine
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,7 +10,7 @@ on:
       - master
       - main
     paths:
-      - ".github/workflows/template_engine_verify_and_test.yaml"
+      - ".github/workflows/template_engine.yaml"
       - "packages/template_engine/**"
       - "packages/blog_models/**"
   push:

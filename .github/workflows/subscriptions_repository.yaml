@@ -1,4 +1,4 @@
-name: Subscriptions Repository Verify and Test
+name: Subscriptions Repository
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,7 +10,7 @@ on:
       - master
       - main
     paths:
-      - ".github/workflows/subscriptions_repository_verify_and_test.yaml"
+      - ".github/workflows/subscriptions_repository.yaml"
       - "packages/subscriptions_repository/**"
       - "packages/api_client/**"
       - "packages/blog_models/**"
