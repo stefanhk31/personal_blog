@@ -1,4 +1,4 @@
-name: Blog Newsletter Client Verify and Test
+name: Blog Newsletter Client
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,7 +10,7 @@ on:
       - master
       - main
     paths:
-      - ".github/workflows/blog_newsletter_client_verify_and_test.yaml"
+      - ".github/workflows/blog_newsletter_client.yaml"
       - "packages/blog_newsletter_client/**"
       - "packages/api_client/**"
       - "packages/blog_models/**"

@@ -112,6 +112,9 @@ final tagJson = {
 /// Mock newsletter title. For testing purposes only.
 const newsletterTitle = 'Newsletter Title';
 
+/// Mock newsletter content. For testing purposes only.
+const newsletterUrl = 'https://example.com/newsletter';
+
 /// Mock newsletter idempotency key. For testing purposes only.
 const newsletterIdempotencyKey = 'idempotency-key-123';
 
