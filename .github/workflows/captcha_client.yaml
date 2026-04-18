@@ -1,4 +1,4 @@
-name: Captcha Client Verify and Test
+name: Captcha Client
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,7 +10,7 @@ on:
       - master
       - main
     paths:
-      - ".github/workflows/captcha_client_verify_and_test.yaml"
+      - ".github/workflows/captcha_client.yaml"
       - "packages/captcha_client/**"
       - "packages/api_client/**"
       - "packages/blog_models/**"

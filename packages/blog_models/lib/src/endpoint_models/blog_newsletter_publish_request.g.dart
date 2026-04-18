@@ -10,6 +10,7 @@ BlogNewsletterPublishRequest _$BlogNewsletterPublishRequestFromJson(
   Map<String, dynamic> json,
 ) => BlogNewsletterPublishRequest(
   title: json['title'] as String,
+  url: json['url'] as String,
   content: NewsletterContent.fromJson(json['content'] as Map<String, dynamic>),
   idempotencyKey: json['idempotency_key'] as String,
 );
@@ -18,6 +19,7 @@ Map<String, dynamic> _$BlogNewsletterPublishRequestToJson(
   BlogNewsletterPublishRequest instance,
 ) => <String, dynamic>{
   'title': instance.title,
+  'url': instance.url,
   'content': instance.content.toJson(),
   'idempotency_key': instance.idempotencyKey,
 };
