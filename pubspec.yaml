@@ -28,7 +28,7 @@ dependencies:
     path: packages/template_engine
 
 dev_dependencies:
-  mocktail: ^1.0.0
+  mocktail: ^1.0.5
   # Pinning to 1.25.8 to fix empty coverage issue on 1.28.0
   test: 1.31.0
   very_good_analysis: ^10.0.0
