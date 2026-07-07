@@ -14,6 +14,6 @@ dev_dependencies:
   very_good_analysis: ^10.0.0
 
 dependencies:
-  equatable: ^2.0.7
+  equatable: ^2.1.0
   intl: ^0.20.2
   json_annotation: ^4.12.0
