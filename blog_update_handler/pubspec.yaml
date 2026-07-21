@@ -22,4 +22,4 @@ dependencies:
     path: ../packages/butter_cms_client
   html: ^0.15.4
   http: ^1.6.0
-  uuid: ^4.0.0
+  uuid: ^4.6.0
