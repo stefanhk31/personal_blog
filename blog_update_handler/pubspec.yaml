@@ -20,6 +20,6 @@ dependencies:
     path: ../packages/blog_newsletter_client
   butter_cms_client:
     path: ../packages/butter_cms_client
-  html: ^0.15.4
+  html: ^0.15.7
   http: ^1.6.0
   uuid: ^4.6.0
